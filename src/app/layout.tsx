@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/features/common/nabvar";
 import Footer from "@/features/common/footer";
@@ -8,6 +8,11 @@ import { Toaster } from "@/components/ui/sonner";
 
 const fontOutfit = Outfit({
   variable: "--font-outfit",
+  subsets: ["latin"],
+});
+
+const fontPlayfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
 });
 
@@ -24,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontOutfit.variable} font-sans antialiased min-h-screen flex flex-col`}
+        className={`${fontOutfit.variable} ${fontPlayfair.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
         <Providers>
           <Navbar />

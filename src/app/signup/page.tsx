@@ -74,7 +74,7 @@ const Signup = () => {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-80px)] bg-gray-50">
+    <div className="flex min-h-[calc(100vh-80px)] bg-gallery-cream">
       <div className="hidden lg:flex lg:w-1/2 relative">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -83,30 +83,30 @@ const Signup = () => {
               "url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[rgba(26,31,44,0.8)] to-[rgba(26,31,44,0.4)]" />
-        <div className="relative z-10 flex flex-col justify-center px-12">
-          <h1 className="text-4xl font-serif font-bold text-white mb-6">
-            Join our community of art lovers
+        <div className="absolute inset-0 bg-gallery-black/60 mix-blend-multiply" />
+        <div className="relative z-10 flex flex-col justify-center px-16">
+          <h1 className="text-5xl font-serif font-black text-white mb-6 uppercase tracking-tight">
+            Join <span className="italic font-light lowercase text-4xl tracking-normal">our</span> Community
           </h1>
-          <p className="text-lg text-gray-200 mb-8">
+          <p className="text-lg text-white/90 mb-10 font-medium max-w-md">
             Discover extraordinary art, connect with creators, and build your
             collection. Want to sell? Open a shop anytime from your profile.
           </p>
-          <div className="flex space-x-2">
-            <div className="w-12 h-1 bg-purple-500 rounded-full"></div>
-            <div className="w-2 h-1 bg-white/50 rounded-full"></div>
-            <div className="w-2 h-1 bg-white/50 rounded-full"></div>
+          <div className="flex space-x-3">
+            <div className="w-12 h-1 bg-gallery-red"></div>
+            <div className="w-3 h-1 bg-white/30"></div>
+            <div className="w-3 h-1 bg-white/30"></div>
           </div>
         </div>
       </div>
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="max-w-md w-full">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-serif font-bold text-gray-900">
-              Create your account
+          <div className="text-center mb-10 border-b border-gallery-charcoal/10 pb-6">
+            <h2 className="text-3xl font-serif font-black text-gallery-black uppercase tracking-widest">
+              Create Account
             </h2>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gallery-charcoal/70 mt-3 font-serif italic">
               Start your artistic journey with us
             </p>
           </div>
@@ -119,9 +119,9 @@ const Signup = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Full Name</FormLabel>
+                    <FormLabel className="text-xs uppercase tracking-widest font-bold text-gallery-charcoal">Full Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your full name" {...field} />
+                      <Input placeholder="Enter your full name" className="rounded-none border-gallery-charcoal/30 focus:border-gallery-red focus:ring-0 shadow-none bg-transparent h-12" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -133,11 +133,12 @@ const Signup = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-xs uppercase tracking-widest font-bold text-gallery-charcoal">Email</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         placeholder="you@example.com"
+                        className="rounded-none border-gallery-charcoal/30 focus:border-gallery-red focus:ring-0 shadow-none bg-transparent h-12"
                         {...field}
                       />
                     </FormControl>
@@ -151,12 +152,13 @@ const Signup = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="text-xs uppercase tracking-widest font-bold text-gallery-charcoal">Password</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="Create a password"
+                          className="rounded-none border-gallery-charcoal/30 focus:border-gallery-red focus:ring-0 shadow-none bg-transparent h-12 pr-10"
                           {...field}
                         />
                         <Button
@@ -191,21 +193,22 @@ const Signup = () => {
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        className="rounded-none border-gallery-charcoal/50 data-[state=checked]:bg-gallery-red data-[state=checked]:border-gallery-red"
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                      <FormLabel className="text-sm font-normal">
+                      <FormLabel className="text-sm font-normal text-gallery-charcoal">
                         I agree to the{" "}
                         <Link
                           href="/terms"
-                          className="font-medium text-purple-600 underline"
+                          className="font-semibold text-gallery-red hover:text-gallery-black transition-colors"
                         >
                           terms of service
                         </Link>{" "}
                         and{" "}
                         <Link
                           href="/privacy"
-                          className="font-medium text-purple-600 underline"
+                          className="font-semibold text-gallery-red hover:text-gallery-black transition-colors"
                         >
                           privacy policy
                         </Link>
@@ -218,19 +221,19 @@ const Signup = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-purple-600 text-white hover:bg-purple-700"
+                className="w-full bg-gallery-red text-white hover:bg-gallery-black rounded-none h-14 uppercase tracking-widest font-bold text-xs transition-colors mt-8"
               >
                 Create Account <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
           </Form>
 
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">
+          <div className="mt-8 text-center border-t border-gallery-charcoal/10 pt-6">
+            <p className="text-gallery-charcoal/70 text-sm">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-medium text-purple-600 hover:underline"
+                className="font-semibold text-gallery-red hover:text-gallery-black uppercase tracking-widest text-xs transition-colors ml-1"
               >
                 Sign in
               </Link>

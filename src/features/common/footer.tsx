@@ -38,29 +38,31 @@ const Footer = () => {
   if (isHidden) return null;
 
   return (
-    <footer className="bg-black text-white py-16">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
-        <div className="space-y-4">
-          <h3 className="font-serif text-2xl font-bold">ArtBook</h3>
-          <p className="text-gray-400 text-sm">
-            Connecting artists and collectors through a curated marketplace for
-            extraordinary art.
+    <footer className="bg-gallery-cream text-gallery-black py-20 border-t border-gallery-charcoal/10">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4">
+        <div className="space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
+          <Link href="/" className="font-serif text-4xl font-black tracking-tighter text-gallery-black flex items-center gap-2">
+            <div className="w-4 h-4 bg-gallery-red hidden sm:block"></div>
+            ArtBook
+          </Link>
+          <p className="text-gallery-charcoal/70 text-sm max-w-xs font-medium">
+            Connecting artists and collectors through a curated marketplace for extraordinary art.
           </p>
-          <div className="flex space-x-4 pt-2">
-            <Instagram className="h-5 w-5 cursor-pointer hover:text-purple-500 transition-colors" />
-            <Twitter className="h-5 w-5 cursor-pointer hover:text-purple-500 transition-colors" />
-            <Facebook className="h-5 w-5 cursor-pointer hover:text-purple-500 transition-colors" />
-            <Mail className="h-5 w-5 cursor-pointer hover:text-purple-500 transition-colors" />
+          <div className="flex space-x-6 pt-2">
+            <Instagram className="h-5 w-5 cursor-pointer text-gallery-charcoal hover:text-gallery-red transition-colors" />
+            <Twitter className="h-5 w-5 cursor-pointer text-gallery-charcoal hover:text-gallery-red transition-colors" />
+            <Facebook className="h-5 w-5 cursor-pointer text-gallery-charcoal hover:text-gallery-red transition-colors" />
+            <Mail className="h-5 w-5 cursor-pointer text-gallery-charcoal hover:text-gallery-red transition-colors" />
           </div>
         </div>
 
         <div>
-          <h4 className="font-medium text-lg mb-4">Explore</h4>
+          <h4 className="font-serif text-xl font-bold mb-6 text-gallery-black">Explore</h4>
           <ul className="space-y-2">
             <li>
               <Link
                 href="/artworks"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gallery-charcoal/70 hover:text-gallery-red text-sm uppercase tracking-widest font-semibold transition-colors"
               >
                 Artworks
               </Link>
@@ -68,7 +70,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/artists"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gallery-charcoal/70 hover:text-gallery-red text-sm uppercase tracking-widest font-semibold transition-colors"
               >
                 Artists
               </Link>
@@ -76,7 +78,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/auctions"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gallery-charcoal/70 hover:text-gallery-red text-sm uppercase tracking-widest font-semibold transition-colors"
               >
                 Auctions
               </Link>
@@ -86,12 +88,12 @@ const Footer = () => {
 
         {/* Info Links */}
         <div>
-          <h4 className="font-medium text-lg mb-4">Information</h4>
+          <h4 className="font-serif text-xl font-bold mb-6 text-gallery-black">Information</h4>
           <ul className="space-y-2">
             <li>
               <Link
                 href="/about"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gallery-charcoal/70 hover:text-gallery-red text-sm uppercase tracking-widest font-semibold transition-colors"
               >
                 About Us
               </Link>
@@ -99,7 +101,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/contact"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gallery-charcoal/70 hover:text-gallery-red text-sm uppercase tracking-widest font-semibold transition-colors"
               >
                 Contact
               </Link>
@@ -107,7 +109,7 @@ const Footer = () => {
             <li>
               <Link
                 href="/faq"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gallery-charcoal/70 hover:text-gallery-red text-sm uppercase tracking-widest font-semibold transition-colors"
               >
                 FAQ
               </Link>
@@ -115,57 +117,55 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div>
-          <h4 className="font-medium text-lg mb-4">
-            Subscribe to our newsletter
+        <div className="lg:col-span-1 border-t md:border-t-0 border-gallery-charcoal/10 pt-8 md:pt-0">
+          <h4 className="font-serif text-xl font-bold mb-6 text-gallery-black">
+            The Newsletter
           </h4>
-          <form onSubmit={handleSubscribe} className="flex">
+          <form onSubmit={handleSubscribe} className="flex border-b border-gallery-charcoal/30 pb-2">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email address"
+              placeholder="Email address"
               required
               disabled={isSubscribing}
-              className="bg-gray-800 px-3 py-2 outline-none flex-grow text-white text-sm rounded-l-md disabled:opacity-70"
+              className="bg-transparent px-2 py-2 outline-none flex-grow text-gallery-black text-sm placeholder-gallery-charcoal/40 disabled:opacity-70"
             />
             <button
               type="submit"
               disabled={isSubscribing}
-              className="bg-purple-500 px-4 py-2 rounded-r-md text-white text-sm hover:bg-purple-600 transition-colors cursor-pointer disabled:opacity-70 flex items-center justify-center min-w-[60px]"
+              className="text-gallery-red text-xs uppercase tracking-widest font-bold px-4 hover:opacity-70 transition-opacity disabled:opacity-70"
             >
               {isSubscribing ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-gallery-red/30 border-t-gallery-red rounded-full animate-spin" />
               ) : (
-                "Join"
+                "Subscribe"
               )}
             </button>
           </form>
-          <p className="text-gray-400 text-xs mt-2">
+          <p className="text-gallery-charcoal/50 text-xs mt-4 italic font-serif">
             Stay updated on new artworks, auctions and featured artists.
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto border-t border-gray-800 mt-12 pt-8 px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
-            © {new Date().getFullYear()} ArtBook Gallery. All rights reserved.
-          </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link
-              href="/terms"
-              className="text-gray-400 text-sm hover:text-white transition-colors"
-            >
-              Terms of Service
-            </Link>
-            <Link
-              href="/privacy"
-              className="text-gray-400 text-sm hover:text-white transition-colors"
-            >
-              Privacy Policy
-            </Link>
-          </div>
+      <div className="container mx-auto border-t border-gallery-charcoal/10 mt-16 pt-8 px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-gallery-charcoal/50 text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
+          © {new Date().getFullYear()} ArtBook Gallery <span className="hidden md:inline">|</span> <span className="italic normal-case font-serif tracking-normal text-sm">All rights reserved.</span>
+        </p>
+        <div className="flex space-x-6">
+          <Link
+            href="/terms"
+            className="text-gallery-charcoal/50 text-xs uppercase tracking-widest font-semibold hover:text-gallery-red transition-colors"
+          >
+            Terms
+          </Link>
+          <Link
+            href="/privacy"
+            className="text-gallery-charcoal/50 text-xs uppercase tracking-widest font-semibold hover:text-gallery-red transition-colors"
+          >
+            Privacy
+          </Link>
         </div>
       </div>
     </footer>

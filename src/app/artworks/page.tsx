@@ -91,23 +91,23 @@ export default function ArtworksPage() {
     });
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gallery-cream">
             {/* Header */}
-            <section className="bg-gradient-to-r from-purple-700 via-purple-600 to-indigo-700 text-white py-16">
-                <div className="container mx-auto px-4">
+            <section className="bg-gallery-cream text-gallery-black py-20 border-b border-gallery-charcoal/10 relative overflow-hidden">
+                <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center">
                     <motion.h1
                         initial="hidden"
                         animate="visible"
                         variants={fadeInUp}
-                        className="font-serif text-4xl md:text-5xl font-bold mb-4"
+                        className="font-serif text-5xl md:text-7xl font-black mb-6 uppercase tracking-tight"
                     >
-                        Explore Artworks
+                        Explore <span className="italic font-light lowercase text-4xl md:text-6xl tracking-normal text-gallery-charcoal">the</span> Gallery
                     </motion.h1>
                     <motion.p
                         initial="hidden"
                         animate="visible"
                         variants={fadeInUp}
-                        className="text-purple-200 text-lg max-w-2xl"
+                        className="text-gallery-charcoal/70 text-lg max-w-2xl font-medium"
                     >
                         Discover unique pieces from talented artists around the world.
                         Browse, bid, and buy original artworks.
@@ -117,16 +117,16 @@ export default function ArtworksPage() {
                         initial="hidden"
                         animate="visible"
                         variants={fadeInUp}
-                        className="mt-8 max-w-xl"
+                        className="mt-12 max-w-xl w-full"
                     >
-                        <div className="relative">
-                            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <div className="relative group">
+                            <Search className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gallery-charcoal/50 w-5 h-5 group-focus-within:text-gallery-red transition-colors" />
                             <input
                                 type="text"
                                 placeholder="Search artworks by title, medium, or description..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-purple-200 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
+                                className="w-full pl-8 pr-4 py-3 rounded-none bg-transparent border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 text-gallery-black placeholder-gallery-charcoal/40 focus:outline-none focus:ring-0 focus:border-gallery-red transition-all shadow-none"
                             />
                         </div>
                     </motion.div>
@@ -135,13 +135,13 @@ export default function ArtworksPage() {
 
             {/* Filters */}
             <div className="container mx-auto px-4 py-8">
-                <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                    <div className="flex overflow-x-auto pb-2 gap-2 hide-scrollbar">
+                <div className="flex flex-col sm:flex-row gap-4 mb-10 items-center justify-center border-b border-gallery-charcoal/10 pb-8">
+                    <div className="flex flex-wrap justify-center gap-3">
                         <button
                             onClick={() => setSelectedCategory("all")}
-                            className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors text-sm font-medium ${selectedCategory === "all"
-                                ? "bg-black text-white"
-                                : "bg-white text-gray-700 hover:bg-gray-200 border border-gray-200"
+                            className={`px-5 py-2 rounded-full whitespace-nowrap transition-all text-xs uppercase tracking-widest font-semibold ${selectedCategory === "all"
+                                ? "bg-gallery-red text-white"
+                                : "bg-transparent text-gallery-charcoal hover:bg-gallery-charcoal/5 border border-gallery-charcoal/20"
                                 }`}
                         >
                             All
@@ -150,9 +150,9 @@ export default function ArtworksPage() {
                             <button
                                 key={category.id}
                                 onClick={() => setSelectedCategory(category.id)}
-                                className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors text-sm font-medium ${selectedCategory === category.id
-                                    ? "bg-black text-white"
-                                    : "bg-white text-gray-700 hover:bg-gray-200 border border-gray-200"
+                                className={`px-5 py-2 rounded-full whitespace-nowrap transition-all text-xs uppercase tracking-widest font-semibold ${selectedCategory === category.id
+                                    ? "bg-gallery-red text-white"
+                                    : "bg-transparent text-gallery-charcoal hover:bg-gallery-charcoal/5 border border-gallery-charcoal/20"
                                     }`}
                             >
                                 {category.name}
@@ -161,7 +161,7 @@ export default function ArtworksPage() {
                     </div>
                 </div>
 
-                <p className="text-gray-500 mb-6">
+                <p className="text-gallery-charcoal/60 mb-8 font-serif italic text-center text-lg">
                     {isLoading ? "" : `${filteredArtworks.length} ${filteredArtworks.length === 1 ? "artwork" : "artworks"} found`}
                 </p>
 
@@ -169,12 +169,12 @@ export default function ArtworksPage() {
                 {isLoading ? (
                     <ArtworkSkeletonGrid count={8} />
                 ) : filteredArtworks.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-                        <Palette className="w-16 h-16 text-purple-200 mx-auto mb-4" />
-                        <h2 className="text-xl font-serif font-semibold mb-2">
+                    <div className="text-center py-32 bg-white border border-gallery-charcoal/10 rounded-none mix-blend-multiply">
+                        <Palette className="w-12 h-12 text-gallery-charcoal/20 mx-auto mb-6" />
+                        <h2 className="text-2xl font-serif font-black mb-3 uppercase tracking-wider text-gallery-black">
                             No artworks found
                         </h2>
-                        <p className="text-gray-500 mb-6">
+                        <p className="text-gallery-charcoal/60 mb-8">
                             We couldn&apos;t find any artworks matching your current filters.
                         </p>
                         <button
@@ -182,7 +182,7 @@ export default function ArtworksPage() {
                                 setSelectedCategory("all");
                                 setSearchQuery("");
                             }}
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-full font-medium transition-colors"
+                            className="bg-transparent hover:bg-gallery-charcoal text-gallery-black hover:text-white border border-gallery-charcoal px-8 py-3 rounded-none text-xs uppercase tracking-widest font-semibold transition-colors"
                         >
                             Clear all filters
                         </button>

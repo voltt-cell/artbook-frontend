@@ -27,43 +27,44 @@ export function AdminSidebar() {
     };
 
     return (
-        <aside className="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100 flex flex-col z-40">
-            <div className="h-16 flex items-center px-6 border-b border-gray-100 shrink-0">
-                <Link href="/admin" className="font-serif text-2xl font-bold text-gray-900 tracking-tight shrink-0 hover:opacity-80 transition-opacity">
-                    ArtBook <span className="text-purple-600 text-sm font-sans uppercase tracking-widest ml-1">Admin</span>
+        <aside className="fixed inset-y-0 left-0 w-64 bg-gallery-cream border-r border-gallery-charcoal/10 flex flex-col z-40">
+            <div className="h-16 flex items-center px-6 border-b border-gallery-charcoal/10 shrink-0">
+                <Link href="/admin" className="font-serif text-2xl font-black text-gallery-black tracking-tighter shrink-0 hover:opacity-80 transition-opacity flex items-center gap-2">
+                    <div className="w-3 h-3 bg-gallery-red"></div>
+                    ArtBook <span className="text-gallery-charcoal/50 text-xs font-sans font-bold uppercase tracking-widest ml-1 mt-1">Admin</span>
                 </Link>
             </div>
 
-            <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+            <nav className="flex-1 py-8 px-4 space-y-2 overflow-y-auto">
                 {sidebarLinks.map((link) => {
                     const isActive = pathname === link.href || (link.href !== "/admin" && pathname?.startsWith(link.href));
                     const Icon = link.icon;
 
                     return (
                         <Link key={link.name} href={link.href} className="block">
-                            <div className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer group transition-colors ${isActive ? "text-purple-700 font-medium" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"}`}>
+                            <div className={`relative flex items-center gap-3 px-4 py-3 cursor-pointer group transition-all duration-300 ${isActive ? "text-gallery-red font-bold" : "text-gallery-charcoal/70 hover:text-gallery-black"}`}>
                                 {isActive && (
                                     <motion.div
                                         layoutId="activeAdminTab"
-                                        className="absolute inset-0 bg-purple-50 rounded-xl"
+                                        className="absolute left-0 top-0 bottom-0 w-1 bg-gallery-red"
                                         initial={false}
                                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                     />
                                 )}
-                                <Icon className={`h-5 w-5 relative z-10 transition-colors ${isActive ? "text-purple-600" : "text-gray-400 group-hover:text-gray-600"}`} />
-                                <span className="relative z-10 text-sm">{link.name}</span>
+                                <Icon className={`h-5 w-5 relative z-10 transition-colors ${isActive ? "text-gallery-red" : "text-gallery-charcoal/50 group-hover:text-gallery-charcoal"}`} />
+                                <span className={`relative z-10 text-xs uppercase tracking-widest ${isActive ? 'font-bold' : 'font-semibold'}`}>{link.name}</span>
                             </div>
                         </Link>
                     );
                 })}
             </nav>
 
-            <div className="p-4 border-t border-gray-100 shrink-0">
+            <div className="p-6 border-t border-gallery-charcoal/10 shrink-0">
                 <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl transition-colors cursor-pointer text-sm font-medium group"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-gallery-charcoal/70 hover:text-gallery-red transition-colors cursor-pointer text-xs uppercase tracking-widest font-bold group"
                 >
-                    <LogOut className="h-5 w-5 text-red-400 group-hover:text-red-500 transition-colors" />
+                    <LogOut className="h-5 w-5 text-gallery-charcoal/50 group-hover:text-gallery-red transition-colors" />
                     Sign Out
                 </button>
             </div>

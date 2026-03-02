@@ -4,12 +4,12 @@ import Link from "next/link";
 
 function JoinCommunity() {
   return (
-    <section className="py-20 bg-black">
-      <div className="container mx-auto text-center">
-        <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-6">
-          Join Our Art Community
+    <section className="py-24 bg-gallery-cream border-t border-gallery-charcoal/10">
+      <div className="container mx-auto px-4 text-center">
+        <h2 className="font-serif text-4xl md:text-5xl font-black text-gallery-black mb-6 uppercase tracking-tight">
+          Join <span className="italic font-light lowercase text-3xl md:text-4xl tracking-normal text-gallery-charcoal">the</span> Community
         </h2>
-        <p className="text-gray-300 max-w-2xl mx-auto mb-8">
+        <p className="text-gallery-charcoal/70 text-lg max-w-2xl mx-auto mb-10 font-medium">
           Discover extraordinary art, connect with creators, and build your
           collection. Want to sell your art? You can open a shop anytime
           after joining.
@@ -18,9 +18,9 @@ function JoinCommunity() {
           <Link href="/signup">
             <Button
               size="lg"
-              className="bg-purple-500 hover:bg-purple-600 cursor-pointer"
+              className="bg-gallery-red text-white hover:bg-gallery-black rounded-none uppercase tracking-widest font-semibold text-xs px-10 h-12 transition-colors"
             >
-              Join the Community
+              Sign Up Now
             </Button>
           </Link>
         </div>

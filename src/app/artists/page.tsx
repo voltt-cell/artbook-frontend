@@ -33,19 +33,19 @@ export default function ArtistsPage() {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="container mx-auto px-4 py-10 max-w-6xl">
+        <div className="min-h-screen bg-gallery-cream">
+            <div className="container mx-auto px-4 py-20 max-w-6xl">
                 <motion.div
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="mb-8"
+                    className="mb-12 text-center"
                 >
-                    <h1 className="font-serif text-4xl font-bold mb-2">
-                        Discover Artists
+                    <h1 className="font-serif text-5xl md:text-7xl font-black mb-6 uppercase tracking-tight text-gallery-black">
+                        Featured <span className="italic font-light lowercase text-4xl md:text-6xl tracking-normal text-gallery-charcoal">Artists</span>
                     </h1>
-                    <p className="text-gray-600 text-lg">
-                        Explore talented artists and their portfolios
+                    <p className="text-gallery-charcoal/70 text-lg max-w-2xl mx-auto font-medium">
+                        Explore the curated portfolio of our celebrated talents.
                     </p>
                 </motion.div>
 
@@ -53,15 +53,15 @@ export default function ArtistsPage() {
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="mb-8"
+                    className="mb-16 max-w-xl mx-auto"
                 >
-                    <div className="relative max-w-md">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <div className="relative group">
+                        <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-gallery-charcoal/50 w-5 h-5 group-focus-within:text-gallery-red transition-colors" />
                         <Input
                             placeholder="Search artists..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10"
+                            className="w-full pl-8 pr-4 py-3 rounded-none bg-transparent border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 text-gallery-black placeholder-gallery-charcoal/40 focus:outline-none focus:ring-0 focus:border-gallery-red transition-all shadow-none"
                         />
                     </div>
                 </motion.div>
@@ -88,9 +88,14 @@ export default function ArtistsPage() {
                         ))}
                     </motion.div>
                 ) : (
-                    <div className="text-center py-20">
-                        <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                        <p className="text-gray-500">No artists found.</p>
+                    <div className="text-center py-32 bg-white border border-gallery-charcoal/10 mix-blend-multiply">
+                        <Users className="w-12 h-12 text-gallery-charcoal/20 mx-auto mb-6" />
+                        <h2 className="text-2xl font-serif font-black mb-3 uppercase tracking-wider text-gallery-black">
+                            No artists found
+                        </h2>
+                        <p className="text-gallery-charcoal/60 mb-8">
+                            We couldn&apos;t find any artists matching your search.
+                        </p>
                     </div>
                 )}
             </div>

@@ -102,10 +102,10 @@ export default function AdminApplicationsPage() {
 
     return (
         <div className="p-8 max-w-5xl mx-auto">
-            <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">
+            <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest mb-2">
                 Shop Applications
             </h1>
-            <p className="text-gray-500 mb-8">
+            <p className="text-gallery-charcoal/70 font-serif italic text-lg mb-8">
                 Review and manage shop applications from users who want to sell on ArtBook.
             </p>
 
@@ -117,13 +117,13 @@ export default function AdminApplicationsPage() {
                 <>
                     {/* Pending Applications */}
                     <div className="mb-10">
-                        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <Clock className="h-5 w-5 text-amber-500" />
+                        <h2 className="text-xl font-serif font-black text-gallery-black mb-6 uppercase tracking-widest flex items-center gap-3 border-b border-gallery-charcoal/10 pb-4">
+                            <Clock className="h-5 w-5 text-gallery-red" />
                             Pending ({pending.length})
                         </h2>
                         {pending.length === 0 ? (
-                            <div className="bg-white rounded-xl p-8 text-center border border-gray-100">
-                                <p className="text-gray-400">No pending applications</p>
+                            <div className="bg-white border border-gallery-charcoal/20 p-16 text-center">
+                                <p className="font-bold text-sm uppercase tracking-widest text-gallery-charcoal/50">No pending applications</p>
                             </div>
                         ) : (
                             <div className="space-y-4">
@@ -132,49 +132,49 @@ export default function AdminApplicationsPage() {
                                         key={item.application.id}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm"
+                                        className="bg-white p-6 border border-gallery-charcoal/20 transition-colors hover:border-gallery-charcoal/40"
                                     >
-                                        <div className="flex items-start justify-between">
-                                            <div className="flex items-start gap-4">
-                                                <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                                            <div className="flex items-start gap-6">
+                                                <div className="w-16 h-16 rounded-none bg-gallery-charcoal flex items-center justify-center flex-shrink-0 text-white font-serif font-black text-2xl">
                                                     {item.user.profileImage ? (
-                                                        <img src={item.user.profileImage} alt={item.user.name} className="w-full h-full rounded-full object-cover" />
+                                                        <img src={item.user.profileImage} alt={item.user.name} className="w-full h-full rounded-none object-cover grayscale" />
                                                     ) : (
-                                                        <User className="h-6 w-6 text-purple-600" />
+                                                        item.user.name.charAt(0).toUpperCase()
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <h3 className="font-bold text-gray-900">{item.user.name}</h3>
-                                                    <p className="text-sm text-gray-500">{item.user.email}</p>
-                                                    <div className="mt-3">
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <Store className="h-4 w-4 text-purple-500" />
-                                                            <span className="font-medium text-purple-700">{item.application.shopName}</span>
+                                                    <h3 className="font-bold text-gallery-black uppercase tracking-wider text-lg">{item.user.name}</h3>
+                                                    <p className="text-sm font-semibold text-gallery-charcoal/70">{item.user.email}</p>
+                                                    <div className="mt-4 pt-4 border-t border-gallery-charcoal/10">
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <Store className="h-4 w-4 text-gallery-red" />
+                                                            <span className="font-black text-gallery-black uppercase tracking-widest text-sm">{item.application.shopName}</span>
                                                         </div>
-                                                        <p className="text-sm text-gray-600 mt-1">{item.application.shopDescription}</p>
+                                                        <p className="text-sm text-gallery-charcoal/80 mt-1 font-serif leading-relaxed">{item.application.shopDescription}</p>
                                                         {item.application.portfolioUrl && (
-                                                            <a href={item.application.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-purple-600 hover:underline mt-1 block">
+                                                            <a href={item.application.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-xs uppercase tracking-widest font-bold text-gallery-red hover:text-gallery-black mt-3 block transition-colors">
                                                                 View Portfolio →
                                                             </a>
                                                         )}
                                                     </div>
-                                                    <p className="text-xs text-gray-400 mt-2">
+                                                    <p className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/50 mt-4">
                                                         Applied {new Date(item.application.createdAt).toLocaleDateString()}
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div className="flex gap-2 flex-shrink-0">
+                                            <div className="flex flex-row md:flex-col gap-3 flex-shrink-0 w-full md:w-auto mt-6 md:mt-0">
                                                 <Button
                                                     onClick={() => handleApprove(item.application.id)}
                                                     disabled={processingId === item.application.id}
                                                     size="sm"
-                                                    className="bg-green-600 hover:bg-green-700 text-white"
+                                                    className="flex-1 md:flex-none bg-gallery-black hover:bg-gallery-red text-white uppercase tracking-widest text-xs font-bold rounded-none h-10 transition-colors"
                                                 >
                                                     {processingId === item.application.id ? (
                                                         <Loader2 className="h-4 w-4 animate-spin" />
                                                     ) : (
                                                         <>
-                                                            <CheckCircle className="h-4 w-4 mr-1" /> Approve
+                                                            <CheckCircle className="h-4 w-4 mr-2" /> Approve
                                                         </>
                                                     )}
                                                 </Button>
@@ -183,9 +183,9 @@ export default function AdminApplicationsPage() {
                                                     disabled={processingId === item.application.id}
                                                     size="sm"
                                                     variant="outline"
-                                                    className="text-red-600 border-red-200 hover:bg-red-50"
+                                                    className="flex-1 md:flex-none border-gallery-charcoal/20 text-gallery-charcoal hover:bg-gallery-red hover:text-white hover:border-gallery-red uppercase tracking-widest text-xs font-bold rounded-none h-10 transition-colors shadow-none"
                                                 >
-                                                    <XCircle className="h-4 w-4 mr-1" /> Reject
+                                                    <XCircle className="h-4 w-4 mr-2" /> Reject
                                                 </Button>
                                             </div>
                                         </div>
@@ -195,29 +195,30 @@ export default function AdminApplicationsPage() {
                         )}
                     </div>
 
-                    {/* Reviewed Applications */}
                     {reviewed.length > 0 && (
                         <div>
-                            <h2 className="text-lg font-bold text-gray-900 mb-4">
+                            <h2 className="text-xl font-serif font-black text-gallery-black mb-6 uppercase tracking-widest border-b border-gallery-charcoal/10 pb-4">
                                 Reviewed ({reviewed.length})
                             </h2>
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 {reviewed.map((item) => (
                                     <div
                                         key={item.application.id}
-                                        className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex items-center justify-between"
+                                        className="bg-white p-5 border border-gallery-charcoal/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <div className={`p-2 rounded-full ${item.application.status === "approved" ? "bg-green-100" : "bg-red-100"}`}>
+                                        <div className="flex items-center gap-4 w-full">
+                                            <div className={`p-2 border ${item.application.status === "approved" ? "border-gallery-black text-gallery-black" : "border-gallery-red text-gallery-red"}`}>
                                                 {item.application.status === "approved" ? (
-                                                    <CheckCircle className="h-4 w-4 text-green-600" />
+                                                    <CheckCircle className="h-5 w-5" />
                                                 ) : (
-                                                    <XCircle className="h-4 w-4 text-red-600" />
+                                                    <XCircle className="h-5 w-5" />
                                                 )}
                                             </div>
-                                            <div>
-                                                <p className="font-medium text-gray-900">{item.user.name} — <span className="text-purple-600">{item.application.shopName}</span></p>
-                                                <p className="text-xs text-gray-400">
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-bold text-gallery-black uppercase tracking-wider text-sm truncate">
+                                                    {item.user.name} <span className="text-gallery-charcoal/50 mx-2">—</span> <span className="text-gallery-red">{item.application.shopName}</span>
+                                                </p>
+                                                <p className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/50 mt-1">
                                                     {item.application.status === "approved" ? "Approved" : "Rejected"} on {item.application.reviewedAt ? new Date(item.application.reviewedAt).toLocaleDateString() : "N/A"}
                                                 </p>
                                             </div>

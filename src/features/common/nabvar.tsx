@@ -44,10 +44,11 @@ const Navbar = () => {
   }
 
   return (
-    <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200">
-      <div className="container mx-auto flex items-center justify-between py-3 px-4">
+    <header className="bg-gallery-cream sticky top-0 z-50 border-b border-gallery-beige">
+      <div className="container mx-auto flex items-center justify-between py-4 px-4">
         {/* Logo */}
-        <Link href="/" className="font-serif text-2xl font-bold text-gray-900 tracking-tight shrink-0 hover:opacity-80 transition-opacity">
+        <Link href="/" className="font-serif text-3xl font-black tracking-tighter text-gallery-black shrink-0 hover:opacity-80 transition-opacity flex items-center gap-2">
+          <div className="w-4 h-4 bg-gallery-red hidden sm:block"></div>
           ArtBook
         </Link>
 
@@ -55,28 +56,28 @@ const Navbar = () => {
         <nav className="hidden lg:flex items-center justify-center space-x-6 absolute left-1/2 -translate-x-1/2 h-full">
           <Link
             href="/"
-            className={`flex items-center h-full text-sm font-medium px-2 transition-colors border-b-2 -mb-[2px] ${pathname === "/" ? "text-purple-600 border-purple-600" : "text-gray-600 border-transparent hover:text-purple-600"
+            className={`flex items-center h-full text-xs uppercase tracking-widest font-semibold px-4 transition-colors ${pathname === "/" ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
               }`}
           >
             Home
           </Link>
           <Link
             href="/artworks"
-            className={`flex items-center h-full text-sm font-medium px-2 transition-colors border-b-2 -mb-[2px] ${pathname === "/artworks" ? "text-purple-600 border-purple-600" : "text-gray-600 border-transparent hover:text-purple-600"
+            className={`flex items-center h-full text-xs uppercase tracking-widest font-semibold px-4 transition-colors ${pathname === "/artworks" ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
               }`}
           >
             Artworks
           </Link>
           <Link
             href="/artists"
-            className={`flex items-center h-full text-sm font-medium px-2 transition-colors border-b-2 -mb-[2px] ${pathname === "/artists" ? "text-purple-600 border-purple-600" : "text-gray-600 border-transparent hover:text-purple-600"
+            className={`flex items-center h-full text-xs uppercase tracking-widest font-semibold px-4 transition-colors ${pathname === "/artists" ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
               }`}
           >
             Artists
           </Link>
           <Link
             href="/auctions"
-            className={`flex items-center h-full text-sm font-medium px-2 transition-colors border-b-2 -mb-[2px] ${pathname === "/auctions" ? "text-purple-600 border-purple-600" : "text-gray-600 border-transparent hover:text-purple-600"
+            className={`flex items-center h-full text-xs uppercase tracking-widest font-semibold px-4 transition-colors ${pathname === "/auctions" ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
               }`}
           >
             Auctions
@@ -90,8 +91,8 @@ const Navbar = () => {
             <form onSubmit={handleSearch} className="relative w-full">
               <Input
                 type="text"
-                placeholder="Search for anything"
-                className="w-full pl-4 pr-10 h-10 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-gray-300 focus:ring-0 transition-all text-sm"
+                placeholder="Search by artist, gallery, style..."
+                className="w-full pl-4 pr-10 h-10 rounded-none border-b border-t-0 border-l-0 border-r-0 border-gallery-charcoal bg-transparent focus:ring-0 focus:border-gallery-red transition-all text-sm rounded-none shadow-none"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -99,7 +100,7 @@ const Navbar = () => {
                 type="submit"
                 variant="ghost"
                 size="sm"
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 rounded-full hover:bg-gray-200 text-gray-500 hover:text-gray-900"
+                className="absolute right-0 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent text-gallery-charcoal hover:text-gallery-red rounded-none"
               >
                 <Search className="h-4 w-4" />
               </Button>
@@ -109,7 +110,7 @@ const Navbar = () => {
           {/* Favorites - Logged In Only */}
           {isAuthenticated && (
             <Link href="/favorites">
-              <Button variant="ghost" size="icon" className="hover:text-red-500 hover:bg-red-50 rounded-full">
+              <Button variant="ghost" size="icon" className="hover:text-gallery-red hover:bg-transparent rounded-full text-gallery-charcoal">
                 <Heart className="h-5 w-5" />
               </Button>
             </Link>
@@ -118,7 +119,7 @@ const Navbar = () => {
           {/* Shop Icon - Only when user has a shop */}
           {hasShop && (
             <Link href="/shop/dashboard">
-              <Button variant="ghost" size="icon" className="hover:text-purple-600 hover:bg-purple-50 rounded-full">
+              <Button variant="ghost" size="icon" className="hover:text-gallery-red hover:bg-transparent rounded-full text-gallery-charcoal">
                 <Store className="h-5 w-5" />
               </Button>
             </Link>
@@ -212,8 +213,8 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center ml-2">
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-full px-5 h-9 transition-colors">
-                  Sign in
+                <Button variant="ghost" size="sm" className="font-semibold text-xs tracking-widest uppercase text-gallery-charcoal hover:bg-transparent hover:text-gallery-red rounded-none px-4 h-9 transition-colors">
+                  My Details
                 </Button>
               </Link>
             </div>

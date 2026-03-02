@@ -99,24 +99,24 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
       whileHover={{ y: -5 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="relative overflow-hidden rounded-xl aspect-square border border-gray-200">
+      <div className="relative overflow-hidden aspect-square border border-transparent bg-gallery-cream">
         <Link href={`/artwork/${artwork.id}`} className="block w-full h-full">
           {artwork.image && !imgError ? (
             <img
               src={artwork.image}
               alt={artwork.title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 border border-gray-200"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               onError={() => setImgError(true)}
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 border border-gray-200">
-              <ImageOff className="w-8 h-8 text-gray-300 mb-2" />
-              <span className="text-xs text-gray-400">No Image</span>
+            <div className="w-full h-full flex flex-col items-center justify-center bg-gallery-beige">
+              <ImageOff className="w-8 h-8 text-gallery-charcoal/20 mb-2" />
+              <span className="text-xs text-gallery-charcoal/40 uppercase tracking-widest font-semibold">No Image</span>
             </div>
           )}
 
           {/* Overlay Gradient on Hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gallery-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </Link>
 
         {/* Top Right: Favorite Button (Visible on Hover) */}
@@ -124,9 +124,9 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
           <button
             onClick={handleToggleFavorite}
             disabled={isToggling}
-            className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${isFav
-              ? "bg-white text-red-500 shadow-sm opacity-100"
-              : "bg-white/20 text-white hover:bg-white hover:text-red-500 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0"
+            className={`absolute top-4 right-4 p-2 rounded-full transition-all duration-300 ${isFav
+              ? "bg-white text-gallery-red shadow-sm opacity-100"
+              : "bg-white/90 text-gallery-charcoal hover:bg-white hover:text-gallery-red opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0"
               }`}
           >
             <Heart className={`w-4 h-4 ${isFav ? "fill-current" : ""}`} />
@@ -138,10 +138,10 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
           {!isOwner && (
             artwork.isAuction ? (
               <Button
-                className="w-full bg-black/80 backdrop-blur-md text-white hover:bg-black font-medium border border-white/10"
+                className="w-full bg-gallery-black text-white hover:bg-gallery-charcoal font-semibold text-xs tracking-widest uppercase rounded-none h-12"
                 onClick={(e) => {
                   e.preventDefault();
-                  if (!isAuthenticated) return router.push("/login"); // Fixed: logic within onClick
+                  if (!isAuthenticated) return router.push("/login");
                   router.push(`/artwork/${artwork.id}`);
                 }}
               >
@@ -149,7 +149,7 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
               </Button>
             ) : (
               <Button
-                className="w-full bg-black/80 backdrop-blur-md text-white hover:bg-black font-medium border border-white/10"
+                className="w-full bg-gallery-black text-white hover:bg-gallery-charcoal font-semibold text-xs tracking-widest uppercase rounded-none h-12"
                 onClick={(e) => {
                   e.preventDefault();
                   handleBuyNow();
@@ -162,21 +162,21 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
         </div>
       </div>
 
-      <div className="pt-3 pb-1">
+      <div className="pt-4 pb-2">
         <div className="flex justify-between items-start gap-4 mb-1">
           <div className="flex-1">
             <Link href={`/artwork/${artwork.id}`}>
-              <h3 className="font-serif text-sm font-semibold text-gray-900 group-hover:text-purple-600 transition-colors line-clamp-1">
+              <h3 className="font-serif text-lg font-bold text-gallery-black group-hover:text-gallery-red transition-colors line-clamp-1 italic">
                 {artwork.title}
               </h3>
             </Link>
             {artist && (
-              <Link href={`/artist/${artist.id}`} className="block mt-0.5 text-xs text-gray-400 hover:text-gray-900 hover:underline truncate">
+              <Link href={`/artist/${artist.id}`} className="block mt-1 text-xs uppercase tracking-widest font-semibold text-gallery-charcoal hover:text-gallery-red hover:underline truncate">
                 {artist.shopName || artist.name}
               </Link>
             )}
           </div>
-          <div className="text-sm font-bold text-gray-900 pt-0.5">
+          <div className="text-base font-medium text-gallery-black pt-0.5">
             {formatPrice(artwork.isAuction ? (artwork.currentBid || artwork.price) : artwork.price)}
           </div>
         </div>

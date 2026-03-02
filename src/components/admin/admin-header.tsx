@@ -19,20 +19,20 @@ export function AdminHeader() {
     };
 
     return (
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-30">
+        <header className="h-16 bg-gallery-cream/80 backdrop-blur-md border-b border-gallery-charcoal/10 flex items-center justify-between px-8 sticky top-0 z-30">
             <div>
-                <h1 className="text-lg font-serif font-semibold text-gray-800">{getPageTitle()}</h1>
+                <h1 className="text-xl font-serif font-black text-gallery-black uppercase tracking-widest">{getPageTitle()}</h1>
             </div>
 
             <div className="flex items-center gap-4">
                 <div className="flex items-center gap-3">
                     <div className="hidden md:block text-right">
-                        <p className="text-sm font-medium text-gray-900 leading-none">{user?.name}</p>
-                        <p className="text-xs text-gray-500 mt-1 leading-none">{user?.email}</p>
+                        <p className="text-sm font-bold text-gallery-black leading-none uppercase tracking-wider">{user?.name}</p>
+                        <p className="text-xs text-gallery-charcoal/70 mt-1.5 leading-none">{user?.email}</p>
                     </div>
-                    <Avatar className="h-9 w-9 border border-gray-200 shadow-sm">
-                        <AvatarImage src={user?.profileImage} alt={user?.name} />
-                        <AvatarFallback className="bg-purple-100 text-purple-700 font-medium text-xs">
+                    <Avatar className="h-10 w-10 border border-gallery-charcoal/20 shadow-none rounded-none">
+                        <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-none object-cover" />
+                        <AvatarFallback className="bg-gallery-charcoal text-white font-serif font-bold text-sm rounded-none">
                             {user?.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>

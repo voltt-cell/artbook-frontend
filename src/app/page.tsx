@@ -131,7 +131,7 @@ const Page = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gallery-cream flex flex-col">
       <Banner />
 
       <div className="py-8">
@@ -157,10 +157,10 @@ const Page = () => {
                   variants={fadeInUp}
                   className="flex justify-between items-center mb-8"
                 >
-                  <h2 className="font-serif text-3xl font-bold">{category.name}</h2>
+                  <h2 className="font-serif text-4xl font-black text-gallery-black">{category.name}</h2>
                   <Link
                     href={`/artworks?category=${category.id}`}
-                    className="flex items-center text-sm px-4 py-2 rounded-full border border-gray-600 font-medium hover:bg-gray-50 transition-colors text-black"
+                    className="flex items-center text-xs px-6 py-2 rounded-none border border-gallery-charcoal font-semibold uppercase tracking-widest hover:bg-gallery-charcoal hover:text-white transition-colors text-gallery-black"
                   >
                     View all
                   </Link>
@@ -201,8 +201,8 @@ const Page = () => {
                       )}
                     </CarouselContent>
                     <div className="hidden md:block">
-                      <CarouselPrevious className="-left-4 bg-white/90 backdrop-blur-sm border shadow-sm w-10 h-10 hover:bg-white text-black" />
-                      <CarouselNext className="-right-4 bg-white/90 backdrop-blur-sm border shadow-sm w-10 h-10 hover:bg-white text-black" />
+                      <CarouselPrevious className="-left-4 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                      <CarouselNext className="-right-4 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
                     </div>
                   </Carousel>
                 </motion.div>
@@ -213,19 +213,19 @@ const Page = () => {
       </div>
 
       {/* Active Auctions */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white border-t border-gallery-charcoal/10">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="flex justify-between items-center mb-10"
+            className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
           >
-            <h2 className="font-serif text-3xl font-bold">Active Auctions</h2>
+            <h2 className="font-serif text-4xl font-black text-gallery-black">Live Auctions</h2>
             <Link
               href="/auctions"
-              className="flex items-center text-purple-500 font-medium hover:text-purple-600"
+              className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
             >
               View All
               <ChevronRight className="w-4 h-4 ml-1" />
@@ -249,10 +249,10 @@ const Page = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full py-16 text-center bg-gray-50 rounded-2xl border border-gray-100 flex flex-col items-center justify-center">
-                <Gavel className="w-12 h-12 text-purple-200 mb-4" />
-                <h3 className="text-xl font-serif font-semibold text-gray-900 mb-2">No active auctions</h3>
-                <p className="text-gray-500 max-w-sm">Check back later for exciting new auction opportunities.</p>
+              <div className="col-span-full py-20 text-center bg-gallery-cream border border-gallery-charcoal/10 flex flex-col items-center justify-center">
+                <Gavel className="w-12 h-12 text-gallery-charcoal/20 mb-6" />
+                <h3 className="text-2xl font-serif font-black text-gallery-black mb-2">No active auctions</h3>
+                <p className="text-gallery-charcoal/60 max-w-sm">Check back later for exciting new auction opportunities.</p>
               </div>
             )}
           </motion.div>
@@ -260,19 +260,19 @@ const Page = () => {
       </section>
 
       {/* Featured Artists */}
-      <section className="py-20">
+      <section className="py-24 bg-gallery-cream border-t border-gallery-charcoal/10">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="flex justify-between items-center mb-10"
+            className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
           >
-            <h2 className="font-serif text-3xl font-bold">Featured Artists</h2>
+            <h2 className="font-serif text-4xl font-black text-gallery-black">Magazine / Artists</h2>
             <Link
               href="/artists"
-              className="flex items-center text-purple-500 font-medium hover:text-purple-600"
+              className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
             >
               View All
               <ChevronRight className="w-4 h-4 ml-1" />
@@ -293,10 +293,10 @@ const Page = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full py-16 text-center bg-gray-50 rounded-2xl border border-gray-100 flex flex-col items-center justify-center">
-                <Users className="w-12 h-12 text-purple-200 mb-4" />
-                <h3 className="text-xl font-serif font-semibold text-gray-900 mb-2">No featured artists</h3>
-                <p className="text-gray-500 max-w-sm">We are currently curating our list of featured artists.</p>
+              <div className="col-span-full py-20 text-center bg-white border border-gallery-charcoal/10 flex flex-col items-center justify-center">
+                <Users className="w-12 h-12 text-gallery-charcoal/20 mb-6" />
+                <h3 className="text-2xl font-serif font-black text-gallery-black mb-2">No featured artists</h3>
+                <p className="text-gallery-charcoal/60 max-w-sm">We are currently curating our list of featured artists.</p>
               </div>
             )}
           </motion.div>

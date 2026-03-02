@@ -63,12 +63,14 @@ export default {
 				},
 				// Custom art gallery colors
 				gallery: {
-					'black': '#1A1F2C',
+					'black': '#1A1A1A', // Deeper editorial black
 					'white': '#FFFFFF',
-					'cream': '#F8F7F4',
-					'beige': '#E5E1DD',
+					'cream': '#F9F6F0', // Warm cream background
+					'beige': '#E8E4D9',
 					'gray': '#8E9196',
-					'accent': '#D946EF',
+					'charcoal': '#2D2D2D',
+					'red': '#D32F2F', // Classic editorial red accent
+					'accent': '#E63946', // Secondary accent
 				}
 			},
 			fontFamily: {

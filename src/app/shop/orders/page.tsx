@@ -34,10 +34,10 @@ type ShopOrderRow = {
 };
 
 const orderStatusColors: Record<string, string> = {
-    pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
-    paid: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    shipped: "bg-blue-100 text-blue-700 border-blue-200",
-    completed: "bg-gray-100 text-gray-700 border-gray-200",
+    pending: "text-gallery-charcoal border-gallery-charcoal/30 bg-transparent",
+    paid: "text-white border-gallery-black bg-gallery-black",
+    shipped: "text-white border-gallery-red bg-gallery-red",
+    completed: "text-gallery-red border-gallery-red bg-transparent",
 };
 
 export default function ShopOrdersPage() {
@@ -71,32 +71,18 @@ export default function ShopOrdersPage() {
     }
 
     return (
-        <div className="min-h-screen relative overflow-hidden pb-20 bg-slate-50">
-            {/* Elegant Atmospheric Background */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <img
-                    src="/assets/watercolor_bg.png"
-                    alt="abstract artistic background"
-                    className="w-full h-full object-cover opacity-60 mix-blend-multiply"
-                />
-            </div>
-            {/* Orbs for extra depth */}
-            <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-                className="absolute -top-[10%] -right-[5%] w-[600px] h-[600px] rounded-full bg-purple-300/20 blur-[120px] pointer-events-none z-0"
-            />
+        <div className="min-h-screen relative overflow-hidden pb-20 bg-gallery-cream">
 
             {/* Header */}
-            <div className="bg-white/60 backdrop-blur-2xl border-b border-white/50 shadow-sm sticky top-0 z-20">
+            <div className="bg-gallery-cream/80 backdrop-blur-md border-b border-gallery-charcoal/10 shadow-sm sticky top-0 z-20">
                 <div className="container mx-auto px-4 max-w-6xl">
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center gap-4">
-                            <Link href="/shop/dashboard" className="text-gray-400 hover:text-gray-600 transition-colors">
+                            <Link href="/shop/dashboard" className="text-gallery-charcoal/50 hover:text-gallery-red transition-colors">
                                 <ArrowLeft className="w-5 h-5" />
                             </Link>
-                            <h1 className="font-serif text-xl font-bold text-gray-900 flex items-center gap-2">
-                                <Package className="w-5 h-5 text-purple-600" />
+                            <h1 className="font-serif text-xl font-black text-gallery-black flex items-center gap-2 uppercase tracking-widest">
+                                <Package className="w-5 h-5 text-gallery-red" />
                                 Sales & Orders
                             </h1>
                         </div>
@@ -109,21 +95,21 @@ export default function ShopOrdersPage() {
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                    className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gallery-charcoal/20 pb-6"
                 >
                     <div>
-                        <h2 className="text-2xl font-serif font-bold text-gray-900">Your Sales History</h2>
-                        <p className="text-sm text-gray-500 mt-1">Manage and track the artworks you've sold.</p>
+                        <h2 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Your Sales History</h2>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2 tracking-wide">Manage and track the artworks you've sold.</p>
                     </div>
 
-                    <div className="relative w-full md:w-72">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <div className="relative w-full md:w-80">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gallery-charcoal/50" />
                         <input
                             type="text"
-                            placeholder="Search by buyer, artwork, or order ID..."
+                            placeholder="Search by buyer, artwork, or ID..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-sm"
+                            className="w-full pl-11 pr-4 py-3 bg-white border border-gallery-charcoal/20 rounded-none focus:outline-none focus:ring-1 focus:ring-gallery-red focus:border-gallery-red text-sm font-serif"
                         />
                     </div>
                 </motion.div>
@@ -132,53 +118,53 @@ export default function ShopOrdersPage() {
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="bg-white/60 backdrop-blur-2xl rounded-3xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"
+                    className="bg-white rounded-none border border-gallery-charcoal/20 shadow-none overflow-hidden"
                 >
                     {ordersLoading ? (
                         <div className="py-20 flex justify-center">
-                            <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+                            <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
                         </div>
                     ) : orders.length === 0 ? (
-                        <div className="py-20 text-center px-4">
-                            <div className="h-16 w-16 bg-purple-100/80 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-white">
-                                <Package className="h-8 w-8 text-purple-600" />
+                        <div className="py-20 text-center px-4 bg-gallery-cream border border-gallery-charcoal/10 m-4">
+                            <div className="h-16 w-16 bg-white border border-gallery-charcoal/20 flex items-center justify-center mx-auto mb-6">
+                                <Package className="h-8 w-8 text-gallery-charcoal/30" />
                             </div>
-                            <h3 className="text-xl font-serif font-bold text-gray-900 mb-2">No sales yet</h3>
-                            <p className="text-gray-500 text-sm max-w-sm mx-auto">
+                            <h3 className="text-xl font-serif font-black text-gallery-black uppercase tracking-widest mb-3">No sales yet</h3>
+                            <p className="text-gallery-charcoal/70 font-serif italic text-lg max-w-sm mx-auto">
                                 Once your artworks start selling, the order details will appear right here in your ledger.
                             </p>
                         </div>
                     ) : filteredOrders.length === 0 ? (
                         <div className="py-20 text-center">
-                            <p className="text-gray-500 font-medium">No orders match your search.</p>
+                            <p className="text-gallery-charcoal/50 font-serif italic text-lg">No orders match your search.</p>
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
+                            <table className="w-full text-sm text-left font-sans">
                                 <thead>
-                                    <tr className="bg-gray-50/80 border-b border-gray-100 text-gray-500 font-medium">
-                                        <th className="py-4 px-6 font-medium whitespace-nowrap hidden md:table-cell">Order ID</th>
-                                        <th className="py-4 px-6 font-medium">Artwork</th>
-                                        <th className="py-4 px-6 font-medium">Buyer</th>
-                                        <th className="py-4 px-6 font-medium hidden sm:table-cell">Date</th>
-                                        <th className="py-4 px-6 font-medium">Amount</th>
-                                        <th className="py-4 px-6 font-medium text-right">Status</th>
+                                    <tr className="bg-gallery-cream border-b border-gallery-charcoal/20 text-gallery-charcoal text-xs uppercase tracking-widest font-bold">
+                                        <th className="py-5 px-6 hidden md:table-cell">Order ID</th>
+                                        <th className="py-5 px-6">Artwork</th>
+                                        <th className="py-5 px-6">Buyer</th>
+                                        <th className="py-5 px-6 hidden sm:table-cell">Date</th>
+                                        <th className="py-5 px-6 text-right">Amount</th>
+                                        <th className="py-5 px-6 text-center">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filteredOrders.map(({ order, artwork, buyer }) => (
                                         <tr
                                             key={order.id}
-                                            className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors last:border-0"
+                                            className="border-b border-gallery-charcoal/10 hover:bg-gallery-cream/50 transition-colors last:border-0"
                                         >
-                                            <td className="py-4 px-6 hidden md:table-cell">
-                                                <span className="font-mono text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
-                                                    {order.id.slice(0, 8)}
+                                            <td className="py-4 px-6 hidden md:table-cell align-middle">
+                                                <span className="font-bold uppercase tracking-wider text-gallery-charcoal/70">
+                                                    #{order.id.slice(0, 8)}
                                                 </span>
                                             </td>
-                                            <td className="py-4 px-6">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="h-10 w-10 shrink-0 rounded-lg overflow-hidden border border-gray-100 bg-gray-50">
+                                            <td className="py-4 px-6 align-middle">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="h-12 w-12 shrink-0 rounded-none overflow-hidden border border-gallery-charcoal/20 bg-gallery-cream">
                                                         {artwork.imageUrl ? (
                                                             <img
                                                                 src={artwork.imageUrl}
@@ -187,41 +173,41 @@ export default function ShopOrdersPage() {
                                                             />
                                                         ) : (
                                                             <div className="h-full w-full flex items-center justify-center">
-                                                                <Package className="h-4 w-4 text-gray-300" />
+                                                                <Package className="h-5 w-5 text-gallery-charcoal/20" />
                                                             </div>
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium text-gray-900 line-clamp-1">{artwork.title}</p>
-                                                        <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                                                        <p className="font-black text-sm text-gallery-black uppercase tracking-wider truncate mb-1">{artwork.title}</p>
+                                                        <span className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 border border-gallery-charcoal/20 px-2 py-0.5 mt-1 inline-block">
                                                             {order.type}
                                                         </span>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="py-4 px-6">
-                                                <p className="font-medium text-gray-900">{buyer.name}</p>
-                                                <p className="text-xs text-gray-500 hidden lg:block">{buyer.email}</p>
+                                            <td className="py-4 px-6 align-middle">
+                                                <p className="font-bold text-sm text-gallery-black uppercase tracking-wider truncate hidden lg:block">{buyer.name}</p>
+                                                <p className="font-bold text-sm text-gallery-black uppercase tracking-wider truncate lg:hidden">{buyer.email}</p>
+                                                <p className="text-xs text-gallery-charcoal/70 hidden lg:block mt-1 font-serif italic truncate">{buyer.email}</p>
                                             </td>
-                                            <td className="py-4 px-6 hidden sm:table-cell text-gray-500">
+                                            <td className="py-4 px-6 hidden sm:table-cell text-gallery-charcoal font-serif italic align-middle">
                                                 {new Date(order.createdAt).toLocaleDateString(undefined, {
                                                     month: "short",
                                                     day: "numeric",
                                                     year: "numeric"
                                                 })}
                                             </td>
-                                            <td className="py-4 px-6">
-                                                <p className="font-bold text-gray-900">
+                                            <td className="py-4 px-6 text-right align-middle">
+                                                <p className="font-serif text-lg text-gallery-black">
                                                     ${parseFloat(order.amount).toLocaleString()}
                                                 </p>
                                             </td>
-                                            <td className="py-4 px-6 text-right">
-                                                <div className="flex items-center justify-end gap-2">
+                                            <td className="py-4 px-6 text-center align-middle">
+                                                <div className="flex items-center justify-center">
                                                     <span
-                                                        className={`text-xs font-semibold px-2.5 py-1 rounded-full border bg-white shadow-sm inline-flex items-center gap-1.5 capitalize ${orderStatusColors[order.status] || "bg-gray-100 text-gray-700"
+                                                        className={`text-[10px] uppercase font-bold tracking-widest px-3 py-1 border ${orderStatusColors[order.status] || "bg-gallery-cream border-gallery-charcoal/20 text-gallery-charcoal/50"
                                                             }`}
                                                     >
-                                                        {order.status === "paid" && <CheckCircle className="h-3 w-3" />}
                                                         {order.status}
                                                     </span>
                                                 </div>

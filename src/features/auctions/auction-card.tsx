@@ -80,9 +80,11 @@ function useCountdown(endTime: string) {
 export default function AuctionCard({
     item,
     artist,
+    isFeatured = false,
 }: {
     item: AuctionItem;
     artist?: ArtistResponse;
+    isFeatured?: boolean;
 }) {
     const { isAuthenticated } = useAuth();
     const router = useRouter();
@@ -95,31 +97,31 @@ export default function AuctionCard({
         <motion.div
             whileHover={{ y: -5 }}
             transition={{ duration: 0.2 }}
-            className="group relative bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300"
+            className={`group relative bg-gallery-cream border ${isFeatured ? 'border-gallery-charcoal' : 'border-gallery-charcoal/20'} transition-all duration-300`}
         >
             <Link href={`/artwork/${artwork.id}`}>
-                <div className="relative overflow-hidden aspect-square">
+                <div className={`relative overflow-hidden ${isFeatured ? 'aspect-[16/9]' : 'aspect-square'}`}>
                     <img
                         src={imageUrl}
                         alt={artwork.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     />
 
                     {/* Status Badge */}
-                    <div className="absolute top-3 left-3 flex gap-2">
+                    <div className="absolute top-4 left-4 flex gap-2">
                         <div className={`
-                            px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm
+                            px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2
                             ${timer.expired
-                                ? "bg-gray-900/90 text-white backdrop-blur-md"
-                                : "bg-white/90 text-purple-700 backdrop-blur-md"}
+                                ? "bg-gallery-charcoal text-white"
+                                : "bg-gallery-red text-white"}
                         `}>
                             {timer.expired ? (
                                 <span>Ended</span>
                             ) : (
                                 <>
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                                    <span className="relative flex h-1.5 w-1.5">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
                                     </span>
                                     Live
                                 </>
@@ -127,13 +129,13 @@ export default function AuctionCard({
                         </div>
                     </div>
 
-                    {/* Timer Overlay - Clean & Minimal */}
+                    {/* Timer Overlay */}
                     {!timer.expired && (
-                        <div className="absolute bottom-3 left-3 right-3">
-                            <div className="bg-black/70 backdrop-blur-md rounded-lg p-3 text-white flex items-center justify-between border border-white/10">
+                        <div className="absolute bottom-4 left-4 right-4">
+                            <div className="bg-gallery-cream border border-gallery-charcoal p-3 text-gallery-black flex items-center justify-between shadow-sm">
                                 <div className="flex flex-col">
-                                    <span className="text-[10px] text-gray-300 uppercase tracking-wide font-medium">Time Remaining</span>
-                                    <div className="flex gap-1 font-mono text-sm leading-none mt-1">
+                                    <span className="text-[10px] text-gallery-charcoal uppercase tracking-widest font-bold mb-1">Ending In</span>
+                                    <div className="flex gap-1 font-mono text-sm leading-none font-semibold">
                                         {timer.d > 0 && <span>{timer.d}d</span>}
                                         <span>{String(timer.h).padStart(2, "0")}h</span>
                                         <span>:</span>
@@ -142,40 +144,40 @@ export default function AuctionCard({
                                         <span>{String(timer.s).padStart(2, "0")}s</span>
                                     </div>
                                 </div>
-                                <Clock className="w-5 h-5 text-purple-400" />
+                                <Clock className="w-5 h-5 text-gallery-red" />
                             </div>
                         </div>
                     )}
                 </div>
             </Link>
 
-            <div className="p-3">
-                <div className="flex justify-between items-start mb-0.5">
+            <div className={`p-4 ${isFeatured ? 'md:p-6' : ''}`}>
+                <div className="flex justify-between items-start mb-1">
                     <Link href={`/artwork/${artwork.id}`} className="flex-1 mr-2">
-                        <h3 className="text-sm font-medium text-gray-900 hover:text-purple-600 transition-colors line-clamp-1">
+                        <h3 className={`${isFeatured ? 'text-2xl' : 'text-lg'} font-serif font-black text-gallery-black hover:text-gallery-red transition-colors line-clamp-1 truncate`}>
                             {artwork.title}
                         </h3>
                     </Link>
                 </div>
 
                 {artist && (
-                    <Link href={`/artist/${artist.id}`} className="text-xs text-gray-500 hover:text-gray-900 hover:underline mb-2 block truncate">
+                    <Link href={`/artist/${artist.id}`} className="text-xs uppercase tracking-widest font-semibold text-gallery-charcoal/70 hover:text-gallery-red hover:underline mb-4 block truncate">
                         {artist.shopName || artist.name}
                     </Link>
                 )}
 
-                <div className="flex items-end justify-between border-t border-gray-50 pt-2 mt-auto">
+                <div className={`flex items-end justify-between border-t border-gallery-charcoal/20 pt-4 mt-auto ${isFeatured ? 'mt-4' : ''}`}>
                     <div>
-                        <p className="text-[10px] text-gray-400 uppercase tracking-wide font-medium">Current Bid</p>
-                        <p className="text-sm font-bold text-gray-900 leading-none mt-1">
+                        <p className="text-[10px] text-gallery-charcoal uppercase tracking-widest font-bold mb-1">Current Bid</p>
+                        <p className={`${isFeatured ? 'text-2xl' : 'text-lg'} font-serif font-black text-gallery-black leading-none`}>
                             {formatPrice(currentBid)}
                         </p>
                     </div>
 
                     {!timer.expired && (
                         <Button
-                            size="sm"
-                            className="bg-gray-900 hover:bg-black text-white text-xs px-4 h-8 rounded-full"
+                            size={isFeatured ? "lg" : "sm"}
+                            className="bg-gallery-black hover:bg-gallery-charcoal text-white text-[10px] uppercase tracking-widest font-semibold px-6 rounded-none"
                             onClick={() => {
                                 if (!isAuthenticated) {
                                     toast.error("Please log in to place a bid");
