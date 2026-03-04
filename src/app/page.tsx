@@ -125,7 +125,7 @@ const Page = () => {
   if (artworksLoading || artistsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
       </div>
     );
   }
@@ -148,7 +148,7 @@ const Page = () => {
           const hasMore = categoryArtworks.length > 12;
 
           return (
-            <section key={category.id} className="py-4 border-b border-gray-100 last:border-b-0">
+            <section key={category.id} className="py-4 border-b border-gallery-charcoal/10 last:border-b-0">
               <div className="container mx-auto px-4">
                 <motion.div
                   initial="hidden"
@@ -190,8 +190,11 @@ const Page = () => {
                       {hasMore && (
                         <CarouselItem className="pl-4 basis-[80%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5 py-0">
                           <Link href={`/artworks?category=${category.id}`} className="block w-full">
-                            <div className="w-full relative overflow-hidden rounded-xl aspect-square border border-gray-200 bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors">
-                              <span className="font-medium text-gray-900 px-6 py-2 bg-white border shadow-sm rounded-full hover:bg-gray-50 transition-colors">
+                            <div className="w-full relative overflow-hidden rounded-none aspect-square border border-gallery-charcoal/20 bg-gallery-cream flex flex-col items-center justify-center hover:bg-gallery-charcoal/5 transition-colors group">
+                              <span className="font-bold text-xs uppercase tracking-widest text-gallery-charcoal group-hover:text-gallery-red transition-colors mb-2">
+                                Discover More
+                              </span>
+                              <span className="font-bold text-xs uppercase tracking-widest text-gallery-black px-6 py-2 bg-white border border-gallery-charcoal/20 shadow-none rounded-none group-hover:bg-gallery-red group-hover:text-white group-hover:border-gallery-red transition-all">
                                 View all
                               </span>
                             </div>

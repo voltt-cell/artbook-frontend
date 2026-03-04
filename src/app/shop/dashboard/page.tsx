@@ -72,7 +72,7 @@ export default function ShopDashboard() {
                             </h1>
                             <p className="text-gallery-charcoal/70 mt-2 font-serif italic text-lg tracking-wide">Manage your artworks, orders, and shop settings</p>
                         </div>
-                        <Link href="/artist/create">
+                        <Link href="/shop/create">
                             <Button className="bg-gallery-black hover:bg-gallery-red text-white rounded-none h-12 px-8 uppercase tracking-widest text-xs font-bold transition-all">
                                 <Plus className="mr-2 h-4 w-4" /> New Artwork
                             </Button>
@@ -103,7 +103,7 @@ export default function ShopDashboard() {
 
                     {/* Quick Actions */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                        <Link href="/artist/create" className="group">
+                        <Link href="/shop/create" className="group">
                             <div className="bg-white rounded-none p-6 border border-gallery-charcoal/20 hover:border-gallery-red transition-all duration-300">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-5">
@@ -149,7 +149,7 @@ export default function ShopDashboard() {
                         <div className="flex items-center justify-between mb-8 pb-4 border-b border-gallery-charcoal/20">
                             <h2 className="text-2xl font-serif font-black text-gallery-black uppercase tracking-widest">Your Masterpieces</h2>
                             {artworks.length > 6 && (
-                                <Link href="/artist/dashboard" className="text-xs font-bold uppercase tracking-widest text-gallery-charcoal hover:text-gallery-red transition-colors flex items-center">
+                                <Link href="/shop/dashboard" className="text-xs font-bold uppercase tracking-widest text-gallery-charcoal hover:text-gallery-red transition-colors flex items-center">
                                     View All Gallery <ArrowRight className="ml-2 w-4 h-4" />
                                 </Link>
                             )}
@@ -164,7 +164,7 @@ export default function ShopDashboard() {
                                 <ImageIcon className="w-16 h-16 text-gallery-charcoal/20 mx-auto mb-6" />
                                 <h3 className="text-xl font-serif font-black text-gallery-black uppercase tracking-widest mb-3">No artworks yet</h3>
                                 <p className="text-gallery-charcoal/70 font-serif italic text-lg mb-8 max-w-sm mx-auto">Start by creating your first masterpiece to display in your gallery.</p>
-                                <Link href="/artist/create">
+                                <Link href="/shop/create">
                                     <Button className="bg-gallery-black hover:bg-gallery-red text-white h-12 px-8 rounded-none uppercase tracking-widest text-xs font-bold transition-all">
                                         <Plus className="mr-2 h-4 w-4" /> Create Your First Artwork
                                     </Button>

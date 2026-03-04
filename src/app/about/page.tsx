@@ -7,9 +7,9 @@ export default function AboutPage() {
             <div className="hidden lg:flex flex-col relative w-[45%] bg-gallery-black">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1577720580479-7d839d892015?auto=format&fit=crop&q=80&w=1600"
+                        src="/images/gallery_about.jpg"
                         alt="Gallery Space"
-                        className="w-full h-full object-cover opacity-60 mix-blend-overlay grayscale"
+                        className="w-full h-full object-cover opacity-50 grayscale"
                     />
                     <div className="absolute inset-0 bg-black/40" />
                 </div>
@@ -18,7 +18,7 @@ export default function AboutPage() {
                     <div>
                         <Quote className="w-12 h-12 text-gallery-red mb-8 opacity-80" />
                         <h2 className="text-5xl font-serif font-black text-white leading-[1.1] mb-6 uppercase tracking-wider">
-                            "The essence of all beautiful art, all great art, is gratitude."
+                            &quot;The essence of all beautiful art, all great art, is gratitude.&quot;
                         </h2>
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-1 bg-gallery-red" />
@@ -45,7 +45,7 @@ export default function AboutPage() {
 
                     <div className="space-y-12 font-serif text-lg text-gallery-charcoal/90 leading-relaxed max-w-2xl">
                         <p className="first-letter:text-6xl first-letter:font-black first-letter:text-gallery-black first-letter:mr-3 first-letter:float-left first-line:uppercase first-line:tracking-widest">
-                            Founded with the belief that art should be accessible without sacrificing premium curation, we built a marketplace that empowers artists to showcase their work in a dedicated, beautiful environment. We strip away the noise of traditional social media and focus purely on the art and the artist's vision.
+                            Founded with the belief that art should be accessible without sacrificing premium curation, we built a marketplace that empowers artists to showcase their work in a dedicated, beautiful environment. We strip away the noise of traditional social media and focus purely on the art and the artist&apos;s vision.
                         </p>
 
                         <div className="h-px w-full bg-gallery-charcoal/20 my-12" />
@@ -55,7 +55,7 @@ export default function AboutPage() {
                                 Our Mission
                             </h2>
                             <p>
-                                To democratize fine art collection while maintaining an exclusive, highly-curated standard that respects the creator's effort and the collector's investment. We believe that every stroke tells a story, and every canvas deserves a stage that echoes its profoundness.
+                                To democratize fine art collection while maintaining an exclusive, highly-curated standard that respects the creator&apos;s effort and the collector&apos;s investment. We believe that every stroke tells a story, and every canvas deserves a stage that echoes its profoundness.
                             </p>
                         </div>
 

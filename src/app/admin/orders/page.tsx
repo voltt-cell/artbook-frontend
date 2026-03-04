@@ -3,9 +3,8 @@
 import useSWR from "swr";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/auth-context";
-import { Loader2, ArrowLeft, Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 import { useState } from "react";
@@ -47,7 +46,7 @@ export default function AdminOrdersPage() {
     if (authLoading || isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
             </div>
         );
     }

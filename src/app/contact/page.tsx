@@ -12,7 +12,7 @@ export default function ContactPage() {
                         Get in Touch
                     </h1>
                     <p className="text-xl md:text-2xl font-serif italic text-gallery-charcoal/70 max-w-2xl mx-auto">
-                        We'd love to hear from you. Please reach out with any questions about artworks, artists, or your collection.
+                        We&apos;d love to hear from you. Please reach out with any questions about artworks, artists, or your collection.
                     </p>
                 </div>
 

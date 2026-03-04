@@ -10,10 +10,10 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { ArrowLeft, Users, Palette, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 import ArtworkCard from "@/features/home/artwork-card";
 import { toast } from "sonner";
 import { useState } from "react";
+import Link from "next/link";
 import { ArtworkSkeletonGrid } from "@/components/artwork-skeleton";
 
 interface Artist {
@@ -43,26 +43,30 @@ interface Artwork {
 
 function ArtistProfileSkeleton() {
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="container mx-auto px-4 py-10 max-w-5xl">
-                <Skeleton className="h-4 w-28 mb-6" />
-                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8">
-                    <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                        <Skeleton className="w-24 h-24 rounded-full flex-shrink-0" />
-                        <div className="flex-1 space-y-3 text-center md:text-left">
-                            <Skeleton className="h-7 w-48 mx-auto md:mx-0" />
-                            <Skeleton className="h-4 w-64 mx-auto md:mx-0" />
-                            <Skeleton className="h-4 w-full max-w-md mx-auto md:mx-0" />
-                            <div className="flex gap-6 justify-center md:justify-start mt-4">
-                                <Skeleton className="h-12 w-16" />
-                                <Skeleton className="h-12 w-16" />
-                                <Skeleton className="h-9 w-24 rounded-md" />
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
+            <div className="container mx-auto px-4 max-w-5xl">
+                <Skeleton className="h-4 w-28 mb-12 rounded-none bg-gallery-charcoal/5" />
+                <div className="bg-white rounded-none p-10 border border-gallery-charcoal/20 mb-16">
+                    <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
+                        <Skeleton className="w-32 h-32 rounded-none flex-shrink-0 bg-gallery-charcoal/5" />
+                        <div className="flex-1 space-y-4 text-center md:text-left mt-2 md:mt-0">
+                            <Skeleton className="h-10 w-64 mx-auto md:mx-0 rounded-none bg-gallery-charcoal/5" />
+                            <div className="flex gap-3 justify-center md:justify-start">
+                                <Skeleton className="h-6 w-32 rounded-none bg-gallery-charcoal/5" />
+                                <Skeleton className="h-6 w-24 rounded-none bg-gallery-charcoal/5" />
+                            </div>
+                            <Skeleton className="h-4 w-full max-w-lg mx-auto md:mx-0 rounded-none bg-gallery-charcoal/5" />
+                            <Skeleton className="h-4 w-3/4 max-w-md mx-auto md:mx-0 rounded-none bg-gallery-charcoal/5" />
+                            <div className="flex gap-4 justify-center md:justify-start mt-8">
+                                <Skeleton className="h-16 w-24 rounded-none bg-gallery-charcoal/5" />
+                                <Skeleton className="h-16 w-24 rounded-none bg-gallery-charcoal/5" />
+                                <Skeleton className="h-12 w-48 rounded-none md:ml-auto mt-2 bg-gallery-charcoal/5" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <Skeleton className="h-6 w-24 mb-4" />
-                <ArtworkSkeletonGrid count={3} />
+                <Skeleton className="h-8 w-48 mb-8 mt-20 rounded-none bg-gallery-charcoal/5" />
+                <ArtworkSkeletonGrid count={6} />
             </div>
         </div>
     );
@@ -126,55 +130,51 @@ export default function ArtistProfilePage() {
     if (!artist) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <p className="text-gray-500">Artist not found.</p>
+                <p className="text-gallery-charcoal/70 uppercase tracking-widest font-bold text-sm">Artist not found.</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="container mx-auto px-4 py-10 max-w-5xl">
-                <Link
-                    href="/artists"
-                    className="inline-flex items-center text-sm text-gray-500 hover:text-purple-600 mb-6"
-                >
-                    <ArrowLeft className="w-4 h-4 mr-1" />
-                    Back to Artists
-                </Link>
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
+            <div className="container mx-auto px-4 max-w-5xl">
+                <div className="mb-12">
+                    <Link
+                        href="/artists"
+                        className="inline-flex items-center text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:text-gallery-red transition-colors"
+                    >
+                        <ArrowLeft className="w-4 h-4 mr-2" />
+                        Back to Artists
+                    </Link>
+                </div>
 
                 {/* Artist Hero Banner & Profile Card */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="relative bg-white rounded-2xl shadow-sm border border-gray-100 mb-12 overflow-hidden"
+                    className="relative bg-white rounded-none border border-gallery-charcoal/20 mb-20 overflow-hidden"
                 >
                     {/* Cover Banner */}
-                    <div className="h-48 md:h-64 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]"></div>
-                        <motion.div
-                            initial={{ scale: 1.1, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.8 }}
-                            className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"
-                        ></motion.div>
+                    <div className="h-32 md:h-48 w-full bg-gallery-charcoal/5 relative overflow-hidden border-b border-gallery-charcoal/10">
+                        <div className="absolute inset-0 bg-gallery-black/5 mix-blend-multiply"></div>
                     </div>
 
-                    <div className="px-6 pb-8 md:px-10 relative">
-                        <div className="flex flex-col md:flex-row gap-6 md:gap-8 -mt-16 md:-mt-20">
+                    <div className="px-6 pb-12 md:px-12 relative">
+                        <div className="flex flex-col md:flex-row gap-8 md:gap-12 -mt-16 md:-mt-24">
                             {/* Profile Picture */}
                             <motion.div
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                                className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white p-2 flex-shrink-0 shadow-lg mx-auto md:mx-0 relative z-10"
+                                className="w-32 h-32 md:w-48 md:h-48 rounded-none bg-white p-2 flex-shrink-0 shadow-none border border-gallery-charcoal/20 mx-auto md:mx-0 relative z-10"
                             >
-                                <div className="w-full h-full rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center text-purple-600 text-4xl font-bold overflow-hidden border border-gray-100">
+                                <div className="w-full h-full rounded-none bg-gallery-cream flex items-center justify-center text-gallery-black text-5xl font-serif font-black overflow-hidden border border-gallery-charcoal/10">
                                     {artist.profileImage ? (
                                         <img
                                             src={artist.profileImage}
                                             alt={artist.name}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover grayscale opacity-90"
                                         />
                                     ) : (
                                         artist.name.charAt(0)
@@ -187,45 +187,45 @@ export default function ArtistProfilePage() {
                                 variants={staggerContainer}
                                 initial="hidden"
                                 animate="visible"
-                                className="flex-1 text-center md:text-left pt-2 md:pt-24 flex flex-col justify-center"
+                                className="flex-1 text-center md:text-left pt-2 md:pt-28 flex flex-col justify-center"
                             >
-                                <motion.h1 variants={fadeInUp} className="text-3xl md:text-4xl font-serif font-bold text-gray-900">
+                                <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-serif font-black uppercase tracking-widest text-gallery-black">
                                     {artist.name}
                                 </motion.h1>
-                                <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-3 text-sm font-medium text-gray-600">
-                                    <span className="flex items-center gap-1.5 bg-gray-100 px-3 py-1 rounded-full text-gray-700">
-                                        <Mail className="w-4 h-4 text-purple-500" />
+                                <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-6">
+                                    <span className="flex items-center gap-2 bg-transparent px-4 py-2 rounded-none border border-gallery-charcoal/20 text-[10px] tracking-widest uppercase font-bold text-gallery-charcoal">
+                                        <Mail className="w-3.5 h-3.5 text-gallery-charcoal" />
                                         {artist.email}
                                     </span>
-                                    <span className="flex items-center gap-1.5 capitalize bg-purple-50 text-purple-700 px-3 py-1 rounded-full border border-purple-100">
-                                        <Palette className="w-4 h-4" />
+                                    <span className="flex items-center gap-2 bg-transparent px-4 py-2 rounded-none border border-gallery-charcoal/20 text-[10px] tracking-widest uppercase font-bold text-gallery-charcoal">
+                                        <Palette className="w-3.5 h-3.5 text-gallery-charcoal" />
                                         {artist.role}
                                     </span>
                                 </motion.div>
 
                                 {artist.bio && (
-                                    <motion.p variants={fadeInUp} className="mt-5 text-gray-600 leading-relaxed max-w-2xl mx-auto md:mx-0 text-base">
-                                        {artist.bio}
+                                    <motion.p variants={fadeInUp} className="mt-8 text-gallery-charcoal/80 font-serif text-lg md:text-xl italic leading-relaxed max-w-2xl mx-auto md:mx-0">
+                                        "{artist.bio}"
                                     </motion.p>
                                 )}
 
                                 {/* Stats & Actions Action */}
-                                <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-8">
-                                    <motion.div whileHover={{ y: -2 }} className="bg-gray-50 px-6 py-3 rounded-xl border border-gray-100 text-center min-w-[100px]">
-                                        <span className="block text-2xl font-bold text-gray-900">
+                                <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-10">
+                                    <div className="bg-gallery-cream px-6 py-4 rounded-none border border-gallery-charcoal/20 text-center min-w-[120px]">
+                                        <span className="block text-3xl font-black font-serif text-gallery-black mb-1">
                                             {followerCount}
                                         </span>
-                                        <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Followers</span>
-                                    </motion.div>
-                                    <motion.div whileHover={{ y: -2 }} className="bg-gray-50 px-6 py-3 rounded-xl border border-gray-100 text-center min-w-[100px]">
-                                        <span className="block text-2xl font-bold text-gray-900">
+                                        <span className="text-[10px] font-bold text-gallery-charcoal/50 uppercase tracking-widest">Followers</span>
+                                    </div>
+                                    <div className="bg-gallery-cream px-6 py-4 rounded-none border border-gallery-charcoal/20 text-center min-w-[120px]">
+                                        <span className="block text-3xl font-black font-serif text-gallery-black mb-1">
                                             {artworks?.length || 0}
                                         </span>
-                                        <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Artworks</span>
-                                    </motion.div>
+                                        <span className="text-[10px] font-bold text-gallery-charcoal/50 uppercase tracking-widest">Artworks</span>
+                                    </div>
 
                                     {!isOwnProfile && (
-                                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="ml-0 md:ml-auto w-full md:w-auto mt-4 md:mt-0">
+                                        <div className="ml-0 md:ml-auto w-full md:w-auto mt-6 md:mt-0">
                                             <Button
                                                 onClick={handleFollow}
                                                 disabled={followLoading}
@@ -233,18 +233,18 @@ export default function ArtistProfilePage() {
                                                 variant={isFollowing ? "outline" : "default"}
                                                 className={
                                                     isFollowing
-                                                        ? "w-full border-purple-300 text-purple-700 hover:bg-purple-50 shadow-sm"
-                                                        : "w-full bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-200"
+                                                        ? "w-full border-gallery-charcoal/20 text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red shadow-none rounded-none h-[82px] px-8 text-xs uppercase tracking-widest font-bold transition-all"
+                                                        : "w-full bg-gallery-black hover:bg-gallery-red text-white shadow-none rounded-none h-[82px] px-8 text-xs uppercase tracking-widest font-bold transition-all"
                                                 }
                                             >
-                                                <Users className="w-5 h-5 mr-2" />
+                                                <Users className="w-4 h-4 mr-3" />
                                                 {followLoading
-                                                    ? "..."
+                                                    ? "Wait..."
                                                     : isFollowing
-                                                        ? "Following"
+                                                        ? "Unfollow"
                                                         : "Follow Artist"}
                                             </Button>
-                                        </motion.div>
+                                        </div>
                                     )}
                                 </motion.div>
                             </motion.div>
@@ -254,10 +254,10 @@ export default function ArtistProfilePage() {
 
 
                 {/* Artworks Portfolio */}
-                <div className="mb-8 flex items-center justify-between">
+                <div className="mb-12 border-b border-gallery-charcoal/20 pb-6 flex items-center justify-between">
                     <div>
-                        <h2 className="text-2xl font-serif font-bold text-gray-900">Portfolio</h2>
-                        <p className="text-gray-500 text-sm mt-1">Explore creations by {artist.name}</p>
+                        <h2 className="text-4xl font-serif font-black uppercase tracking-widest text-gallery-black">Portfolio</h2>
+                        <p className="text-gallery-charcoal/60 text-sm mt-2 uppercase tracking-widest font-bold">Explore creations by {artist.name}</p>
                     </div>
                 </div>
 
@@ -308,19 +308,12 @@ export default function ArtistProfilePage() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-100 shadow-sm"
+                        className="flex flex-col items-center justify-center py-32 bg-white border border-gallery-charcoal/20 shadow-none mix-blend-multiply"
                     >
-                        <motion.div
-                            initial={{ y: 0 }}
-                            animate={{ y: [-5, 5, -5] }}
-                            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                            className="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mb-4"
-                        >
-                            <Palette className="w-10 h-10 text-purple-400" />
-                        </motion.div>
-                        <h3 className="text-xl font-serif font-bold text-gray-900 mb-2">No Artworks Yet</h3>
-                        <p className="text-gray-500 max-w-sm text-center">
-                            {artist.name} hasn't published any artworks yet. Check back later to see their creative portfolio.
+                        <Palette className="w-12 h-12 text-gallery-charcoal/20 mb-6" />
+                        <h3 className="text-2xl font-serif font-black text-gallery-black mb-3 uppercase tracking-wider">No Artworks Yet</h3>
+                        <p className="text-gallery-charcoal/60 max-w-md text-center">
+                            {artist.name} hasn&apos;t published any artworks yet. Check back later to see their creative portfolio.
                         </p>
                     </motion.div>
                 )}

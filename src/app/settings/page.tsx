@@ -5,17 +5,14 @@ import { useAuth } from "@/context/auth-context";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/animations";
 import { Loader2, Camera, User, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8787";
-
 export default function SettingsPage() {
-    const { user, isAuthenticated, loading, refreshUser, hasShop } = useAuth();
+    const { user, isAuthenticated, loading, refreshUser } = useAuth();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
@@ -50,6 +47,8 @@ export default function SettingsPage() {
         try {
             const formData = new FormData();
             formData.append("file", file);
+
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
             const response = await fetch(`${API_URL}/upload`, {
                 method: "POST",
@@ -120,7 +119,7 @@ export default function SettingsPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
             </div>
         );
     }
@@ -131,24 +130,24 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="container mx-auto px-4 py-10 max-w-2xl">
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
+            <div className="container mx-auto px-4 max-w-2xl">
                 <motion.h1
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="font-serif text-3xl font-bold mb-8"
+                    className="font-serif text-5xl md:text-6xl font-black tracking-widest uppercase text-gallery-black text-center mb-16"
                 >
                     Settings
                 </motion.h1>
 
                 {/* Tabs */}
-                <div className="flex gap-2 mb-8">
+                <div className="flex gap-4 border-b border-gallery-charcoal/20 mb-12 pb-4 justify-center">
                     <button
                         onClick={() => setActiveTab("profile")}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === "profile"
-                            ? "bg-purple-600 text-white"
-                            : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                        className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all text-xs uppercase tracking-widest ${activeTab === "profile"
+                            ? "bg-gallery-black text-white"
+                            : "bg-transparent text-gallery-charcoal hover:bg-gallery-charcoal/5 border border-gallery-charcoal/20"
                             }`}
                     >
                         <User className="w-4 h-4" />
@@ -156,9 +155,9 @@ export default function SettingsPage() {
                     </button>
                     <button
                         onClick={() => setActiveTab("password")}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === "password"
-                            ? "bg-purple-600 text-white"
-                            : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                        className={`flex items-center gap-2 px-6 py-3 font-semibold transition-all text-xs uppercase tracking-widest ${activeTab === "password"
+                            ? "bg-gallery-black text-white"
+                            : "bg-transparent text-gallery-charcoal hover:bg-gallery-charcoal/5 border border-gallery-charcoal/20"
                             }`}
                     >
                         <Lock className="w-4 h-4" />
@@ -172,87 +171,75 @@ export default function SettingsPage() {
                         initial="hidden"
                         animate="visible"
                         variants={fadeInUp}
-                        className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 space-y-6"
+                        className="bg-white rounded-none p-10 border border-gallery-charcoal/20 space-y-10"
                     >
                         {/* Profile Image */}
                         <div className="flex flex-col items-center gap-4">
-                            <div className="relative group">
-                                <div className="w-28 h-28 rounded-full bg-purple-100 flex items-center justify-center overflow-hidden">
-                                    {profileImage ? (
-                                        <img
-                                            src={profileImage}
-                                            alt="Profile"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-purple-600 font-bold text-3xl">
+                            <div className="relative group w-32 h-32">
+                                {profileImage ? (
+                                    <img
+                                        src={profileImage}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover rounded-none border border-gallery-charcoal/20"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-gallery-cream border border-gallery-charcoal/20 flex items-center justify-center">
+                                        <span className="text-gallery-red font-bold text-4xl font-serif">
                                             {name.charAt(0)}
                                         </span>
-                                    )}
-                                </div>
-                                <button
-                                    onClick={() => fileInputRef.current?.click()}
-                                    disabled={uploading}
-                                    className="absolute bottom-0 right-0 bg-purple-600 text-white p-2 rounded-full shadow-md hover:bg-purple-700 transition-colors"
-                                >
-                                    {uploading ? (
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                    ) : (
-                                        <Camera className="w-4 h-4" />
-                                    )}
-                                </button>
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
-                                    className="hidden"
-                                />
+                                    </div>
+                                )}
                             </div>
-                            <p className="text-sm text-gray-500">
-                                Click the camera icon to upload a new photo
-                            </p>
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={uploading}
+                                className="bg-gallery-black text-white px-4 py-2 uppercase tracking-widest text-[10px] font-bold shadow-none hover:bg-gallery-charcoal transition-colors flex items-center gap-2"
+                            >
+                                {uploading ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <>
+                                        <Camera className="w-4 h-4" />
+                                        Upload Photo
+                                    </>
+                                )}
+                            </button>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="hidden"
+                            />
                         </div>
 
                         {/* Name */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-bold uppercase tracking-widest text-gallery-charcoal mb-2">
                                 Name
                             </label>
                             <Input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="Your full name"
+                                className="rounded-none border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 bg-transparent px-0 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none"
                             />
                         </div>
 
                         {/* Email (read-only) */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-bold uppercase tracking-widest text-gallery-charcoal mb-2">
                                 Email
                             </label>
-                            <Input value={user?.email || ""} disabled className="bg-gray-50" />
-                            <p className="text-xs text-gray-400 mt-1">Email cannot be changed</p>
+                            <Input value={user?.email || ""} disabled className="rounded-none border-gallery-charcoal/10 bg-gallery-cream text-gallery-charcoal px-4 py-6 font-medium shadow-none cursor-not-allowed" />
+                            <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/40 mt-2">Email cannot be changed</p>
                         </div>
 
-                        {/* Bio */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Bio
-                            </label>
-                            <Textarea
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                                placeholder="Tell us about yourself and your art..."
-                                rows={4}
-                            />
-                        </div>
-
-                        <div className="flex justify-end">
+                        <div className="flex justify-end pt-4 border-t border-gallery-charcoal/10">
                             <Button
                                 onClick={handleProfileSave}
                                 disabled={profileSaving}
-                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                                className="bg-gallery-black hover:bg-gallery-charcoal text-white rounded-none px-8 py-6 text-xs font-bold tracking-widest uppercase transition-colors"
                             >
                                 {profileSaving ? "Saving..." : "Save Changes"}
                             </Button>
@@ -266,10 +253,10 @@ export default function SettingsPage() {
                         initial="hidden"
                         animate="visible"
                         variants={fadeInUp}
-                        className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 space-y-6"
+                        className="bg-white rounded-none p-10 border border-gallery-charcoal/20 space-y-10"
                     >
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-bold uppercase tracking-widest text-gallery-charcoal mb-2">
                                 Current Password
                             </label>
                             <Input
@@ -277,11 +264,12 @@ export default function SettingsPage() {
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
                                 placeholder="Enter current password"
+                                className="rounded-none border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 bg-transparent px-0 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-bold uppercase tracking-widest text-gallery-charcoal mb-2">
                                 New Password
                             </label>
                             <Input
@@ -289,11 +277,12 @@ export default function SettingsPage() {
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
                                 placeholder="Enter new password (min 8 characters)"
+                                className="rounded-none border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 bg-transparent px-0 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-xs font-bold uppercase tracking-widest text-gallery-charcoal mb-2">
                                 Confirm New Password
                             </label>
                             <Input
@@ -301,14 +290,15 @@ export default function SettingsPage() {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="Confirm new password"
+                                className="rounded-none border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 bg-transparent px-0 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none"
                             />
                         </div>
 
-                        <div className="flex justify-end">
+                        <div className="flex justify-end pt-4 border-t border-gallery-charcoal/10">
                             <Button
                                 onClick={handlePasswordChange}
                                 disabled={passwordSaving}
-                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                                className="bg-gallery-black hover:bg-gallery-charcoal text-white rounded-none px-8 py-6 text-xs font-bold tracking-widest uppercase transition-colors"
                             >
                                 {passwordSaving ? "Changing..." : "Change Password"}
                             </Button>
@@ -316,6 +306,6 @@ export default function SettingsPage() {
                     </motion.div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

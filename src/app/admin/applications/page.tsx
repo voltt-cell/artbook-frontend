@@ -6,8 +6,7 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, Clock, Store, User, Loader2, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { CheckCircle, XCircle, Clock, Store, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type ShopApplication = {
@@ -46,7 +45,7 @@ export default function AdminApplicationsPage() {
         try {
             const data = await api.get<ShopApplication[]>("/admin/shop-applications");
             setApplications(data);
-        } catch (error) {
+        } catch {
             toast.error("Failed to load applications");
         } finally {
             setLoading(false);
@@ -87,7 +86,7 @@ export default function AdminApplicationsPage() {
     if (authLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
             </div>
         );
     }
@@ -111,7 +110,7 @@ export default function AdminApplicationsPage() {
 
             {loading ? (
                 <div className="flex justify-center py-20">
-                    <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+                    <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
                 </div>
             ) : (
                 <>

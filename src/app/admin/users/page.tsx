@@ -3,10 +3,9 @@
 import useSWR, { mutate } from "swr";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/auth-context";
-import { Loader2, ArrowLeft, Trash2, Search } from "lucide-react";
+import { Loader2, Trash2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 import { api } from "@/lib/api";
@@ -84,7 +83,7 @@ export default function AdminUsersPage() {
     if (authLoading || isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
             </div>
         );
     }
@@ -186,11 +185,11 @@ export default function AdminUsersPage() {
                         </table>
                     </div>
                     {filteredUsers.length === 0 && (
-                        <div className="py-16 text-center text-gray-400">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 mb-4">
-                                <Search className="h-8 w-8 text-gray-300" />
+                        <div className="py-24 text-center bg-gallery-cream/30 border-t border-gallery-charcoal/20">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-none bg-white border border-gallery-charcoal/20 mb-6 shadow-none">
+                                <Search className="h-6 w-6 text-gallery-charcoal/40" />
                             </div>
-                            <p className="font-medium text-gray-500">No users found</p>
+                            <p className="font-serif italic text-gallery-charcoal text-lg">No users found</p>
                         </div>
                     )}
                 </div>
@@ -201,7 +200,7 @@ export default function AdminUsersPage() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete the user "{deleteUser?.name}". This action cannot be undone.
+                            This will permanently delete the user &quot;{deleteUser?.name}&quot;. This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

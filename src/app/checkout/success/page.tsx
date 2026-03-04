@@ -24,11 +24,11 @@ function CheckoutSuccessContent() {
 
     if (!sessionId) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid Session</h1>
+            <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gallery-cream px-4">
+                <div className="text-center p-16 bg-white border border-gallery-charcoal/20 max-w-lg w-full">
+                    <h1 className="text-2xl font-serif font-black text-gallery-black mb-6 uppercase tracking-widest">Invalid Session</h1>
                     <Link href="/">
-                        <Button>Return Home</Button>
+                        <Button className="w-full bg-gallery-black hover:bg-gallery-red text-white h-12 rounded-none font-bold uppercase tracking-widest text-xs transition-colors">Return to Gallery</Button>
                     </Link>
                 </div>
             </div>
@@ -36,33 +36,38 @@ function CheckoutSuccessContent() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream flex flex-col items-center justify-center border-t border-gallery-charcoal/20 px-4 py-20">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center"
+                className="max-w-xl w-full bg-white border border-gallery-charcoal/20 p-12 md:p-16 text-center"
             >
-                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-                    <CheckCircle className="h-8 w-8 text-green-600" />
+                <div className="mx-auto flex items-center justify-center h-20 w-20 border border-green-800/20 bg-green-50/50 mb-8 mt-4">
+                    <CheckCircle className="h-8 w-8 text-green-800" />
                 </div>
 
-                <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">
-                    Payment Successful!
+                <div className="inline-flex items-center border border-gallery-charcoal/20 bg-white px-4 py-1 text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal mb-6">
+                    Transaction Complete
+                </div>
+
+                <h2 className="text-4xl md:text-5xl font-serif font-black text-gallery-black mb-6 uppercase tracking-widest leading-tight">
+                    Acquisition<br />Successful
                 </h2>
-                <p className="text-gray-500 mb-8">
-                    Thank you for your purchase. Your order has been confirmed and the artwork is now yours.
+
+                <p className="font-serif italic text-gallery-charcoal/80 mb-12 text-lg max-w-md mx-auto">
+                    Thank you, collector. Your order has been confirmed and the artwork is now securely yours.
                 </p>
 
-                <div className="space-y-3">
+                <div className="space-y-4 max-w-sm mx-auto">
                     <Link href="/buyer/dashboard">
-                        <Button className="w-full bg-purple-600 hover:bg-purple-700 h-11 text-base">
-                            View My Orders <ArrowRight className="ml-2 h-4 w-4" />
+                        <Button className="w-full bg-gallery-black hover:bg-gallery-red text-white h-14 rounded-none font-bold uppercase tracking-widest text-xs transition-colors flex items-center justify-between px-6">
+                            View Collection <ArrowRight className="h-4 w-4" />
                         </Button>
                     </Link>
 
                     <Link href="/artworks">
-                        <Button variant="outline" className="w-full h-11 text-base">
-                            Continue Shopping
+                        <Button variant="outline" className="w-full bg-white hover:bg-gallery-cream text-gallery-black border border-gallery-charcoal/20 h-14 rounded-none font-bold uppercase tracking-widest text-xs transition-colors">
+                            Continue Exploring
                         </Button>
                     </Link>
                 </div>
@@ -74,8 +79,8 @@ function CheckoutSuccessContent() {
 export default function CheckoutSuccessPage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+            <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gallery-cream">
+                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
             </div>
         }>
             <CheckoutSuccessContent />

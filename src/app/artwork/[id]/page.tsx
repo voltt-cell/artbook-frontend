@@ -90,29 +90,29 @@ const formatPrice = (price: number) =>
 
 function ArtworkDetailSkeleton() {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
             <div className="container mx-auto px-4 pt-6">
-                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-32 rounded-none bg-gallery-charcoal/5" />
             </div>
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <Skeleton className="w-full h-[500px] rounded-2xl" />
-                    <div className="space-y-4">
-                        <Skeleton className="h-10 w-3/4" />
-                        <div className="flex items-center gap-3">
-                            <Skeleton className="w-10 h-10 rounded-full" />
-                            <div className="space-y-1">
-                                <Skeleton className="h-4 w-28" />
-                                <Skeleton className="h-3 w-16" />
+            <div className="container mx-auto px-4 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <Skeleton className="w-full h-[600px] rounded-none bg-gallery-charcoal/5" />
+                    <div className="space-y-6 pt-4">
+                        <Skeleton className="h-12 w-3/4 rounded-none bg-gallery-charcoal/5" />
+                        <div className="flex items-center gap-4 py-4 border-y border-gallery-charcoal/10">
+                            <Skeleton className="w-12 h-12 rounded-none bg-gallery-charcoal/5" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-32 rounded-none bg-gallery-charcoal/5" />
+                                <Skeleton className="h-3 w-20 rounded-none bg-gallery-charcoal/5" />
                             </div>
                         </div>
-                        <Skeleton className="h-24 w-full rounded-xl" />
-                        <Skeleton className="h-20 w-full" />
-                        <div className="grid grid-cols-2 gap-4">
-                            <Skeleton className="h-20 rounded-lg" />
-                            <Skeleton className="h-20 rounded-lg" />
-                            <Skeleton className="h-20 rounded-lg" />
-                            <Skeleton className="h-20 rounded-lg" />
+                        <Skeleton className="h-32 w-full rounded-none bg-gallery-charcoal/5" />
+                        <Skeleton className="h-24 w-full rounded-none bg-gallery-charcoal/5" />
+                        <div className="grid grid-cols-2 gap-6">
+                            <Skeleton className="h-24 rounded-none bg-gallery-charcoal/5" />
+                            <Skeleton className="h-24 rounded-none bg-gallery-charcoal/5" />
+                            <Skeleton className="h-24 rounded-none bg-gallery-charcoal/5" />
+                            <Skeleton className="h-24 rounded-none bg-gallery-charcoal/5" />
                         </div>
                     </div>
                 </div>
@@ -315,7 +315,7 @@ export default function ArtworkDetailPage({
     if (!artwork) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-                <p className="text-gray-500 text-lg">Artwork not found.</p>
+                <p className="text-gallery-charcoal/70 uppercase tracking-widest font-bold text-sm">Artwork not found.</p>
                 <Link href="/artworks">
                     <Button variant="outline">
                         <ArrowLeft className="w-4 h-4 mr-2" />
@@ -330,23 +330,23 @@ export default function ArtworkDetailPage({
     const isAuction = artwork.listingType === "auction";
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
             {/* Back Navigation */}
-            <div className="container mx-auto px-4 pt-6">
+            <div className="container mx-auto px-4 pt-6 mb-12">
                 <Link
                     href="/artworks"
-                    className="inline-flex items-center text-gray-500 hover:text-gray-900 transition-colors text-sm"
+                    className="inline-flex items-center text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:text-gallery-red transition-colors"
                 >
-                    <ArrowLeft className="w-4 h-4 mr-1" />
+                    <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to Artworks
                 </Link>
             </div>
 
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="container mx-auto px-4 py-8 max-w-7xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                     {/* Image Slider */}
                     <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-                        <div className="relative overflow-hidden rounded-2xl shadow-xl bg-gray-100">
+                        <div className="relative overflow-hidden rounded-none shadow-none border border-gallery-charcoal/20 bg-white">
                             {/* Main image */}
                             <AnimatePresence mode="wait">
                                 <motion.img
@@ -372,14 +372,14 @@ export default function ArtworkDetailPage({
 
                             {/* Badges */}
                             {isAuction && (
-                                <div className="absolute top-4 left-4 bg-purple-600 text-white text-sm px-3 py-1 rounded-full font-medium">
-                                    <Gavel className="w-3.5 h-3.5 inline mr-1" />
+                                <div className="absolute top-4 left-4 bg-gallery-black text-white px-4 py-2 text-[10px] uppercase font-bold tracking-widest rounded-none border border-white/20">
+                                    <Gavel className="w-3.5 h-3.5 inline mr-2" />
                                     Auction
                                 </div>
                             )}
                             {artwork.status === "sold" && (
-                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                    <span className="text-white text-3xl font-serif font-bold tracking-wide bg-red-600/80 px-6 py-2 rounded-lg">
+                                <div className="absolute inset-0 bg-gallery-cream/80 flex items-center justify-center backdrop-blur-sm">
+                                    <span className="text-gallery-red text-4xl md:text-6xl font-serif font-black tracking-widest uppercase border-4 border-gallery-red px-10 py-4 rotate-[-5deg]">
                                         SOLD
                                     </span>
                                 </div>
@@ -390,15 +390,15 @@ export default function ArtworkDetailPage({
                                 <>
                                     <button
                                         onClick={prevSlide}
-                                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md hover:bg-white transition-colors"
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-none shadow-none border border-gallery-charcoal/20 hover:bg-white hover:text-gallery-red transition-all"
                                     >
-                                        <ChevronLeft className="w-5 h-5 text-gray-700" />
+                                        <ChevronLeft className="w-5 h-5 text-gallery-charcoal" />
                                     </button>
                                     <button
                                         onClick={nextSlide}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md hover:bg-white transition-colors"
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-none shadow-none border border-gallery-charcoal/20 hover:bg-white hover:text-gallery-red transition-all"
                                     >
-                                        <ChevronRight className="w-5 h-5 text-gray-700" />
+                                        <ChevronRight className="w-5 h-5 text-gallery-charcoal" />
                                     </button>
                                 </>
                             )}
@@ -406,20 +406,20 @@ export default function ArtworkDetailPage({
 
                         {/* Thumbnail strip */}
                         {allImages.length > 1 && (
-                            <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                            <div className="flex gap-4 mt-6 overflow-x-auto pb-4">
                                 {allImages.map((img, idx) => (
                                     <button
                                         key={idx}
                                         onClick={() => setCurrentSlide(idx)}
-                                        className={`flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${idx === currentSlide
-                                            ? "border-purple-500 ring-2 ring-purple-200"
-                                            : "border-transparent opacity-60 hover:opacity-100"
+                                        className={`flex-shrink-0 rounded-none overflow-hidden transition-all border ${idx === currentSlide
+                                            ? "border-gallery-black p-1"
+                                            : "border-gallery-charcoal/20 opacity-60 hover:opacity-100"
                                             }`}
                                     >
                                         <img
                                             src={img}
                                             alt={`Thumbnail ${idx + 1}`}
-                                            className="w-16 h-16 object-cover"
+                                            className="w-20 h-20 object-cover rounded-none"
                                         />
                                     </button>
                                 ))}
@@ -434,11 +434,11 @@ export default function ArtworkDetailPage({
                         variants={fadeInUp}
                         className="flex flex-col"
                     >
-                        <div className="flex items-start justify-between">
-                            <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">
+                        <div className="flex items-start justify-between mb-8">
+                            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-black text-gallery-black uppercase tracking-widest leading-none">
                                 {artwork.title}
                             </h1>
-                            <div className="flex items-center gap-2 ml-4">
+                            <div className="flex items-center gap-3 ml-6 flex-shrink-0 md:mt-2">
                                 {/* Favorite Button */}
                                 {isOwner ? null : (
                                     <Button
@@ -446,19 +446,21 @@ export default function ArtworkDetailPage({
                                         size="icon"
                                         onClick={handleToggleFavorite}
                                         disabled={isTogglingFav}
-                                        className={isFav ? "text-red-500 border-red-200 bg-red-50 hover:bg-red-100" : ""}
+                                        className={`rounded-none h-12 w-12 border border-gallery-charcoal/20 shadow-none transition-all ${isFav ? "bg-gallery-red text-white border-gallery-red hover:bg-gallery-red/90" : "bg-transparent text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red"
+                                            }`}
                                     >
                                         <Heart className={`w-5 h-5 ${isFav ? "fill-current" : ""}`} />
                                     </Button>
                                 )}
 
                                 {isOwner && (
-                                    <Link href={`/artist/edit/${artwork.id}`}>
+                                    <Link href={`/shop/edit/${artwork.id}`}>
                                         <Button
                                             variant="outline"
                                             size="sm"
+                                            className="rounded-none h-12 px-6 uppercase tracking-widest text-[10px] font-bold border-gallery-charcoal/20 text-gallery-charcoal hover:bg-gallery-cream shadow-none"
                                         >
-                                            <Pencil className="w-3.5 h-3.5 mr-1" />
+                                            <Pencil className="w-3.5 h-3.5 mr-2" />
                                             Edit
                                         </Button>
                                     </Link>
@@ -470,85 +472,85 @@ export default function ArtworkDetailPage({
                         {artist && (
                             <Link
                                 href={`/artist/${artist.id}`}
-                                className="flex items-center gap-3 mb-6 group"
+                                className="flex items-center gap-4 mb-10 group py-6 border-y border-gallery-charcoal/10"
                             >
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-indigo-400 flex items-center justify-center overflow-hidden">
+                                <div className="w-14 h-14 rounded-none border border-gallery-charcoal/20 bg-gallery-cream flex items-center justify-center overflow-hidden">
                                     {artist.profileImage ? (
                                         <img
                                             src={artist.profileImage}
                                             alt={artist.name}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover grayscale opacity-90"
                                         />
                                     ) : (
-                                        <span className="text-white font-medium text-sm">
+                                        <span className="text-gallery-black font-serif font-black text-2xl">
                                             {artist.name.charAt(0)}
                                         </span>
                                     )}
                                 </div>
                                 <div>
-                                    <p className="font-medium group-hover:text-purple-600 transition-colors">
+                                    <p className="font-bold uppercase tracking-widest text-gallery-black group-hover:text-gallery-red transition-colors">
                                         {artist.name}
                                     </p>
-                                    <p className="text-xs text-gray-500">Artist</p>
+                                    <p className="text-[10px] uppercase font-bold text-gallery-charcoal/50 tracking-widest mt-1">Artist</p>
                                 </div>
                             </Link>
                         )}
 
                         {/* Price / Auction Panel */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
+                        <div className="bg-white rounded-none p-8 md:p-10 border border-gallery-charcoal/20 mb-10 shadow-none">
                             {isAuction && timeLeft && (
-                                <div className={`mb-4 p-3 rounded-lg ${auctionEnded ? 'bg-red-50 border border-red-200' : 'bg-purple-50 border border-purple-200'}`}>
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <Clock className={`w-4 h-4 ${auctionEnded ? 'text-red-500' : 'text-purple-600'}`} />
-                                        <span className={`text-sm font-medium ${auctionEnded ? 'text-red-600' : 'text-purple-700'}`}>
+                                <div className={`mb-8 p-6 rounded-none border ${auctionEnded ? 'bg-gallery-red/5 border-gallery-red' : 'bg-gallery-cream border-gallery-charcoal/10'}`}>
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <Clock className={`w-4 h-4 ${auctionEnded ? 'text-gallery-red' : 'text-gallery-charcoal'}`} />
+                                        <span className={`text-xs uppercase tracking-widest font-bold ${auctionEnded ? 'text-gallery-red' : 'text-gallery-charcoal'}`}>
                                             {auctionEnded ? 'Auction Ended' : 'Time Remaining'}
                                         </span>
                                     </div>
                                     {!auctionEnded && (
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-3">
                                             {timeLeft.d > 0 && (
-                                                <div className="bg-white rounded-lg px-3 py-2 text-center min-w-[50px] shadow-sm">
-                                                    <p className="text-lg font-bold text-purple-700">{timeLeft.d}</p>
-                                                    <p className="text-[10px] text-gray-500 uppercase">Days</p>
+                                                <div className="bg-white border border-gallery-charcoal/10 rounded-none px-4 py-3 min-w-[70px] flex flex-col items-center">
+                                                    <p className="text-2xl font-serif font-black text-gallery-black">{timeLeft.d}</p>
+                                                    <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mt-1">Days</p>
                                                 </div>
                                             )}
-                                            <div className="bg-white rounded-lg px-3 py-2 text-center min-w-[50px] shadow-sm">
-                                                <p className="text-lg font-bold text-purple-700">{String(timeLeft.h).padStart(2, '0')}</p>
-                                                <p className="text-[10px] text-gray-500 uppercase">Hrs</p>
+                                            <div className="bg-white border border-gallery-charcoal/10 rounded-none px-4 py-3 min-w-[70px] flex flex-col items-center">
+                                                <p className="text-2xl font-serif font-black text-gallery-black">{String(timeLeft.h).padStart(2, '0')}</p>
+                                                <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mt-1">Hrs</p>
                                             </div>
-                                            <div className="bg-white rounded-lg px-3 py-2 text-center min-w-[50px] shadow-sm">
-                                                <p className="text-lg font-bold text-purple-700">{String(timeLeft.m).padStart(2, '0')}</p>
-                                                <p className="text-[10px] text-gray-500 uppercase">Min</p>
+                                            <div className="bg-white border border-gallery-charcoal/10 rounded-none px-4 py-3 min-w-[70px] flex flex-col items-center">
+                                                <p className="text-2xl font-serif font-black text-gallery-black">{String(timeLeft.m).padStart(2, '0')}</p>
+                                                <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mt-1">Min</p>
                                             </div>
-                                            <div className="bg-white rounded-lg px-3 py-2 text-center min-w-[50px] shadow-sm">
-                                                <p className="text-lg font-bold text-purple-700 tabular-nums">{String(timeLeft.s).padStart(2, '0')}</p>
-                                                <p className="text-[10px] text-gray-500 uppercase">Sec</p>
+                                            <div className="bg-white border border-gallery-charcoal/10 rounded-none px-4 py-3 min-w-[70px] flex flex-col items-center">
+                                                <p className="text-2xl font-serif font-black text-gallery-black tabular-nums">{String(timeLeft.s).padStart(2, '0')}</p>
+                                                <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mt-1">Sec</p>
                                             </div>
                                         </div>
                                     )}
                                 </div>
                             )}
 
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                                 <div>
-                                    <p className="text-sm text-gray-500 mb-1">
+                                    <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mb-2">
                                         {isAuction ? 'Current Bid' : 'Price'}
                                     </p>
-                                    <p className="text-3xl font-bold text-gray-900">
+                                    <p className="text-5xl font-serif font-black text-gallery-black tracking-tight">
                                         {formatPrice(isAuction && livePrice !== null ? livePrice : price)}
                                     </p>
                                     {isAuction && auctionData?.bids && auctionData.bids.length > 0 && (
-                                        <p className="text-xs text-gray-500 mt-1">
+                                        <p className="text-xs font-bold text-gallery-charcoal/60 mt-3 uppercase tracking-widest">
                                             {auctionData.bids.length} bid{auctionData.bids.length !== 1 ? 's' : ''} placed
                                         </p>
                                     )}
                                 </div>
                                 {!isOwner && artwork.status !== 'sold' && (
-                                    <div className="flex flex-col gap-2 sm:flex-row">
+                                    <div className="flex flex-col gap-3 sm:flex-row w-full lg:w-auto">
                                         {isAuction ? (
                                             <Button
                                                 size="lg"
-                                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                                                className="bg-gallery-black hover:bg-gallery-red text-white flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                 disabled={!!auctionEnded}
                                                 onClick={() => {
                                                     if (!isAuthenticated) {
@@ -559,7 +561,7 @@ export default function ArtworkDetailPage({
                                                     setBidDialogOpen(true);
                                                 }}
                                             >
-                                                <Gavel className="w-4 h-4 mr-2" />
+                                                <Gavel className="w-4 h-4 mr-3" />
                                                 {auctionEnded ? 'Auction Ended' : 'Place Bid'}
                                             </Button>
                                         ) : (
@@ -569,20 +571,21 @@ export default function ArtworkDetailPage({
                                                     variant="outline"
                                                     onClick={handleAddToCart}
                                                     disabled={isAddedToCart || isAddingToCart}
+                                                    className="border-gallery-charcoal/20 text-gallery-charcoal bg-transparent flex-1 lg:flex-none rounded-none shadow-none hover:bg-gallery-cream hover:text-gallery-red h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                 >
                                                     {isAddingToCart ? (
-                                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                        <Loader2 className="w-4 h-4 mr-3 animate-spin" />
                                                     ) : (
-                                                        <ShoppingCart className="w-4 h-4 mr-2" />
+                                                        <ShoppingCart className="w-4 h-4 mr-3" />
                                                     )}
                                                     {isAddedToCart ? "In Cart" : "Add to Cart"}
                                                 </Button>
                                                 <Button
                                                     size="lg"
-                                                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                                                    className="bg-gallery-black hover:bg-gallery-red text-white flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                     onClick={handleBuyNow}
                                                 >
-                                                    <ShoppingBag className="w-4 h-4 mr-2" />
+                                                    <ShoppingBag className="w-4 h-4 mr-3" />
                                                     Buy Now
                                                 </Button>
                                             </>
@@ -590,7 +593,7 @@ export default function ArtworkDetailPage({
                                     </div>
                                 )}
                                 {isOwner && (
-                                    <span className="text-sm text-gray-400 italic">
+                                    <span className="text-xs uppercase tracking-widest font-bold text-gallery-charcoal/40">
                                         Your Artwork
                                     </span>
                                 )}
@@ -599,33 +602,33 @@ export default function ArtworkDetailPage({
 
                         {/* Bid History — for auction artworks */}
                         {isAuction && auctionData?.bids && auctionData.bids.length > 0 && (
-                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
-                                <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
-                                    <Users className="w-4 h-4 text-purple-600" />
+                            <div className="bg-white rounded-none p-8 border border-gallery-charcoal/20 mb-10 shadow-none">
+                                <h3 className="text-xs uppercase font-bold tracking-widest text-gallery-charcoal mb-6 flex items-center gap-3">
+                                    <Users className="w-4 h-4 text-gallery-charcoal" />
                                     Bid History
                                 </h3>
-                                <div className="space-y-2 max-h-48 overflow-y-auto">
+                                <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
                                     {auctionData.bids.map((bid, idx) => (
                                         <div
                                             key={bid.id}
-                                            className={`flex items-center justify-between py-2 px-3 rounded-lg text-sm ${idx === 0 ? 'bg-purple-50 border border-purple-100' : 'bg-gray-50'}`}
+                                            className={`flex items-center justify-between py-3 px-4 rounded-none text-sm transition-colors ${idx === 0 ? 'bg-gallery-cream border border-gallery-charcoal/10' : 'bg-transparent border border-gallery-charcoal/5 hover:bg-gallery-charcoal/5'}`}
                                         >
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-indigo-400 flex items-center justify-center">
-                                                    <span className="text-white text-[10px] font-medium">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-8 h-8 rounded-none bg-gallery-black flex items-center justify-center">
+                                                    <span className="text-white text-xs font-serif font-bold uppercase">
                                                         {bid.bidderName.charAt(0)}
                                                     </span>
                                                 </div>
-                                                <span className="font-medium">{bid.bidderName}</span>
+                                                <span className="font-bold text-gallery-charcoal">{bid.bidderName}</span>
                                                 {idx === 0 && (
-                                                    <span className="text-[10px] bg-purple-600 text-white px-1.5 py-0.5 rounded-full">
+                                                    <span className="bg-gallery-red text-white rounded-none px-2 py-1 uppercase tracking-widest text-[8px] font-bold">
                                                         Highest
                                                     </span>
                                                 )}
                                             </div>
                                             <div className="text-right">
-                                                <p className="font-semibold">{formatPrice(parseFloat(bid.amount))}</p>
-                                                <p className="text-[10px] text-gray-400">
+                                                <p className="font-serif font-black text-lg text-gallery-black">{formatPrice(parseFloat(bid.amount))}</p>
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-gallery-charcoal/40">
                                                     {new Date(bid.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </p>
                                             </div>
@@ -636,22 +639,22 @@ export default function ArtworkDetailPage({
                         )}
 
                         {/* Description */}
-                        <div className="mb-6">
-                            <h2 className="font-semibold text-lg mb-2">Description</h2>
-                            <p className="text-gray-600 leading-relaxed">
+                        <div className="mb-10">
+                            <h2 className="text-xs uppercase font-bold tracking-widest text-gallery-charcoal mb-4">Description</h2>
+                            <p className="text-gallery-charcoal/80 font-serif text-lg leading-relaxed border-l-2 border-gallery-charcoal/20 pl-6">
                                 {artwork.description}
                             </p>
                         </div>
 
                         {/* Tags */}
                         {artwork.tags && artwork.tags.length > 0 && (
-                            <div className="mb-6 flex flex-wrap gap-2">
+                            <div className="mb-10 flex flex-wrap gap-3">
                                 {artwork.tags.map((tag) => (
                                     <span
                                         key={tag}
-                                        className="inline-block px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm"
+                                        className="inline-block px-4 py-2 bg-transparent border border-gallery-charcoal/20 text-gallery-charcoal rounded-none text-[10px] tracking-widest uppercase font-bold"
                                     >
-                                        #{tag}
+                                        {tag}
                                     </span>
                                 ))}
                             </div>
@@ -659,42 +662,43 @@ export default function ArtworkDetailPage({
 
                         {/* Details Grid */}
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-white rounded-lg p-4 border border-gray-100">
-                                <div className="flex items-center gap-2 text-gray-500 mb-1">
+                            <div className="bg-gallery-cream/50 rounded-none p-6 border border-gallery-charcoal/20">
+                                <div className="flex items-center gap-3 text-gallery-charcoal/60 mb-2">
                                     <Palette className="w-4 h-4" />
-                                    <span className="text-xs uppercase tracking-wide">
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">
                                         Medium
                                     </span>
                                 </div>
-                                <p className="font-medium">{artwork.medium}</p>
+                                <p className="font-serif font-black text-lg text-gallery-black">{artwork.medium}</p>
                             </div>
-                            <div className="bg-white rounded-lg p-4 border border-gray-100">
-                                <div className="flex items-center gap-2 text-gray-500 mb-1">
+                            <div className="bg-gallery-cream/50 rounded-none p-6 border border-gallery-charcoal/20">
+                                <div className="flex items-center gap-3 text-gallery-charcoal/60 mb-2">
                                     <Tag className="w-4 h-4" />
-                                    <span className="text-xs uppercase tracking-wide">Type</span>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">Type</span>
                                 </div>
-                                <p className="font-medium capitalize">
+                                <p className="font-serif font-black text-lg text-gallery-black capitalize">
                                     {artwork.listingType === "fixed" ? "Fixed Price" : "Auction"}
                                 </p>
                             </div>
                             {artwork.dimensions && (
-                                <div className="bg-white rounded-lg p-4 border border-gray-100">
-                                    <div className="flex items-center gap-2 text-gray-500 mb-1">
-                                        <span className="text-xs uppercase tracking-wide">
+                                <div className="bg-gallery-cream/50 rounded-none p-6 border border-gallery-charcoal/20">
+                                    <div className="flex items-center gap-3 text-gallery-charcoal/60 mb-2">
+                                        <ZoomIn className="w-4 h-4" />
+                                        <span className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">
                                             Dimensions
                                         </span>
                                     </div>
-                                    <p className="font-medium">{artwork.dimensions}</p>
+                                    <p className="font-serif font-black text-lg text-gallery-black">{artwork.dimensions}</p>
                                 </div>
                             )}
-                            <div className="bg-white rounded-lg p-4 border border-gray-100">
-                                <div className="flex items-center gap-2 text-gray-500 mb-1">
+                            <div className="bg-gallery-cream/50 rounded-none p-6 border border-gallery-charcoal/20">
+                                <div className="flex items-center gap-3 text-gallery-charcoal/60 mb-2">
                                     <Calendar className="w-4 h-4" />
-                                    <span className="text-xs uppercase tracking-wide">
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">
                                         Listed
                                     </span>
                                 </div>
-                                <p className="font-medium">
+                                <p className="font-serif font-black text-lg text-gallery-black">
                                     {new Date(artwork.createdAt).toLocaleDateString("en-US", {
                                         year: "numeric",
                                         month: "long",
@@ -702,13 +706,13 @@ export default function ArtworkDetailPage({
                                     })}
                                 </p>
                             </div>
-                            <div className="bg-white rounded-lg p-4 border border-gray-100">
-                                <div className="flex items-center gap-2 text-gray-500 mb-1">
-                                    <span className="text-xs uppercase tracking-wide">
+                            <div className="bg-gallery-cream/50 rounded-none p-6 border border-gallery-charcoal/20">
+                                <div className="flex items-center gap-3 text-gallery-charcoal/60 mb-2">
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">
                                         Status
                                     </span>
                                 </div>
-                                <p className="font-medium capitalize">{artwork.status}</p>
+                                <p className="font-serif font-black text-lg text-gallery-black capitalize">{artwork.status}</p>
                             </div>
                         </div>
                     </motion.div>
@@ -764,24 +768,24 @@ export default function ArtworkDetailPage({
 
             {/* Bid Dialog */}
             <Dialog open={bidDialogOpen} onOpenChange={setBidDialogOpen}>
-                <DialogContent className="sm:max-w-md">
-                    <DialogTitle className="font-serif text-xl">Place a Bid</DialogTitle>
-                    <div className="space-y-4 mt-2">
+                <DialogContent className="sm:max-w-md rounded-none border border-gallery-charcoal/20 bg-white p-8">
+                    <DialogTitle className="font-serif text-2xl font-black uppercase tracking-widest text-gallery-black border-b border-gallery-charcoal/10 pb-4">Place a Bid</DialogTitle>
+                    <div className="space-y-6 mt-4">
                         <div>
-                            <p className="text-sm text-gray-500 mb-1">Current Bid</p>
-                            <p className="text-2xl font-bold">{formatPrice(livePrice ?? price)}</p>
+                            <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mb-1">Current Bid</p>
+                            <p className="text-4xl font-serif font-black text-gallery-black tracking-tight">{formatPrice(livePrice ?? price)}</p>
                         </div>
                         {timeLeft && !auctionEnded && (
-                            <div className="flex items-center gap-2 text-sm text-purple-600">
-                                <Clock className="w-4 h-4" />
-                                <span>
+                            <div className="flex items-center gap-2 bg-gallery-cream px-4 py-3 border border-gallery-charcoal/10">
+                                <Clock className="w-4 h-4 text-gallery-red" />
+                                <span className="text-gallery-red font-bold text-[10px] uppercase tracking-widest">
                                     {timeLeft.d > 0 ? `${timeLeft.d}d ` : ''}
                                     {String(timeLeft.h).padStart(2, '0')}:{String(timeLeft.m).padStart(2, '0')}:{String(timeLeft.s).padStart(2, '0')} remaining
                                 </span>
                             </div>
                         )}
                         <div>
-                            <label htmlFor="bid-amount" className="text-sm font-medium block mb-1">
+                            <label htmlFor="bid-amount" className="text-xs font-bold uppercase tracking-widest text-gallery-charcoal block mb-3">
                                 Your Bid (must be higher)
                             </label>
                             <Input
@@ -792,20 +796,20 @@ export default function ArtworkDetailPage({
                                 placeholder={`Min $${((livePrice ?? price) + 1).toFixed(2)}`}
                                 value={bidAmount}
                                 onChange={(e) => setBidAmount(e.target.value)}
-                                className="text-lg"
+                                className="rounded-none border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 bg-transparent px-0 pb-2 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none text-2xl font-serif font-black placeholder:text-gallery-charcoal/20"
                             />
                         </div>
                         <Button
-                            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                            className="w-full bg-gallery-black hover:bg-gallery-red text-white flex-1 lg:flex-none rounded-none shadow-none h-14 uppercase text-xs tracking-widest font-bold px-8 transition-colors mt-4"
                             onClick={handlePlaceBid}
                             disabled={bidLoading}
                         >
                             {bidLoading ? (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                <Loader2 className="w-4 h-4 mr-3 animate-spin" />
                             ) : (
-                                <Gavel className="w-4 h-4 mr-2" />
+                                <Gavel className="w-4 h-4 mr-3" />
                             )}
-                            {bidLoading ? "Placing Bid..." : `Place Bid${bidAmount ? ` — ${formatPrice(parseFloat(bidAmount) || 0)}` : ""}`}
+                            {bidLoading ? "Placing Bid..." : `Confirm Bid${bidAmount ? ` — ${formatPrice(parseFloat(bidAmount) || 0)}` : ""}`}
                         </Button>
                     </div>
                 </DialogContent>

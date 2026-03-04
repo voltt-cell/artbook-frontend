@@ -4,7 +4,6 @@ import useSWR from "swr";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/auth-context";
 import { Loader2, Users, Image, ShoppingCart, Gavel, DollarSign, Palette, UserCheck, TrendingUp, Activity } from "lucide-react";
-import Link from "next/link";
 import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 import {
@@ -52,7 +51,7 @@ export default function AdminDashboard() {
     if (authLoading || isLoading) {
         return (
             <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
             </div>
         );
     }
@@ -153,7 +152,7 @@ export default function AdminDashboard() {
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(26,26,26,0.1)" />
                                     <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#1A1A1A', fontWeight: 'bold' }} dy={10} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#1A1A1A', fontWeight: 'bold' }} tickFormatter={(value: any) => `$${value}`} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#1A1A1A', fontWeight: 'bold' }} tickFormatter={(value: number) => `$${value}`} />
                                     <Tooltip
                                         contentStyle={{ backgroundColor: '#F9F6F0', borderRadius: '0', border: '1px solid rgba(26,26,26,0.2)', color: '#1A1A1A' }}
                                         itemStyle={{ color: '#1A1A1A', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em' }}

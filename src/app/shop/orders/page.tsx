@@ -3,9 +3,9 @@
 import useSWR from "swr";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/auth-context";
-import { Loader2, Package, ArrowLeft, Search, CheckCircle } from "lucide-react";
+import { Loader2, Package, ArrowLeft, Search } from "lucide-react";
 import { fetcher } from "@/lib/swr";
-import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { fadeInUp } from "@/lib/animations";
 import { ArtisticLoader } from "@/components/ui/artistic-loader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -99,7 +99,7 @@ export default function ShopOrdersPage() {
                 >
                     <div>
                         <h2 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Your Sales History</h2>
-                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2 tracking-wide">Manage and track the artworks you've sold.</p>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2 tracking-wide">Manage and track the artworks you&apos;ve sold.</p>
                     </div>
 
                     <div className="relative w-full md:w-80">

@@ -20,7 +20,7 @@ export default function TermsPage() {
                             <span className="text-gallery-red text-sm">01</span> Acceptance of Terms
                         </h2>
                         <p className="font-serif text-lg leading-relaxed text-gallery-charcoal/80">
-                            By accessing and using ArtBook ("Platform", "we", "our", or "us"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+                            By accessing and using ArtBook (&quot;Platform&quot;, &quot;we&quot;, &quot;our&quot;, or &quot;us&quot;), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
                         </p>
                     </div>
 

@@ -47,22 +47,22 @@ export function ArtisticLoader({ fullScreen = true }: { fullScreen?: boolean }) 
     return (
         <div className={containerClasses}>
             <div className="relative flex items-center justify-center w-24 h-24 mb-8">
-                {/* Decorative rotating blobs */}
+                {/* Decorative rotating squares */}
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-                    className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-500 opacity-30 blur-[2px]"
+                    className="absolute inset-0 rounded-none border border-gallery-charcoal/30 opacity-50"
                 />
                 <motion.div
                     animate={{ rotate: -360 }}
                     transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-                    className="absolute inset-2 rounded-full border-b-2 border-l-2 border-pink-500 opacity-40 blur-[1px]"
+                    className="absolute inset-2 rounded-none border border-gallery-red/40 opacity-50"
                 />
                 {/* Central Icon */}
                 <motion.div
                     animate={{ scale: [1, 1.1, 1] }}
                     transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                    className="relative z-10 flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-purple-600 to-pink-500 rounded-full shadow-xl shadow-purple-500/30"
+                    className="relative z-10 flex items-center justify-center w-16 h-16 bg-gallery-black rounded-none shadow-none"
                 >
                     <Palette className="w-8 h-8 text-white" />
                 </motion.div>
@@ -78,10 +78,10 @@ export function ArtisticLoader({ fullScreen = true }: { fullScreen?: boolean }) 
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="flex flex-col items-center"
                     >
-                        <p className="text-xl md:text-2xl font-serif italic text-gray-800 bg-clip-text">
+                        <p className="text-xl md:text-2xl font-serif italic text-gallery-black bg-clip-text">
                             &quot;{quotes[currentQuoteIndex].text}&quot;
                         </p>
-                        <p className="mt-3 text-sm font-medium tracking-widest uppercase text-purple-600/80">
+                        <p className="mt-4 text-xs font-bold tracking-widest uppercase text-gallery-red">
                             — {quotes[currentQuoteIndex].author}
                         </p>
                     </motion.div>

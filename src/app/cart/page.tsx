@@ -28,26 +28,28 @@ export default function CartPage() {
 
     if (authLoading || isLoading) {
         return (
-            <div className="min-h-[60vh] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+            <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gallery-cream">
+                <Loader2 className="w-8 h-8 animate-spin text-gallery-red" />
             </div>
         );
     }
 
     if (!cartItems || cartItems.length === 0) {
         return (
-            <div className="container mx-auto px-4 py-20">
-                <div className="text-center py-20 bg-white rounded-2xl border border-gray-100 flex flex-col items-center justify-center">
-                    <ShoppingBag className="w-16 h-16 text-purple-200 mx-auto mb-4" />
-                    <h2 className="text-xl font-serif font-semibold mb-2">
-                        Your cart is empty
+            <div className="min-h-[calc(100vh-80px)] bg-gallery-cream flex flex-col items-center justify-center border-t border-gallery-charcoal/20 px-4">
+                <div className="text-center p-16 bg-white border border-gallery-charcoal/20 max-w-lg w-full">
+                    <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center mx-auto mb-6">
+                        <ShoppingBag className="w-6 h-6 text-gallery-charcoal/30" />
+                    </div>
+                    <h2 className="text-3xl font-serif font-black text-gallery-black mb-4 uppercase tracking-widest">
+                        Empty Collection
                     </h2>
-                    <p className="text-gray-500 mb-8 max-w-md mx-auto">
-                        Looks like checking out art hasn&apos;t caught your eye yet?
+                    <p className="font-serif italic text-gallery-charcoal/70 mb-8 max-w-sm mx-auto">
+                        Your cart currently holds no masterpieces.
                     </p>
                     <Link href="/artworks">
-                        <Button className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-6">
-                            Browse Artworks
+                        <Button className="w-full bg-gallery-black hover:bg-gallery-red text-white h-14 rounded-none font-bold uppercase tracking-widest text-xs transition-colors">
+                            Explore Gallery
                         </Button>
                     </Link>
                 </div>
@@ -56,35 +58,42 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
-            <div className="container mx-auto px-4 pt-8 mb-8">
-                <div className="flex items-center gap-4 mb-2">
-                    <Link href="/artworks" className="text-gray-500 hover:text-gray-900">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                    <h1 className="font-serif text-3xl font-bold">Shopping Cart</h1>
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pb-24">
+            <div className="bg-white border-b border-gallery-charcoal/20 pt-16 pb-12 mb-12 relative">
+                <div className="max-w-7xl mx-auto px-6 lg:px-12">
+                    <div className="flex items-center gap-6 mb-4">
+                        <Link href="/artworks" className="text-gallery-charcoal hover:text-gallery-red transition-colors border border-gallery-charcoal/20 p-2 bg-white">
+                            <ArrowLeft className="w-5 h-5" />
+                        </Link>
+                        <h1 className="font-serif text-4xl md:text-5xl font-black uppercase tracking-widest text-gallery-black">Acquisitions Cart</h1>
+                    </div>
+                    <p className="font-serif italic text-gallery-charcoal/70 ml-[4.5rem]">
+                        {cartItems.length} item{cartItems.length !== 1 ? 's' : ''} queued for purchase
+                    </p>
                 </div>
-                <p className="text-gray-500 ml-9">
-                    {cartItems.length} item{cartItems.length !== 1 ? 's' : ''}
-                </p>
+                {/* Decorative Line */}
+                <div className="absolute bottom-0 right-1/4 w-px h-12 bg-gallery-charcoal/10" />
             </div>
 
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="max-w-7xl mx-auto px-6 lg:px-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     {/* Cart Items List */}
-                    <div className="lg:col-span-2 space-y-4">
+                    <div className="lg:col-span-2 space-y-0 border border-gallery-charcoal/20 bg-white">
+                        <div className="px-8 flex items-center justify-between border-b border-gallery-charcoal/20 min-h-[4rem] bg-gallery-cream/50">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-gallery-charcoal">Selected Artworks</span>
+                        </div>
                         <AnimatePresence mode="popLayout">
                             {cartItems.map((item) => (
                                 <motion.div
                                     key={item.cartItemId}
                                     layout
-                                    initial={{ opacity: 0, y: 20 }}
+                                    initial={{ opacity: 0, y: 0 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-center"
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="p-8 border-b border-gallery-charcoal/20 last:border-b-0 flex gap-8 items-start hover:bg-gallery-cream/30 transition-colors"
                                 >
                                     {/* Image */}
-                                    <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                    <div className="w-32 h-32 bg-gallery-cream border border-gallery-charcoal/20 flex-shrink-0">
                                         <img
                                             src={item.artwork.imageUrl}
                                             alt={item.artwork.title}
@@ -96,45 +105,45 @@ export default function CartPage() {
                                     <div className="flex-grow min-w-0">
                                         <div className="flex justify-between items-start">
                                             <div>
-                                                <h3 className="font-medium text-lg leading-tight truncate pr-4">
+                                                <h3 className="font-serif text-2xl font-black uppercase tracking-widest text-gallery-black mb-2">
                                                     {item.artwork.title}
                                                 </h3>
-                                                <div className="flex items-center gap-2 mt-1">
+                                                <div className="flex items-center gap-3 mb-2">
                                                     {item.artist.profileImage ? (
                                                         <img
                                                             src={item.artist.profileImage}
                                                             alt={item.artist.name}
-                                                            className="w-5 h-5 rounded-full object-cover"
+                                                            className="w-6 h-6 object-cover border border-gallery-charcoal/20"
                                                         />
                                                     ) : (
-                                                        <div className="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center text-[10px] font-bold text-purple-600">
+                                                        <div className="w-6 h-6 bg-white border border-gallery-charcoal/20 flex items-center justify-center text-[10px] font-bold text-gallery-black">
                                                             {item.artist.name.charAt(0)}
                                                         </div>
                                                     )}
-                                                    <span className="text-sm text-gray-500">{item.artist.name}</span>
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-gallery-charcoal">{item.artist.name}</span>
                                                 </div>
-                                                <p className="text-xs text-gray-400 mt-1 capitalize">{item.artwork.listingType}</p>
+                                                <p className="text-[10px] text-gallery-charcoal/60 uppercase tracking-widest border border-gallery-charcoal/10 bg-white px-2 py-0.5 inline-block">{item.artwork.listingType}</p>
                                             </div>
-                                            <p className="font-bold text-lg">
-                                                {formatPrice(parseFloat(item.artwork.price))}
-                                            </p>
+                                            <div className="flex flex-col items-end gap-4 border-l border-gallery-charcoal/10 pl-6 ml-4">
+                                                <p className="font-serif font-black text-2xl text-gallery-black">
+                                                    {formatPrice(parseFloat(item.artwork.price))}
+                                                </p>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="text-gallery-charcoal/40 hover:text-gallery-red hover:bg-transparent rounded-none p-0 h-auto"
+                                                    onClick={() => removeFromCart(item.cartItemId)}
+                                                    disabled={removingIds.includes(item.cartItemId)}
+                                                >
+                                                    {removingIds.includes(item.cartItemId) ? (
+                                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                                    ) : (
+                                                        <Trash2 className="w-5 h-5" />
+                                                    )}
+                                                </Button>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    {/* Actions */}
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="text-gray-400 hover:text-red-500"
-                                        onClick={() => removeFromCart(item.cartItemId)}
-                                        disabled={removingIds.includes(item.cartItemId)}
-                                    >
-                                        {removingIds.includes(item.cartItemId) ? (
-                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                        ) : (
-                                            <Trash2 className="w-4 h-4" />
-                                        )}
-                                    </Button>
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -142,36 +151,36 @@ export default function CartPage() {
 
                     {/* Summary */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-24">
-                            <h2 className="text-xl font-bold mb-4">Summary</h2>
-                            <div className="flex justify-between items-center mb-4 text-gray-600">
+                        <div className="bg-white p-8 border border-gallery-charcoal/20 sticky top-24">
+                            <h2 className="text-xl font-serif font-black uppercase tracking-widest mb-8 text-gallery-black pb-4 border-b border-gallery-charcoal/20">Summary</h2>
+                            <div className="flex justify-between items-center mb-4 text-[10px] font-bold uppercase tracking-widest text-gallery-charcoal">
                                 <span>Subtotal</span>
                                 <span>{formatPrice(total)}</span>
                             </div>
-                            <div className="flex justify-between items-center mb-6 text-gray-600">
+                            <div className="flex justify-between items-center mb-8 text-[10px] font-bold uppercase tracking-widest text-gallery-charcoal">
                                 <span>Tax</span>
-                                <span className="text-xs text-gray-400">(Calculated at checkout)</span>
+                                <span className="text-gallery-charcoal/50">(Calculated at checkout)</span>
                             </div>
-                            <div className="border-t pt-4 flex justify-between items-center mb-8">
-                                <span className="text-lg font-bold">Total</span>
-                                <span className="text-2xl font-bold text-purple-600">{formatPrice(total)}</span>
+                            <div className="border-t border-gallery-charcoal/20 pt-6 flex justify-between items-end mb-8">
+                                <span className="text-xs font-bold uppercase tracking-widest text-gallery-black">Total</span>
+                                <span className="text-3xl font-serif font-black text-gallery-black leading-none">{formatPrice(total)}</span>
                             </div>
 
                             <Button
-                                className="w-full bg-black hover:bg-gray-800 text-white py-6 text-lg"
+                                className="w-full bg-gallery-black hover:bg-gallery-red text-white h-16 rounded-none font-bold uppercase tracking-widest text-xs transition-colors"
                                 onClick={() => checkout()}
                                 disabled={checkoutLoading || cartItems.length === 0}
                             >
                                 {checkoutLoading ? (
                                     <Loader2 className="w-5 h-5 animate-spin mr-2" />
                                 ) : (
-                                    <ShoppingBag className="w-5 h-5 mr-2" />
+                                    <ShoppingBag className="w-5 h-5 mr-3" />
                                 )}
-                                Checkout
+                                Secure Checkout
                             </Button>
 
-                            <p className="text-xs text-center text-gray-400 mt-4">
-                                Secure checkout powered by Stripe
+                            <p className="text-[10px] text-center text-gallery-charcoal/50 uppercase tracking-widest mt-6 pt-6 border-t border-gallery-charcoal/10">
+                                Processed securely by Stripe
                             </p>
                         </div>
                     </div>

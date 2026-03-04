@@ -33,7 +33,7 @@ const Footer = () => {
   };
 
   // Hide footer on admin and artist dashboard routes
-  const isHidden = pathname?.startsWith("/admin") || pathname?.startsWith("/artist/dashboard") || pathname?.startsWith("/shop/dashboard");
+  const isHidden = pathname?.startsWith("/admin") || pathname?.startsWith("/shop/dashboard");
 
   if (isHidden) return null;
 

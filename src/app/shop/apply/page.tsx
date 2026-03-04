@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import { Store, CheckCircle2, XCircle, Loader2, Clock, Sparkles, ArrowRight, Paintbrush, Quote } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, Clock, Sparkles, ArrowRight, Paintbrush, Quote } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
     Select,
@@ -169,10 +169,10 @@ export default function ShopApplyPage() {
                             Application Under Review
                         </h2>
                         <p className="text-gallery-charcoal/70 mb-8 max-w-sm mx-auto font-serif italic text-lg leading-relaxed">
-                            Your application for <span className="font-bold text-gallery-red not-italic font-sans uppercase tracking-widest text-xs">"{existingApp.shopName}"</span> is currently being reviewed by our curation team.
+                            Your application for <span className="font-bold text-gallery-red not-italic font-sans uppercase tracking-widest text-xs">&quot;{existingApp.shopName}&quot;</span> is currently being reviewed by our curation team.
                         </p>
                         <div className="p-4 bg-gallery-cream text-xs uppercase tracking-widest text-gallery-charcoal font-bold border border-gallery-charcoal/20 border-l-4 border-l-gallery-red text-left">
-                            We'll notify you via email as soon as a decision is made. Thank you for your patience.
+                            We&apos;ll notify you via email as soon as a decision is made. Thank you for your patience.
                         </div>
                     </>
                 )}
@@ -210,7 +210,7 @@ export default function ShopApplyPage() {
                             Welcome to ArtBook
                         </h2>
                         <p className="text-gallery-charcoal/70 mb-8 max-w-sm mx-auto font-serif italic text-lg leading-relaxed">
-                            Your shop <span className="font-bold text-gallery-red not-italic font-sans uppercase tracking-widest text-xs">"{existingApp.shopName}"</span> has been successfully verified! You're ready to start selling.
+                            Your shop <span className="font-bold text-gallery-red not-italic font-sans uppercase tracking-widest text-xs">&quot;{existingApp.shopName}&quot;</span> has been successfully verified! You&apos;re ready to start selling.
                         </p>
                         <Button
                             onClick={() => router.push("/shop/dashboard")}
@@ -261,7 +261,7 @@ export default function ShopApplyPage() {
                                     <AnimatePresence mode="wait">
                                         {checkingName && (
                                             <motion.div key="checking" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                                                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                                                <Loader2 className="h-5 w-5 animate-spin text-gallery-red" />
                                             </motion.div>
                                         )}
                                         {!checkingName && nameAvailable === true && (
@@ -376,7 +376,7 @@ export default function ShopApplyPage() {
                                 )}
                             </Button>
                             <p className="text-[10px] uppercase font-bold tracking-widest text-center text-gallery-charcoal/50 mt-6 leading-relaxed">
-                                Our curation team reviews all applications to maintain platform quality. You'll hear back within 24 hours.
+                                Our curation team reviews all applications to maintain platform quality. You&apos;ll hear back within 24 hours.
                             </p>
                         </div>
                     </form>
@@ -392,9 +392,9 @@ export default function ShopApplyPage() {
             <div className="hidden lg:flex flex-col relative w-[45%] bg-gallery-black">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&q=80&w=1600"
+                        src="/images/art_apply.jpg"
                         alt="Art Inspiration"
-                        className="w-full h-full object-cover opacity-60 mix-blend-overlay grayscale"
+                        className="w-full h-full object-cover opacity-50 grayscale"
                     />
                     <div className="absolute inset-0 bg-black/40" />
                 </div>
@@ -407,7 +407,7 @@ export default function ShopApplyPage() {
                     >
                         <Quote className="w-12 h-12 text-gallery-red mb-8 opacity-80" />
                         <h2 className="text-5xl font-serif font-black text-white leading-[1.1] mb-6 uppercase tracking-wider">
-                            "Art washes away from the soul the dust of everyday life."
+                            &quot;Art washes away from the soul the dust of everyday life.&quot;
                         </h2>
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-1 bg-gallery-red" />

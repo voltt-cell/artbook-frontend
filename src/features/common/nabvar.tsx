@@ -132,36 +132,36 @@ const Navbar = () => {
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full ml-1 p-0 hover:bg-gray-100 focus-visible:outline-none ring-offset-background transition-colors">
-                  <Avatar className="h-8 w-8 border border-gray-200">
-                    <AvatarImage src={user?.profileImage} alt={user?.name} />
-                    <AvatarFallback className="bg-purple-100 text-purple-700 font-medium text-xs">
+                <Button variant="ghost" className="relative h-10 w-10 rounded-none ml-1 p-0 hover:bg-gallery-cream border border-gallery-charcoal/20 focus-visible:outline-none ring-offset-background transition-colors">
+                  <Avatar className="h-8 w-8 rounded-none">
+                    <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-none object-cover" />
+                    <AvatarFallback className="bg-gallery-red text-white font-bold text-xs rounded-none">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-64 p-2 rounded-xl border-gray-100 shadow-xl mt-2 bg-white" align="end" forceMount sideOffset={8}>
-                <div className="px-3 py-3 mb-2 flex items-center gap-3 bg-gray-50/50 rounded-lg mx-1">
-                  <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
-                    <AvatarImage src={user?.profileImage} alt={user?.name} />
-                    <AvatarFallback className="bg-white text-purple-700 font-bold border border-gray-100">
+              <DropdownMenuContent className="w-72 p-4 rounded-none border-gallery-charcoal/20 shadow-2xl mt-2 bg-white" align="end" forceMount sideOffset={8}>
+                <div className="px-3 py-3 mb-4 flex items-center gap-3 bg-gallery-cream border border-gallery-charcoal/10 rounded-none mix-blend-multiply">
+                  <Avatar className="h-10 w-10 border border-gallery-charcoal/20 rounded-none shadow-none">
+                    <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-none object-cover" />
+                    <AvatarFallback className="bg-gallery-red text-white font-bold rounded-none">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col overflow-hidden">
-                    <p className="text-sm font-bold text-gray-900 truncate">{user?.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                    <p className="text-xs uppercase tracking-widest font-black text-gallery-black truncate">{user?.name}</p>
+                    <p className="text-[10px] uppercase tracking-widest font-semibold text-gallery-charcoal/50 truncate mt-0.5">{user?.email}</p>
                   </div>
                 </div>
 
-                <DropdownMenuSeparator className="bg-gray-100 my-1" />
+                <DropdownMenuSeparator className="bg-gallery-charcoal/10 my-2" />
 
                 {/* Purchases & Orders - Always visible */}
                 <DropdownMenuItem asChild>
-                  <Link href="/buyer/dashboard" className="flex items-center px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors group">
-                    <div className="p-1.5 bg-gray-100 rounded-md mr-3 group-hover:bg-white transition-colors">
-                      <ShoppingBag className="h-4 w-4 text-gray-500 group-hover:text-purple-600" />
+                  <Link href="/buyer/dashboard" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-none cursor-pointer transition-colors group">
+                    <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-red transition-colors">
+                      <ShoppingBag className="h-4 w-4 text-gallery-charcoal group-hover:text-gallery-red" />
                     </div>
                     Purchases & Orders
                   </Link>
@@ -170,9 +170,9 @@ const Navbar = () => {
                 {/* My Shop - if they have one */}
                 {hasShop && (
                   <DropdownMenuItem asChild>
-                    <Link href="/shop/dashboard" className="flex items-center px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors group">
-                      <div className="p-1.5 bg-gray-100 rounded-md mr-3 group-hover:bg-white transition-colors">
-                        <Store className="h-4 w-4 text-gray-500 group-hover:text-purple-600" />
+                    <Link href="/shop/dashboard" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-none cursor-pointer transition-colors group">
+                      <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-red transition-colors">
+                        <Store className="h-4 w-4 text-gallery-charcoal group-hover:text-gallery-red" />
                       </div>
                       My Shop
                     </Link>
@@ -182,9 +182,9 @@ const Navbar = () => {
                 {/* Open Your Shop - if they don't have one */}
                 {!hasShop && (
                   <DropdownMenuItem asChild>
-                    <Link href="/shop/apply" className="flex items-center px-3 py-2.5 text-sm font-medium text-purple-700 hover:bg-purple-50 rounded-lg cursor-pointer transition-colors group">
-                      <div className="p-1.5 bg-purple-100 rounded-md mr-3 group-hover:bg-purple-200 transition-colors">
-                        <Sparkles className="h-4 w-4 text-purple-600" />
+                    <Link href="/shop/apply" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-red hover:bg-gallery-red hover:text-white rounded-none cursor-pointer transition-colors group">
+                      <div className="p-2 border border-gallery-red bg-white rounded-none mr-4 group-hover:bg-gallery-black group-hover:border-gallery-black transition-colors">
+                        <Sparkles className="h-4 w-4 text-gallery-red group-hover:text-white" />
                       </div>
                       Open Your Shop
                     </Link>
@@ -192,19 +192,19 @@ const Navbar = () => {
                 )}
 
                 <DropdownMenuItem asChild>
-                  <Link href="/settings" className="flex items-center px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors group">
-                    <div className="p-1.5 bg-gray-100 rounded-md mr-3 group-hover:bg-white transition-colors">
-                      <Settings className="h-4 w-4 text-gray-500 group-hover:text-gray-900" />
+                  <Link href="/settings" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-none cursor-pointer transition-colors group">
+                    <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-red transition-colors">
+                      <Settings className="h-4 w-4 text-gallery-charcoal group-hover:text-gallery-red" />
                     </div>
                     Account Settings
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuSeparator className="bg-gray-100 my-1" />
+                <DropdownMenuSeparator className="bg-gallery-charcoal/10 my-2" />
 
-                <DropdownMenuItem onClick={handleLogout} className="flex items-center px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-red-50 hover:text-red-700 rounded-lg cursor-pointer transition-colors group">
-                  <div className="p-1.5 bg-gray-100 rounded-md mr-3 group-hover:bg-white group-hover:text-red-600 transition-colors">
-                    <LogOut className="h-4 w-4 text-gray-500" />
+                <DropdownMenuItem onClick={handleLogout} className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-black hover:text-white rounded-none cursor-pointer transition-colors group mt-2">
+                  <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-charcoal/40 group-hover:bg-gallery-charcoal transition-colors">
+                    <LogOut className="h-4 w-4 text-gallery-charcoal group-hover:text-white" />
                   </div>
                   Sign Out
                 </DropdownMenuItem>

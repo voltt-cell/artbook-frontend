@@ -52,19 +52,6 @@ type BidRow = {
     };
 };
 
-const orderStatusColors: Record<string, string> = {
-    pending: "bg-yellow-100 text-yellow-700",
-    paid: "bg-green-100 text-green-700",
-    shipped: "bg-blue-100 text-blue-700",
-    completed: "bg-gray-200 text-gray-700",
-};
-
-const auctionStatusColors: Record<string, string> = {
-    active: "bg-green-100 text-green-700",
-    ended: "bg-yellow-100 text-yellow-700",
-    paid: "bg-blue-100 text-blue-700",
-};
-
 const tabs = [
     { id: "summary", label: "Overview", icon: LayoutDashboard },
     { id: "orders", label: "My Orders", icon: ShoppingBag },
@@ -121,50 +108,50 @@ export default function BuyerDashboard() {
 
     if (!isAuthenticated) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <h2 className="text-2xl font-serif font-bold text-gray-800 mb-2">Sign In Required</h2>
-                    <p className="text-gray-500">Please log in to view your dashboard.</p>
+            <div className="min-h-[calc(100vh-80px)] bg-gallery-cream flex flex-col items-center justify-center border-t border-gallery-charcoal/20">
+                <div className="text-center p-16 bg-white border border-gallery-charcoal/20 max-w-lg w-full">
+                    <User className="w-12 h-12 text-gallery-charcoal mx-auto mb-6 opacity-50" />
+                    <h2 className="text-3xl font-serif font-black text-gallery-black mb-4 uppercase tracking-widest">Authentication Required</h2>
+                    <p className="font-serif italic text-gallery-charcoal/70 mb-8 max-w-sm mx-auto">Please log in to access your collector&apos;s dashboard and manage your acquisitions.</p>
+                    <Button onClick={() => window.location.href = "/login"} className="w-full bg-gallery-black hover:bg-gallery-red text-white h-14 rounded-none font-bold uppercase tracking-widest text-xs transition-colors">
+                        Sign In
+                    </Button>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 relative overflow-hidden">
-            {/* Ambient Artistic Background */}
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-br from-indigo-100/40 via-purple-100/40 to-pink-50/20 pointer-events-none" />
-            <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-                className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] rounded-full bg-purple-300/20 blur-[120px] pointer-events-none"
-            />
-            <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
-                className="absolute top-[20%] -left-[10%] w-[600px] h-[600px] rounded-full bg-blue-300/20 blur-[120px] pointer-events-none"
-            />
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pb-24">
+            <div className="bg-white border-b border-gallery-charcoal/20 pt-16 pb-12 mb-12 relative">
+                <div className="max-w-7xl mx-auto px-6 lg:px-12">
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={fadeInUp}
+                    >
+                        <div className="inline-flex items-center border border-gallery-charcoal/20 bg-white px-4 py-1 text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal mb-6">
+                            Collector Profile
+                        </div>
+                        <h1 className="text-5xl md:text-6xl font-serif font-black text-gallery-black uppercase tracking-widest mb-4">
+                            Dashboard
+                        </h1>
+                        <p className="text-xl font-serif italic text-gallery-charcoal/70">
+                            Welcome back, <span className="font-bold border-b border-gallery-red lowercase">{user?.name}</span>
+                        </p>
+                    </motion.div>
+                </div>
+                {/* Decorative Line */}
+                <div className="absolute bottom-0 right-1/4 w-px h-12 bg-gallery-charcoal/10" />
+            </div>
 
-            <div className="container mx-auto py-12 px-4 relative z-10">
-                {/* Header */}
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    variants={fadeInUp}
-                    className="mb-8"
-                >
-                    <h1 className="text-4xl font-serif font-bold text-gray-900">My Dashboard</h1>
-                    <p className="text-gray-500 mt-2">
-                        Welcome back, <span className="font-medium text-gray-700">{user?.name}</span>
-                    </p>
-                </motion.div>
-
+            <div className="max-w-7xl mx-auto px-6 lg:px-12">
                 {/* Tabs */}
                 <motion.div
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="flex gap-2 mb-10 bg-white/60 backdrop-blur-xl rounded-2xl p-2 border border-white/50 shadow-sm w-fit relative z-20"
+                    className="flex flex-wrap gap-0 mb-12 border border-gallery-charcoal/20 bg-white shadow-none w-fit"
                 >
                     {tabs.map((tab) => {
                         const Icon = tab.icon;
@@ -178,18 +165,18 @@ export default function BuyerDashboard() {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${isActive
-                                    ? "bg-purple-600 text-white shadow-sm"
-                                    : "text-gray-600 hover:text-purple-600 hover:bg-purple-50"
+                                className={`flex items-center gap-2 px-6 py-4 text-xs font-bold uppercase tracking-widest transition-colors border-r border-gallery-charcoal/20 last:border-r-0 ${isActive
+                                    ? "bg-gallery-black text-white"
+                                    : "text-gallery-charcoal/70 hover:bg-gallery-cream hover:text-gallery-red"
                                     }`}
                             >
                                 <Icon className="h-4 w-4" />
                                 {tab.label}
                                 {count > 0 && (
                                     <span
-                                        className={`text-xs px-1.5 py-0.5 rounded-full ${isActive
+                                        className={`px-1.5 py-0.5 text-[10px] ${isActive
                                             ? "bg-white/20 text-white"
-                                            : "bg-gray-100 text-gray-500"
+                                            : "bg-gallery-charcoal/10 text-gallery-charcoal"
                                             }`}
                                     >
                                         {count}
@@ -209,32 +196,32 @@ export default function BuyerDashboard() {
                 >
                     {/* Summary Tab */}
                     {activeTab === "summary" && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Profile Card */}
-                            <motion.div variants={fadeInUp} className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:col-span-1 h-fit transition-transform hover:-translate-y-1 duration-300">
-                                <div className="flex flex-col items-center text-center">
-                                    <div className="h-24 w-24 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-3xl font-bold mb-4 border-4 border-white shadow-md">
+                            <motion.div variants={fadeInUp} className="bg-white border border-gallery-charcoal/20 shadow-none md:col-span-1 h-fit">
+                                <div className="p-8 flex flex-col items-center text-center">
+                                    <div className="h-28 w-28 bg-gallery-cream flex border border-gallery-charcoal/20 items-center justify-center text-gallery-black text-4xl font-serif font-black mb-6 uppercase">
                                         {user?.profileImage ? (
-                                            <img src={user.profileImage} alt={user.name} className="h-full w-full rounded-full object-cover" />
+                                            <img src={user.profileImage} alt={user.name} className="h-full w-full object-cover" />
                                         ) : (
-                                            user?.name?.charAt(0).toUpperCase()
+                                            user?.name?.charAt(0)
                                         )}
                                     </div>
-                                    <h2 className="text-xl font-serif font-bold text-gray-900">{user?.name}</h2>
-                                    <p className="text-gray-500 text-sm mb-6">{user?.email}</p>
+                                    <h2 className="text-xl font-serif font-black text-gallery-black uppercase tracking-widest leading-tight">{user?.name}</h2>
+                                    <p className="text-gallery-charcoal/60 text-xs font-bold uppercase tracking-widest mb-8 mt-2">{user?.email}</p>
 
-                                    <div className="w-full grid grid-cols-2 gap-4 text-center mb-6">
-                                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 rounded-2xl border border-purple-100/50">
-                                            <p className="text-2xl font-bold text-gray-900">{orders?.length || 0}</p>
-                                            <p className="text-xs text-gray-500 uppercase tracking-wide">Orders</p>
+                                    <div className="w-full grid grid-cols-2 gap-0 border-y border-gallery-charcoal/20 mb-8 bg-gallery-cream/30">
+                                        <div className="p-4 border-r border-gallery-charcoal/20">
+                                            <p className="text-3xl font-serif font-black text-gallery-black">{orders?.length || 0}</p>
+                                            <p className="text-[10px] text-gallery-charcoal uppercase tracking-widest font-bold mt-1">Orders</p>
                                         </div>
-                                        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-2xl border border-teal-100/50">
-                                            <p className="text-2xl font-bold text-gray-900">{uniqueWon.length}</p>
-                                            <p className="text-xs text-gray-500 uppercase tracking-wide">Wins</p>
+                                        <div className="p-4">
+                                            <p className="text-3xl font-serif font-black text-gallery-black">{uniqueWon.length}</p>
+                                            <p className="text-[10px] text-gallery-charcoal uppercase tracking-widest font-bold mt-1">Wins</p>
                                         </div>
                                     </div>
 
-                                    <Button variant="outline" className="w-full rounded-full border-gray-200 hover:bg-gray-50 hover:text-purple-600" onClick={() => window.location.href = "/settings"}>
+                                    <Button variant="outline" className="w-full rounded-none border-gallery-charcoal/20 hover:bg-gallery-red hover:text-white hover:border-gallery-red uppercase tracking-widest text-xs font-bold transition-colors h-12" onClick={() => window.location.href = "/settings"}>
                                         <User className="w-4 h-4 mr-2" />
                                         Edit Profile
                                     </Button>
@@ -242,57 +229,57 @@ export default function BuyerDashboard() {
                             </motion.div>
 
                             {/* Recent Activity */}
-                            <motion.div variants={fadeInUp} className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] md:col-span-2 flex flex-col overflow-hidden transition-transform hover:-translate-y-1 duration-300">
-                                <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                                    <h3 className="font-serif font-bold text-lg text-gray-900 flex items-center">
-                                        <Clock className="w-5 h-5 mr-2 text-purple-500" />
+                            <motion.div variants={fadeInUp} className="bg-white border border-gallery-charcoal/20 shadow-none md:col-span-2 flex flex-col overflow-hidden">
+                                <div className="px-8 flex items-center justify-between border-b border-gallery-charcoal/20 min-h-[5rem]">
+                                    <h3 className="font-serif font-black text-xl text-gallery-black uppercase tracking-widest flex items-center">
+                                        <Clock className="w-5 h-5 mr-3 text-gallery-red" />
                                         Recent Activity
                                     </h3>
-                                    <Button variant="link" className="text-purple-600 p-0 h-auto font-medium" onClick={() => setActiveTab("orders")}>
+                                    <Button variant="link" className="text-[10px] font-bold uppercase tracking-widest text-gallery-charcoal hover:text-gallery-red p-0 h-auto" onClick={() => setActiveTab("orders")}>
                                         View All
-                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                        <ChevronRight className="w-3 h-3 ml-1" />
                                     </Button>
                                 </div>
-                                <div className="p-6 flex-1">
+                                <div className="flex-1 bg-gallery-cream/20">
                                     {ordersLoading ? (
-                                        <div className="flex justify-center py-8"><Loader2 className="animate-spin text-purple-500" /></div>
+                                        <div className="flex justify-center items-center h-48"><Loader2 className="animate-spin text-gallery-red w-8 h-8" /></div>
                                     ) : (orders || []).length === 0 && myBids.length === 0 ? (
-                                        <div className="text-center py-12 bg-white rounded-2xl border border-gray-100 mt-2">
-                                            <p className="text-gray-500">No recent activity found.</p>
-                                            <Button className="mt-4 bg-purple-600 rounded-full" onClick={() => window.location.href = "/artworks"}>Start Exploring</Button>
+                                        <div className="text-center py-20 px-8">
+                                            <p className="text-gallery-charcoal/60 font-serif italic text-lg mb-6">No recent activity found in your collection.</p>
+                                            <Button className="bg-gallery-black hover:bg-gallery-red rounded-none uppercase tracking-widest text-xs font-bold px-8 h-12" onClick={() => window.location.href = "/artworks"}>Start Exploring</Button>
                                         </div>
                                     ) : (
-                                        <div className="space-y-4">
+                                        <div className="divide-y divide-gallery-charcoal/10">
                                             {/* Show latest order if exists */}
                                             {orders && orders.length > 0 && (
-                                                <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-                                                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                                                        <ShoppingBag className="w-5 h-5" />
+                                                <div className="flex items-center gap-6 p-6 hover:bg-gallery-cream/50 transition-colors">
+                                                    <div className="h-12 w-12 border border-gallery-charcoal/20 flex items-center justify-center text-gallery-black bg-white shrink-0">
+                                                        <ShoppingBag className="w-5 h-5 opacity-60" />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium text-gray-900">New Order Placed</p>
-                                                        <p className="text-xs text-gray-500 truncate">Order #{orders[0].id.slice(0, 8)} • {new Date(orders[0].createdAt).toLocaleDateString()}</p>
+                                                        <p className="text-sm font-bold uppercase tracking-widest text-gallery-black">Order Placed</p>
+                                                        <p className="text-xs text-gallery-charcoal/60 uppercase tracking-widest mt-1">Ref: {orders[0].id.slice(0, 8)} • {new Date(orders[0].createdAt).toLocaleDateString()}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-sm font-bold text-gray-900">${parseFloat(orders[0].amount).toLocaleString()}</p>
-                                                        <span className={`text-[10px] px-2 py-0.5 rounded-full capitalize ${orderStatusColors[orders[0].status]}`}>{orders[0].status}</span>
+                                                        <p className="text-lg font-serif font-bold text-gallery-black mb-1">${parseFloat(orders[0].amount).toLocaleString()}</p>
+                                                        <span className="text-[10px] px-2 py-0.5 border border-gallery-charcoal/20 bg-white font-bold uppercase tracking-widest text-gallery-charcoal">{orders[0].status}</span>
                                                     </div>
                                                 </div>
                                             )}
 
                                             {/* Show latest bid if exists */}
                                             {myBids && myBids.length > 0 && (
-                                                <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-                                                    <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 shrink-0">
-                                                        <Gavel className="w-5 h-5" />
+                                                <div className="flex items-center gap-6 p-6 hover:bg-gallery-cream/50 transition-colors">
+                                                    <div className="h-12 w-12 border border-gallery-charcoal/20 flex items-center justify-center text-gallery-black bg-white shrink-0">
+                                                        <Gavel className="w-5 h-5 opacity-60" />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium text-gray-900">Bid Placed on {myBids[0].artwork.title}</p>
-                                                        <p className="text-xs text-gray-500 truncate">{new Date(myBids[0].bid.createdAt).toLocaleDateString()}</p>
+                                                        <p className="text-sm font-bold uppercase tracking-widest text-gallery-black truncate">Bid: {myBids[0].artwork.title}</p>
+                                                        <p className="text-xs text-gallery-charcoal/60 uppercase tracking-widest mt-1">{new Date(myBids[0].bid.createdAt).toLocaleDateString()}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-sm font-bold text-gray-900">${parseFloat(myBids[0].bid.amount).toLocaleString()}</p>
-                                                        <span className={`text-[10px] px-2 py-0.5 rounded-full capitalize ${auctionStatusColors[myBids[0].auction.status]}`}>{myBids[0].auction.status}</span>
+                                                        <p className="text-lg font-serif font-bold text-gallery-black mb-1">${parseFloat(myBids[0].bid.amount).toLocaleString()}</p>
+                                                        <span className={`text-[10px] px-2 py-0.5 border font-bold uppercase tracking-widest ${myBids[0].auction.status === 'active' ? 'border-gallery-red text-gallery-red bg-white' : 'border-gallery-charcoal/20 text-gallery-charcoal bg-gallery-cream'}`}>{myBids[0].auction.status}</span>
                                                     </div>
                                                 </div>
                                             )}
@@ -305,57 +292,57 @@ export default function BuyerDashboard() {
 
                     {/* My Orders Tab */}
                     {activeTab === "orders" && (
-                        <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+                        <div className="bg-white border border-gallery-charcoal/20 shadow-none overflow-hidden">
                             {ordersLoading ? (
-                                <div className="py-12 flex justify-center">
-                                    <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+                                <div className="py-24 flex justify-center">
+                                    <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
                                 </div>
                             ) : (orders || []).length === 0 ? (
-                                <div className="py-16 text-center">
-                                    <ShoppingBag className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                                    <p className="text-gray-500 text-lg">No orders yet</p>
-                                    <p className="text-gray-400 text-sm mt-1">Your purchases will appear here</p>
+                                <div className="py-32 text-center bg-gallery-cream/30">
+                                    <ShoppingBag className="h-12 w-12 text-gallery-charcoal/30 mx-auto mb-6" />
+                                    <h2 className="text-2xl font-serif font-black text-gallery-black uppercase tracking-widest mb-2">No Acquisitions</h2>
+                                    <p className="font-serif italic text-gallery-charcoal/70">Your collection log is currently empty.</p>
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-sm">
+                                    <table className="w-full text-sm text-left">
                                         <thead>
-                                            <tr className="bg-gray-50/80 border-b border-gray-100">
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Order ID</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Amount</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Type</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Status</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Date</th>
+                                            <tr className="border-b border-gallery-charcoal/20 bg-gallery-cream/50">
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Order Ref</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Amount</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Origin</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Status</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal text-right">Date</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody className="divide-y divide-gallery-charcoal/10">
                                             {(orders || []).map((order) => (
                                                 <tr
                                                     key={order.id}
-                                                    className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
+                                                    className="hover:bg-gallery-cream/30 transition-colors"
                                                 >
-                                                    <td className="py-3 px-4">
-                                                        <span className="font-mono text-xs text-gray-700">
-                                                            {order.id.slice(0, 8)}...
+                                                    <td className="py-5 px-6">
+                                                        <span className="font-mono text-xs font-bold text-gallery-charcoal uppercase tracking-wider">
+                                                            {order.id.slice(0, 8)}
                                                         </span>
                                                     </td>
-                                                    <td className="py-3 px-4 font-medium text-gray-900">
+                                                    <td className="py-5 px-6 font-serif font-bold text-lg text-gallery-black">
                                                         ${parseFloat(order.amount).toLocaleString()}
                                                     </td>
-                                                    <td className="py-3 px-4">
-                                                        <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100 text-gray-600 capitalize">
+                                                    <td className="py-5 px-6">
+                                                        <span className="text-[10px] font-bold px-2 py-0.5 border border-gallery-charcoal/20 text-gallery-charcoal capitalize">
                                                             {order.type}
                                                         </span>
                                                     </td>
-                                                    <td className="py-3 px-4">
+                                                    <td className="py-5 px-6">
                                                         <span
-                                                            className={`text-xs font-medium px-2 py-1 rounded-full capitalize ${orderStatusColors[order.status]
+                                                            className={`text-[10px] font-bold px-2 py-0.5 border uppercase tracking-widest ${order.status === 'completed' || order.status === 'paid' ? 'border-gallery-black bg-gallery-black text-white' : 'border-gallery-charcoal/20 text-gallery-charcoal bg-white'
                                                                 }`}
                                                         >
                                                             {order.status}
                                                         </span>
                                                     </td>
-                                                    <td className="py-3 px-4 text-gray-500">
+                                                    <td className="py-5 px-6 text-xs text-gallery-charcoal/60 uppercase tracking-widest text-right">
                                                         {new Date(order.createdAt).toLocaleDateString()}
                                                     </td>
                                                 </tr>
@@ -369,31 +356,31 @@ export default function BuyerDashboard() {
 
                     {/* My Bids Tab */}
                     {activeTab === "bids" && (
-                        <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+                        <div className="bg-white border border-gallery-charcoal/20 shadow-none overflow-hidden">
                             {bidsLoading ? (
-                                <div className="py-12 flex justify-center">
-                                    <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+                                <div className="py-24 flex justify-center">
+                                    <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
                                 </div>
                             ) : myBids.length === 0 ? (
-                                <div className="py-16 text-center">
-                                    <Gavel className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                                    <p className="text-gray-500 text-lg">No bids placed yet</p>
-                                    <p className="text-gray-400 text-sm mt-1">Browse auctions to start bidding</p>
+                                <div className="py-32 text-center bg-gallery-cream/30">
+                                    <Gavel className="h-12 w-12 text-gallery-charcoal/30 mx-auto mb-6" />
+                                    <h2 className="text-2xl font-serif font-black text-gallery-black uppercase tracking-widest mb-2">No Active Bids</h2>
+                                    <p className="font-serif italic text-gallery-charcoal/70">Participate in an auction to see your bidding history.</p>
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-sm">
+                                    <table className="w-full text-sm text-left">
                                         <thead>
-                                            <tr className="bg-gray-50/80 border-b border-gray-100">
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Artwork</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Your Bid</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Current Bid</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Auction Status</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Result</th>
-                                                <th className="text-left py-3 px-4 font-medium text-gray-500">Date</th>
+                                            <tr className="border-b border-gallery-charcoal/20 bg-gallery-cream/50">
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Artwork</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Your Offer</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Current Highest</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Status</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Outcome</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal text-right">Date</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody className="divide-y divide-gallery-charcoal/10">
                                             {myBids.map((item) => {
                                                 const isWinner =
                                                     item.auction.winnerId === user?.id &&
@@ -401,50 +388,45 @@ export default function BuyerDashboard() {
                                                 return (
                                                     <tr
                                                         key={item.bid.id}
-                                                        className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
+                                                        className="hover:bg-gallery-cream/30 transition-colors"
                                                     >
-                                                        <td className="py-3 px-4">
-                                                            <div className="flex items-center gap-3">
+                                                        <td className="py-5 px-6">
+                                                            <div className="flex items-center gap-4">
                                                                 <img
                                                                     src={item.artwork.imageUrl}
                                                                     alt={item.artwork.title}
-                                                                    className="w-9 h-9 rounded-lg object-cover"
+                                                                    className="w-10 h-10 object-cover border border-gallery-charcoal/20"
                                                                 />
-                                                                <span className="font-medium text-gray-900 max-w-[180px] truncate">
+                                                                <span className="font-bold text-xs uppercase tracking-widest text-gallery-black max-w-[180px] truncate">
                                                                     {item.artwork.title}
                                                                 </span>
                                                             </div>
                                                         </td>
-                                                        <td className="py-3 px-4 font-medium text-gray-900">
+                                                        <td className="py-5 px-6 font-serif font-bold text-lg text-gallery-black">
                                                             ${parseFloat(item.bid.amount).toLocaleString()}
                                                         </td>
-                                                        <td className="py-3 px-4 text-gray-600">
+                                                        <td className="py-5 px-6 font-serif text-gallery-charcoal/80">
                                                             {item.auction.currentBid
                                                                 ? `$${parseFloat(item.auction.currentBid).toLocaleString()}`
                                                                 : "—"}
                                                         </td>
-                                                        <td className="py-3 px-4">
-                                                            <span
-                                                                className={`text-xs font-medium px-2 py-1 rounded-full capitalize ${auctionStatusColors[item.auction.status]
-                                                                    }`}
-                                                            >
-                                                                {item.auction.status}
-                                                            </span>
+                                                        <td className="py-5 px-6">
+                                                            <span className={`text-[10px] font-bold px-2 py-0.5 border uppercase tracking-widest ${item.auction.status === 'active' ? 'border-gallery-red text-gallery-red bg-white' : 'border-gallery-charcoal/20 text-gallery-charcoal bg-gallery-cream'}`}>{item.auction.status}</span>
                                                         </td>
-                                                        <td className="py-3 px-4">
+                                                        <td className="py-5 px-6">
                                                             {item.auction.status === "active" ? (
-                                                                <span className="text-xs text-gray-400">In progress</span>
+                                                                <span className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/60">Live</span>
                                                             ) : isWinner ? (
-                                                                <span className="text-xs font-medium px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
-                                                                    🎉 Won
+                                                                <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border border-gallery-black bg-gallery-black text-white">
+                                                                    Acquired
                                                                 </span>
                                                             ) : (
-                                                                <span className="text-xs font-medium px-2 py-1 rounded-full bg-red-100 text-red-600">
-                                                                    Outbid
+                                                                <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border border-gallery-charcoal/30 text-gallery-charcoal">
+                                                                    Passed
                                                                 </span>
                                                             )}
                                                         </td>
-                                                        <td className="py-3 px-4 text-gray-500">
+                                                        <td className="py-5 px-6 text-xs text-gallery-charcoal/60 uppercase tracking-widest text-right">
                                                             {new Date(item.bid.createdAt).toLocaleDateString()}
                                                         </td>
                                                     </tr>
@@ -461,22 +443,24 @@ export default function BuyerDashboard() {
                     {activeTab === "won" && (
                         <div>
                             {bidsLoading ? (
-                                <div className="py-12 flex justify-center">
-                                    <Loader2 className="h-6 w-6 animate-spin text-purple-500" />
+                                <div className="py-24 flex justify-center">
+                                    <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
                                 </div>
                             ) : uniqueWon.length === 0 ? (
-                                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm py-20 text-center">
-                                    <Trophy className="h-16 w-16 text-purple-200 mx-auto mb-4" />
-                                    <h2 className="text-xl font-serif font-semibold mb-2">No won auctions yet</h2>
-                                    <p className="text-gray-500 mb-6">Keep bidding to win your favorite pieces. Your victories will appear here.</p>
-                                    <Button onClick={() => window.location.href = "/auctions"} className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-6">Find Auctions</Button>
+                                <div className="bg-white border border-gallery-charcoal/20 shadow-none py-32 text-center bg-gallery-cream/30">
+                                    <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center mx-auto mb-6">
+                                        <Trophy className="h-6 w-6 text-gallery-charcoal/30" />
+                                    </div>
+                                    <h2 className="text-2xl font-serif font-black text-gallery-black uppercase tracking-widest mb-2">No Acquisitions</h2>
+                                    <p className="font-serif italic text-gallery-charcoal/70 mb-8">Emerge victorious in an auction to secure masterpieces.</p>
+                                    <Button onClick={() => window.location.href = "/auctions"} className="bg-gallery-black hover:bg-gallery-red text-white h-12 px-8 rounded-none font-bold uppercase tracking-widest text-[10px] transition-colors">Go to Auctions</Button>
                                 </div>
                             ) : (
                                 <motion.div
                                     variants={staggerContainer}
                                     initial="hidden"
                                     animate="visible"
-                                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+                                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                                 >
                                     {uniqueWon.map((item) => {
                                         const isPaid = item.auction.status === "paid";
@@ -484,44 +468,47 @@ export default function BuyerDashboard() {
                                             <motion.div
                                                 key={item.auction.id}
                                                 variants={fadeInUp}
-                                                className="bg-white/90 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden hover:shadow-[0_20px_40px_rgb(0,0,0,0.1)] transition-all duration-300 transform hover:-translate-y-1 group"
+                                                className="bg-white border border-gallery-charcoal/20 shadow-none overflow-hidden group hover:border-gallery-black transition-colors"
                                             >
-                                                <div className="relative overflow-hidden">
+                                                <div className="relative overflow-hidden aspect-square">
                                                     <img
                                                         src={item.artwork.imageUrl}
                                                         alt={item.artwork.title}
-                                                        className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                                        className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
                                                     />
-                                                    <div className="absolute top-3 right-3">
+                                                    <div className="absolute top-4 right-4">
                                                         <span
-                                                            className={`text-xs font-medium px-2.5 py-1 rounded-full ${isPaid
-                                                                ? "bg-green-500 text-white"
-                                                                : "bg-yellow-500 text-white"
+                                                            className={`text-[10px] font-bold px-3 py-1 uppercase tracking-widest border ${isPaid
+                                                                ? "bg-gallery-black text-white border-gallery-black"
+                                                                : "bg-gallery-red text-white border-gallery-red"
                                                                 }`}
                                                         >
-                                                            {isPaid ? "✓ Paid" : "Awaiting Payment"}
+                                                            {isPaid ? "Settled" : "Pending Payment"}
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div className="p-5">
-                                                    <h3 className="font-serif text-lg font-semibold text-gray-900 mb-1">
+                                                <div className="p-8">
+                                                    <h3 className="font-serif text-2xl font-black text-gallery-black mb-2 uppercase tracking-widest">
                                                         {item.artwork.title}
                                                     </h3>
-                                                    <p className="text-sm text-gray-500 mb-3">{item.artwork.medium}</p>
-                                                    <div className="flex items-center justify-between">
-                                                        <div>
-                                                            <p className="text-xs text-gray-400">Winning Bid</p>
-                                                            <p className="text-xl font-bold text-gray-900">
+                                                    <div className="flex items-center gap-2 mb-6 text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/60">
+                                                        <span>{item.artwork.medium}</span>
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-4">
+                                                        <div className="flex items-center justify-between border-b border-gallery-charcoal/10 pb-4">
+                                                            <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/60">Final Price</p>
+                                                            <p className="text-2xl font-serif font-black text-gallery-black">
                                                                 ${parseFloat(item.auction.currentBid || item.bid.amount).toLocaleString()}
                                                             </p>
                                                         </div>
                                                         {!isPaid && (
                                                             <Button
                                                                 onClick={() => handlePayAuction(item.auction.id)}
-                                                                className="bg-purple-600 hover:bg-purple-700 text-white cursor-pointer"
+                                                                className="w-full bg-gallery-black hover:bg-gallery-red text-white rounded-none h-14 uppercase tracking-widest text-xs font-bold transition-colors mt-2"
                                                             >
                                                                 <CreditCard className="h-4 w-4 mr-2" />
-                                                                Pay Now
+                                                                Settle Account
                                                             </Button>
                                                         )}
                                                     </div>
