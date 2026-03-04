@@ -19,18 +19,30 @@ export default function FAQPage() {
     ];
 
     return (
-        <div className="container mx-auto px-4 py-24 min-h-screen">
-            <div className="max-w-3xl mx-auto space-y-12">
-                <div className="space-y-4">
-                    <h1 className="font-serif text-5xl font-bold tracking-tight text-gray-900">Frequently Asked Questions</h1>
-                    <p className="text-xl text-gray-500">Find answers to the most common questions about buying and selling on ArtBook.</p>
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
+            <div className="max-w-4xl mx-auto px-6">
+                <div className="text-center space-y-6 mb-24">
+                    <div className="inline-flex items-center border border-gallery-charcoal/20 bg-white px-4 py-1 text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">
+                        Information
+                    </div>
+                    <h1 className="font-serif text-5xl md:text-7xl font-black tracking-widest uppercase text-gallery-black">
+                        FAQ
+                    </h1>
+                    <p className="text-xl md:text-2xl font-serif italic text-gallery-charcoal/70 max-w-2xl mx-auto">
+                        Frequently asked questions about buying and selling on the platform.
+                    </p>
                 </div>
 
-                <div className="space-y-8 mt-12">
+                <div className="space-y-0 border border-gallery-charcoal/20 bg-white">
                     {faqs.map((faq, i) => (
-                        <div key={i} className="pb-8 border-b border-gray-100 last:border-0">
-                            <h3 className="text-xl font-medium text-gray-900 mb-3">{faq.q}</h3>
-                            <p className="text-gray-600 leading-relaxed">{faq.a}</p>
+                        <div key={i} className="p-8 md:p-12 border-b border-gallery-charcoal/20 last:border-b-0 hover:bg-gallery-cream/30 transition-colors">
+                            <h3 className="font-serif text-2xl md:text-3xl font-black text-gallery-black mb-6 uppercase tracking-widest">
+                                {faq.q}
+                            </h3>
+                            <div className="h-px w-12 bg-gallery-red mb-6" />
+                            <p className="text-gallery-charcoal/80 leading-relaxed font-serif text-lg">
+                                {faq.a}
+                            </p>
                         </div>
                     ))}
                 </div>
