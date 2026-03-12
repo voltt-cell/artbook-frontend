@@ -226,6 +226,21 @@ export default function SettingsPage() {
                             />
                         </div>
 
+                        {/* Bio */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-gallery-charcoal mb-2">
+                                Bio
+                            </label>
+                            <textarea
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                placeholder="Tell the world about yourself..."
+                                rows={4}
+                                className="w-full rounded-none border border-gallery-charcoal/30 bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-gallery-red focus:ring-0 resize-none placeholder:text-gallery-charcoal/30 font-serif"
+                            />
+                            <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/40 mt-1">Visible on your public profile</p>
+                        </div>
+
                         {/* Email (read-only) */}
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-widest text-gallery-charcoal mb-2">

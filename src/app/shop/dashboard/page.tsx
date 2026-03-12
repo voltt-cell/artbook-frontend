@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/swr";
 import { motion } from "framer-motion";
 import { ArtisticLoader } from "@/components/ui/artistic-loader";
-import { Package, Gavel, DollarSign, Image as ImageIcon, Plus, Settings, ArrowRight } from "lucide-react";
+import { Package, Gavel, DollarSign, Image as ImageIcon, Plus, Settings, ArrowRight, CreditCard, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -26,6 +26,12 @@ type ArtworkResponse = {
     createdAt: string;
 };
 
+type ConnectStatus = {
+    connected: boolean;
+    onboardingComplete: boolean;
+    payoutEnabled: boolean;
+    stripeAccountId: string | null;
+};
 
 const formatCurrency = (price: number) =>
     new Intl.NumberFormat("en-US", {
@@ -39,6 +45,11 @@ export default function ShopDashboard() {
 
     const { data: artworksRaw, isLoading: artworksLoading } = useSWR<ArtworkResponse[]>(
         user ? `/artworks?artistId=${user.id}` : null,
+        fetcher
+    );
+
+    const { data: connectStatus } = useSWR<ConnectStatus>(
+        user && hasShop ? "/connect/status" : null,
         fetcher
     );
 
@@ -58,12 +69,42 @@ export default function ShopDashboard() {
         return null;
     }
 
+    const connectComplete = connectStatus?.onboardingComplete && connectStatus?.payoutEnabled;
+
     return (
         <div className="min-h-screen relative overflow-hidden bg-gallery-cream">
 
 
             <div className="container mx-auto py-12 px-4 max-w-7xl relative z-10">
                 <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
+                    {/* Stripe Connect Banner */}
+                    {connectStatus && !connectComplete && (
+                        <Link href="/shop/connect" className="block mb-6">
+                            <div className="bg-amber-50 border border-amber-300 p-4 flex items-center justify-between hover:border-amber-500 transition-colors">
+                                <div className="flex items-center gap-4">
+                                    <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                                    <div>
+                                        <p className="text-sm font-bold uppercase tracking-widest text-amber-800">
+                                            Complete Stripe Onboarding
+                                        </p>
+                                        <p className="text-amber-700 text-xs mt-0.5">
+                                            Connect your Stripe account to receive payments from buyers.
+                                        </p>
+                                    </div>
+                                </div>
+                                <ArrowRight className="w-5 h-5 text-amber-500 flex-shrink-0" />
+                            </div>
+                        </Link>
+                    )}
+                    {connectStatus && connectComplete && (
+                        <div className="mb-6 bg-green-50 border border-green-200 p-3 flex items-center gap-3">
+                            <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
+                            <span className="text-[10px] uppercase tracking-widest font-bold text-green-800">
+                                Stripe payouts active
+                            </span>
+                        </div>
+                    )}
+
                     {/* Header */}
                     <div className="flex items-center justify-between mb-10 border-b border-gallery-charcoal/20 pb-6">
                         <div>

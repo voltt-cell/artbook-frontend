@@ -2,7 +2,7 @@
 import useSWR from "swr";
 import { motion } from "framer-motion";
 
-import { ChevronRight, Loader2, Gavel, Users } from "lucide-react";
+import { ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import ArtworkCard from "@/features/home/artwork-card";
 import ArtistCard from "@/features/home/artist-card";
@@ -65,13 +65,13 @@ const Page = () => {
   // Unused state removed
 
   const { data: artworksRaw, isLoading: artworksLoading } = useSWR<ArtworkResponse[]>(
-    "/artworks",
+    "/artworks?limit=20",
     fetcher,
     { refreshInterval: 15000 }
   );
 
   const { data: artistsRaw, isLoading: artistsLoading } = useSWR<ArtistResponse[]>(
-    "/users?role=artist",
+    "/users?role=artist&limit=8",
     fetcher
   );
 
@@ -108,7 +108,7 @@ const Page = () => {
     followers: a.followerCount || 0,
   }));
 
-  // Get the most recent 5 auctions to fill a grid smartly
+  // Limit for display
   const activeAuctions = (auctionItemsRaw || []).slice(0, 5);
   const featuredArtists = artists.slice(0, 4);
 
@@ -215,96 +215,84 @@ const Page = () => {
         })}
       </div>
 
-      {/* Active Auctions */}
-      <section className="py-24 bg-white border-t border-gallery-charcoal/10">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
-          >
-            <h2 className="font-serif text-4xl font-black text-gallery-black">Live Auctions</h2>
-            <Link
-              href="/auctions"
-              className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
+      {/* Active Auctions — only render if there are any */}
+      {activeAuctions.length > 0 && (
+        <section className="py-24 bg-white border-t border-gallery-charcoal/10">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
             >
-              View All
-              <ChevronRight className="w-4 h-4 ml-1" />
-            </Link>
-          </motion.div>
+              <h2 className="font-serif text-4xl font-black text-gallery-black">Live Auctions</h2>
+              <Link
+                href="/auctions"
+                className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
+              >
+                View All
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
-          >
-            {activeAuctions.length > 0 ? (
-              activeAuctions.map((auctionItem) => (
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+            >
+              {activeAuctions.map((auctionItem) => (
                 <motion.div key={auctionItem.auction.id} variants={fadeInUp}>
                   <AuctionCard
                     item={auctionItem}
                     artist={getArtistById(auctionItem.artwork.artistId)!}
                   />
                 </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full py-20 text-center bg-gallery-cream border border-gallery-charcoal/10 flex flex-col items-center justify-center">
-                <Gavel className="w-12 h-12 text-gallery-charcoal/20 mb-6" />
-                <h3 className="text-2xl font-serif font-black text-gallery-black mb-2">No active auctions</h3>
-                <p className="text-gallery-charcoal/60 max-w-sm">Check back later for exciting new auction opportunities.</p>
-              </div>
-            )}
-          </motion.div>
-        </div>
-      </section>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
-      {/* Featured Artists */}
-      <section className="py-24 bg-gallery-cream border-t border-gallery-charcoal/10">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
-          >
-            <h2 className="font-serif text-4xl font-black text-gallery-black">Magazine / Artists</h2>
-            <Link
-              href="/artists"
-              className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
+      {/* Featured Artists — only render if there are any */}
+      {featuredArtists.length > 0 && (
+        <section className="py-24 bg-gallery-cream border-t border-gallery-charcoal/10">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
             >
-              View All
-              <ChevronRight className="w-4 h-4 ml-1" />
-            </Link>
-          </motion.div>
+              <h2 className="font-serif text-4xl font-black text-gallery-black">Magazine / Artists</h2>
+              <Link
+                href="/artists"
+                className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
+              >
+                View All
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Link>
+            </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {featuredArtists.length > 0 ? (
-              featuredArtists.map((artist) => (
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
+              {featuredArtists.map((artist) => (
                 <motion.div key={artist.id} variants={fadeInUp}>
                   <ArtistCard artist={artist} />
                 </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full py-20 text-center bg-white border border-gallery-charcoal/10 flex flex-col items-center justify-center">
-                <Users className="w-12 h-12 text-gallery-charcoal/20 mb-6" />
-                <h3 className="text-2xl font-serif font-black text-gallery-black mb-2">No featured artists</h3>
-                <p className="text-gallery-charcoal/60 max-w-sm">We are currently curating our list of featured artists.</p>
-              </div>
-            )}
-          </motion.div>
-        </div>
-      </section>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       <JoinCommunity />
     </div>

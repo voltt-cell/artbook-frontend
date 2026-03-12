@@ -38,6 +38,9 @@ import { toast } from "sonner";
 import { fadeInUp, fadeIn } from "@/lib/animations";
 import { useCart } from "@/hooks/useCart";
 import { useFavorites } from "@/hooks/useFavorites";
+import { StripeProvider } from "@/components/providers/stripe-provider";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { Shield } from "lucide-react";
 
 type ArtworkResponse = {
     id: string;
@@ -257,7 +260,7 @@ export default function ArtworkDetailPage({
         }
     };
 
-    const handlePlaceBid = async () => {
+    const handlePlaceBid = async (paymentMethodId?: string) => {
         if (!isAuthenticated) {
             toast.error("Please log in to place a bid");
             router.push("/login");
@@ -268,16 +271,19 @@ export default function ArtworkDetailPage({
             toast.error("Please enter a valid bid amount");
             return;
         }
+        if (!paymentMethodId) {
+            toast.error("Please enter your card details");
+            return;
+        }
         setBidLoading(true);
         try {
-            const res = await api.post<{ message: string; currentBid: number }>(
+            const res = await api.post<{ message: string; currentBid: number; holdStatus?: string }>(
                 `/auctions/artwork/${id}/bid`,
-                { amount }
+                { amount, paymentMethodId }
             );
             toast.success(res.message);
             setBidDialogOpen(false);
             setBidAmount("");
-            // Refresh auction data to show updated bid
             mutateAuction();
         } catch (error) {
             toast.error("Bid failed", {
@@ -766,54 +772,161 @@ export default function ArtworkDetailPage({
                 </DialogContent>
             </Dialog>
 
-            {/* Bid Dialog */}
-            <Dialog open={bidDialogOpen} onOpenChange={setBidDialogOpen}>
-                <DialogContent className="sm:max-w-md rounded-none border border-gallery-charcoal/20 bg-white p-8">
-                    <DialogTitle className="font-serif text-2xl font-black uppercase tracking-widest text-gallery-black border-b border-gallery-charcoal/10 pb-4">Place a Bid</DialogTitle>
-                    <div className="space-y-6 mt-4">
-                        <div>
-                            <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mb-1">Current Bid</p>
-                            <p className="text-4xl font-serif font-black text-gallery-black tracking-tight">{formatPrice(livePrice ?? price)}</p>
+            {/* Bid Dialog with Stripe Elements */}
+            <StripeProvider>
+                <BidDialog
+                    open={bidDialogOpen}
+                    onOpenChange={setBidDialogOpen}
+                    livePrice={livePrice}
+                    price={price}
+                    timeLeft={timeLeft}
+                    auctionEnded={auctionEnded ?? undefined}
+                    bidAmount={bidAmount}
+                    setBidAmount={setBidAmount}
+                    bidLoading={bidLoading}
+                    onPlaceBid={handlePlaceBid}
+                />
+            </StripeProvider>
+        </div>
+    );
+}
+
+/** Separate component so useStripe() / useElements() work inside StripeProvider */
+function BidDialog({
+    open,
+    onOpenChange,
+    livePrice,
+    price,
+    timeLeft,
+    auctionEnded,
+    bidAmount,
+    setBidAmount,
+    bidLoading,
+    onPlaceBid,
+}: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    livePrice: number | null;
+    price: number;
+    timeLeft: { d: number; h: number; m: number; s: number } | null;
+    auctionEnded: boolean | undefined;
+    bidAmount: string;
+    setBidAmount: (v: string) => void;
+    bidLoading: boolean;
+    onPlaceBid: (paymentMethodId?: string) => void;
+}) {
+    const stripe = useStripe();
+    const elements = useElements();
+    const [cardError, setCardError] = useState<string | null>(null);
+    const [cardComplete, setCardComplete] = useState(false);
+
+    const handleSubmit = async () => {
+        if (!stripe || !elements) return;
+
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) return;
+
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: "card",
+            card: cardElement,
+        });
+
+        if (error) {
+            setCardError(error.message || "Card error");
+            return;
+        }
+
+        setCardError(null);
+        onPlaceBid(paymentMethod.id);
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-md rounded-none border border-gallery-charcoal/20 bg-white p-8">
+                <DialogTitle className="font-serif text-2xl font-black uppercase tracking-widest text-gallery-black border-b border-gallery-charcoal/10 pb-4">Place a Bid</DialogTitle>
+                <div className="space-y-6 mt-4">
+                    <div>
+                        <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mb-1">Current Bid</p>
+                        <p className="text-4xl font-serif font-black text-gallery-black tracking-tight">{formatPrice(livePrice ?? price)}</p>
+                    </div>
+                    {timeLeft && !auctionEnded && (
+                        <div className="flex items-center gap-2 bg-gallery-cream px-4 py-3 border border-gallery-charcoal/10">
+                            <Clock className="w-4 h-4 text-gallery-red" />
+                            <span className="text-gallery-red font-bold text-[10px] uppercase tracking-widest">
+                                {timeLeft.d > 0 ? `${timeLeft.d}d ` : ''}
+                                {String(timeLeft.h).padStart(2, '0')}:{String(timeLeft.m).padStart(2, '0')}:{String(timeLeft.s).padStart(2, '0')} remaining
+                            </span>
                         </div>
-                        {timeLeft && !auctionEnded && (
-                            <div className="flex items-center gap-2 bg-gallery-cream px-4 py-3 border border-gallery-charcoal/10">
-                                <Clock className="w-4 h-4 text-gallery-red" />
-                                <span className="text-gallery-red font-bold text-[10px] uppercase tracking-widest">
-                                    {timeLeft.d > 0 ? `${timeLeft.d}d ` : ''}
-                                    {String(timeLeft.h).padStart(2, '0')}:{String(timeLeft.m).padStart(2, '0')}:{String(timeLeft.s).padStart(2, '0')} remaining
-                                </span>
-                            </div>
-                        )}
-                        <div>
-                            <label htmlFor="bid-amount" className="text-xs font-bold uppercase tracking-widest text-gallery-charcoal block mb-3">
-                                Your Bid (must be higher)
-                            </label>
-                            <Input
-                                id="bid-amount"
-                                type="number"
-                                step="0.01"
-                                min={((livePrice ?? price) + 0.01).toFixed(2)}
-                                placeholder={`Min $${((livePrice ?? price) + 1).toFixed(2)}`}
-                                value={bidAmount}
-                                onChange={(e) => setBidAmount(e.target.value)}
-                                className="rounded-none border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 bg-transparent px-0 pb-2 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none text-2xl font-serif font-black placeholder:text-gallery-charcoal/20"
+                    )}
+                    <div>
+                        <label htmlFor="bid-amount" className="text-xs font-bold uppercase tracking-widest text-gallery-charcoal block mb-3">
+                            Your Bid (must be higher)
+                        </label>
+                        <Input
+                            id="bid-amount"
+                            type="number"
+                            step="0.01"
+                            min={((livePrice ?? price) + 0.01).toFixed(2)}
+                            placeholder={`Min $${((livePrice ?? price) + 1).toFixed(2)}`}
+                            value={bidAmount}
+                            onChange={(e) => setBidAmount(e.target.value)}
+                            className="rounded-none border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 bg-transparent px-0 pb-2 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none text-2xl font-serif font-black placeholder:text-gallery-charcoal/20"
+                        />
+                    </div>
+                    {/* Card Details */}
+                    <div>
+                        <label className="text-xs font-bold uppercase tracking-widest text-gallery-charcoal block mb-3">
+                            Card Details
+                        </label>
+                        <div className="border border-gallery-charcoal/20 p-4 bg-gallery-cream/30">
+                            <CardElement
+                                options={{
+                                    style: {
+                                        base: {
+                                            fontSize: "16px",
+                                            fontFamily: '"DM Serif Display", Georgia, serif',
+                                            color: "#1a1a1a",
+                                            "::placeholder": {
+                                                color: "rgba(26, 26, 26, 0.3)",
+                                            },
+                                        },
+                                        invalid: {
+                                            color: "#c0392b",
+                                        },
+                                    },
+                                }}
+                                onChange={(e) => {
+                                    setCardComplete(e.complete);
+                                    if (e.error) setCardError(e.error.message);
+                                    else setCardError(null);
+                                }}
                             />
                         </div>
-                        <Button
-                            className="w-full bg-gallery-black hover:bg-gallery-red text-white flex-1 lg:flex-none rounded-none shadow-none h-14 uppercase text-xs tracking-widest font-bold px-8 transition-colors mt-4"
-                            onClick={handlePlaceBid}
-                            disabled={bidLoading}
-                        >
-                            {bidLoading ? (
-                                <Loader2 className="w-4 h-4 mr-3 animate-spin" />
-                            ) : (
-                                <Gavel className="w-4 h-4 mr-3" />
-                            )}
-                            {bidLoading ? "Placing Bid..." : `Confirm Bid${bidAmount ? ` — ${formatPrice(parseFloat(bidAmount) || 0)}` : ""}`}
-                        </Button>
+                        {cardError && (
+                            <p className="text-gallery-red text-xs mt-2 font-bold">{cardError}</p>
+                        )}
                     </div>
-                </DialogContent>
-            </Dialog>
-        </div>
+                    {/* Hold info */}
+                    <div className="flex items-start gap-3 bg-gallery-cream/50 border border-gallery-charcoal/10 p-4">
+                        <Shield className="w-4 h-4 text-gallery-charcoal/50 mt-0.5 flex-shrink-0" />
+                        <p className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/50 leading-relaxed">
+                            Your card will be authorized (held), not charged. Funds are only captured if you win. If outbid, the hold is released immediately.
+                        </p>
+                    </div>
+                    <Button
+                        className="w-full bg-gallery-black hover:bg-gallery-red text-white flex-1 lg:flex-none rounded-none shadow-none h-14 uppercase text-xs tracking-widest font-bold px-8 transition-colors mt-4"
+                        onClick={handleSubmit}
+                        disabled={bidLoading || !stripe || !cardComplete}
+                    >
+                        {bidLoading ? (
+                            <Loader2 className="w-4 h-4 mr-3 animate-spin" />
+                        ) : (
+                            <Gavel className="w-4 h-4 mr-3" />
+                        )}
+                        {bidLoading ? "Authorizing..." : `Confirm Bid${bidAmount ? ` — ${formatPrice(parseFloat(bidAmount) || 0)}` : ""}`}
+                    </Button>
+                </div>
+            </DialogContent>
+        </Dialog>
     );
 }
