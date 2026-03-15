@@ -10,7 +10,9 @@ import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { useDebounce } from "@/hooks/use-debounce";
 import {
     Select,
     SelectContent,
@@ -47,18 +49,26 @@ const roleColors: Record<string, string> = {
 
 export default function AdminUsersPage() {
     const { isAdmin, loading: authLoading, user: currentUser } = useAuth();
-    const { data: users, isLoading } = useSWR<UserRow[]>(
-        isAdmin ? "/admin/users" : null,
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const [deleteUser, setDeleteUser] = useState<{ id: string; name: string } | null>(null);
+    const limit = 10;
+
+    const debouncedSearch = useDebounce(search, 500);
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch]);
+
+    const { data: response, isLoading } = useSWR<{ data: UserRow[], total: number }>(
+        isAdmin ? `/admin/users?page=${page}&limit=${limit}${debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : ''}` : null,
         fetcher
     );
-    const [search, setSearch] = useState("");
-    const [deleteUser, setDeleteUser] = useState<{ id: string; name: string } | null>(null);
 
-    const filteredUsers = (users || []).filter(
-        (u) =>
-            u.name.toLowerCase().includes(search.toLowerCase()) ||
-            u.email.toLowerCase().includes(search.toLowerCase())
-    );
+    const usersList = response?.data || [];
+    const totalUsers = response?.total || 0;
+    const totalPages = Math.ceil(totalUsers / limit);
 
     const handleRoleChange = async (userId: string, newRole: string) => {
         try {
@@ -105,7 +115,7 @@ export default function AdminUsersPage() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                     <div>
                         <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">User Management</h1>
-                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{filteredUsers.length} total users registered</p>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{totalUsers} total users found</p>
                     </div>
                     <div className="relative w-full sm:w-72">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gallery-charcoal/50" />
@@ -133,7 +143,7 @@ export default function AdminUsersPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredUsers.map((user) => (
+                                {usersList.map((user) => (
                                     <motion.tr
                                         key={user.id}
                                         variants={fadeInUp}
@@ -184,7 +194,7 @@ export default function AdminUsersPage() {
                             </tbody>
                         </table>
                     </div>
-                    {filteredUsers.length === 0 && (
+                    {usersList.length === 0 && (
                         <div className="py-24 text-center bg-gallery-cream/30 border-t border-gallery-charcoal/20">
                             <div className="inline-flex items-center justify-center w-16 h-16 rounded-none bg-white border border-gallery-charcoal/20 mb-6 shadow-none">
                                 <Search className="h-6 w-6 text-gallery-charcoal/40" />
@@ -192,6 +202,14 @@ export default function AdminUsersPage() {
                             <p className="font-serif italic text-gallery-charcoal text-lg">No users found</p>
                         </div>
                     )}
+
+                    <AdminPagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        totalItems={totalUsers}
+                        itemsPerPage={limit}
+                        onPageChange={setPage}
+                    />
                 </div>
             </motion.div>
 

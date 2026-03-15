@@ -10,7 +10,9 @@ import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { useDebounce } from "@/hooks/use-debounce";
 import {
     Select,
     SelectContent,
@@ -50,18 +52,26 @@ const statusColors: Record<string, string> = {
 
 export default function AdminArtworksPage() {
     const { isAdmin, loading: authLoading } = useAuth();
-    const { data: artworks, isLoading } = useSWR<ArtworkRow[]>(
-        isAdmin ? "/admin/artworks" : null,
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const [deleteArtwork, setDeleteArtwork] = useState<{ id: string; title: string } | null>(null);
+    const limit = 10;
+
+    const debouncedSearch = useDebounce(search, 500);
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch]);
+
+    const { data: response, isLoading } = useSWR<{ data: ArtworkRow[], total: number }>(
+        isAdmin ? `/admin/artworks?page=${page}&limit=${limit}${debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : ''}` : null,
         fetcher
     );
-    const [search, setSearch] = useState("");
-    const [deleteArtwork, setDeleteArtwork] = useState<{ id: string; title: string } | null>(null);
 
-    const filtered = (artworks || []).filter(
-        (a) =>
-            a.title.toLowerCase().includes(search.toLowerCase()) ||
-            a.medium.toLowerCase().includes(search.toLowerCase())
-    );
+    const artworksList = response?.data || [];
+    const totalArtworks = response?.total || 0;
+    const totalPages = Math.ceil(totalArtworks / limit);
 
     const handleStatusChange = async (id: string, newStatus: string) => {
         try {
@@ -108,7 +118,7 @@ export default function AdminArtworksPage() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                     <div>
                         <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Artwork Management</h1>
-                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{filtered.length} total artworks</p>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{totalArtworks} total artworks</p>
                     </div>
                     <div className="relative w-full sm:w-72">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gallery-charcoal/50" />
@@ -138,7 +148,7 @@ export default function AdminArtworksPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filtered.map((artwork) => (
+                                {artworksList.map((artwork) => (
                                     <motion.tr
                                         key={artwork.id}
                                         variants={fadeInUp}
@@ -198,11 +208,19 @@ export default function AdminArtworksPage() {
                             </tbody>
                         </table>
                     </div>
-                    {filtered.length === 0 && (
+                    {artworksList.length === 0 && (
                         <div className="py-16 text-center text-gallery-charcoal/50">
                             <p className="font-bold text-sm uppercase tracking-widest">No artworks found</p>
                         </div>
                     )}
+
+                    <AdminPagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        totalItems={totalArtworks}
+                        itemsPerPage={limit}
+                        onPageChange={setPage}
+                    />
                 </div>
             </motion.div>
 

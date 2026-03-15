@@ -41,6 +41,27 @@ export const staggerContainer: Variants = {
     },
 };
 
+/** Fast stagger for data-driven grids — minimal delay so items appear quickly */
+export const fastStaggerContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.03,
+            delayChildren: 0,
+        },
+    },
+};
+
+/** Instant appear for data cards — no translation to avoid layout shift */
+export const fadeInCard: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { duration: 0.2, ease: "easeOut" },
+    },
+};
+
 /** Slide in from left */
 export const slideInLeft: Variants = {
     hidden: { opacity: 0, x: -30 },

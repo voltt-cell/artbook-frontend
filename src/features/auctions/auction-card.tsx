@@ -154,7 +154,7 @@ export default function AuctionCard({
             <div className={`p-4 ${isFeatured ? 'md:p-6' : ''}`}>
                 <div className="flex justify-between items-start mb-1">
                     <Link href={`/artwork/${artwork.id}`} className="flex-1 mr-2">
-                        <h3 className={`${isFeatured ? 'text-2xl' : 'text-lg'} font-serif font-black text-gallery-black hover:text-gallery-red transition-colors line-clamp-1 truncate`}>
+                        <h3 className={`${isFeatured ? 'text-2xl' : 'text-lg'} font-sans font-black text-gallery-black hover:text-gallery-red transition-colors line-clamp-1 truncate`}>
                             {artwork.title}
                         </h3>
                     </Link>
@@ -169,7 +169,7 @@ export default function AuctionCard({
                 <div className={`flex items-end justify-between border-t border-gallery-charcoal/20 pt-4 mt-auto ${isFeatured ? 'mt-4' : ''}`}>
                     <div>
                         <p className="text-[10px] text-gallery-charcoal uppercase tracking-widest font-bold mb-1">Current Bid</p>
-                        <p className={`${isFeatured ? 'text-2xl' : 'text-lg'} font-serif font-black text-gallery-black leading-none`}>
+                        <p className={`${isFeatured ? 'text-2xl' : 'text-lg'} font-sans font-black text-gallery-black leading-none`}>
                             {formatPrice(currentBid)}
                         </p>
                     </div>

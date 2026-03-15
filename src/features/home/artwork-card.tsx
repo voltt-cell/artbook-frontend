@@ -166,7 +166,7 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
         <div className="flex justify-between items-start gap-4 mb-1">
           <div className="flex-1">
             <Link href={`/artwork/${artwork.id}`}>
-              <h3 className="font-serif text-lg font-bold text-gallery-black group-hover:text-gallery-red transition-colors line-clamp-1 italic">
+              <h3 className="font-sans text-lg font-bold text-gallery-black group-hover:text-gallery-red transition-colors line-clamp-1">
                 {artwork.title}
               </h3>
             </Link>

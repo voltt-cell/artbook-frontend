@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Gavel, Loader2 } from "lucide-react";
 import AuctionCard from "@/features/auctions/auction-card";
 import { fetcher } from "@/lib/swr";
-import { staggerContainer, fadeInUp } from "@/lib/animations";
+import { fastStaggerContainer, fadeInUp } from "@/lib/animations";
 
 type AuctionItem = {
     auction: {
@@ -115,7 +115,7 @@ export default function AuctionsPage() {
                         </div>
 
                         <motion.div
-                            variants={staggerContainer}
+                            variants={fastStaggerContainer}
                             initial="hidden"
                             animate="visible"
                             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"

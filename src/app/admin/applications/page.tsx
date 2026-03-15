@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/context/auth-context";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { CheckCircle, XCircle, Clock, Store, Loader2 } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Store, Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import useSWR, { mutate } from "swr";
+import { fetcher } from "@/lib/swr";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { useDebounce } from "@/hooks/use-debounce";
+import { Input } from "@/components/ui/input";
 
 type ShopApplication = {
     application: {
@@ -31,33 +36,32 @@ type ShopApplication = {
 export default function AdminApplicationsPage() {
     const { isAdmin, loading: authLoading } = useAuth();
     const router = useRouter();
-    const [applications, setApplications] = useState<ShopApplication[]>([]);
-    const [loading, setLoading] = useState(true);
     const [processingId, setProcessingId] = useState<string | null>(null);
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const limit = 10;
 
-    useEffect(() => {
-        if (!authLoading && isAdmin) {
-            fetchApplications();
-        }
-    }, [authLoading, isAdmin]);
+    const debouncedSearch = useDebounce(search, 500);
 
-    const fetchApplications = async () => {
-        try {
-            const data = await api.get<ShopApplication[]>("/admin/shop-applications");
-            setApplications(data);
-        } catch {
-            toast.error("Failed to load applications");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { data: response, isLoading } = useSWR<{ data: ShopApplication[], total: number }>(
+        isAdmin ? `/admin/shop-applications?page=${page}&limit=${limit}${debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : ''}` : null,
+        fetcher
+    );
+
+    const applicationsList = response?.data || [];
+    const totalApplications = response?.total || 0;
+    const totalPages = Math.ceil(totalApplications / limit);
 
     const handleApprove = async (id: string) => {
         setProcessingId(id);
         try {
             await api.post(`/admin/shop-applications/${id}/approve`, {});
             toast.success("Application approved!");
-            fetchApplications();
+            mutate(
+                (key: any) => typeof key === 'string' && key.startsWith('/admin/shop-applications'),
+                undefined,
+                { revalidate: true }
+            );
         } catch (error) {
             toast.error("Failed to approve", {
                 description: (error as Error).message,
@@ -73,7 +77,11 @@ export default function AdminApplicationsPage() {
         try {
             await api.post(`/admin/shop-applications/${id}/reject`, { notes });
             toast.success("Application rejected");
-            fetchApplications();
+            mutate(
+                (key: any) => typeof key === 'string' && key.startsWith('/admin/shop-applications'),
+                undefined,
+                { revalidate: true }
+            );
         } catch (error) {
             toast.error("Failed to reject", {
                 description: (error as Error).message,
@@ -96,19 +104,32 @@ export default function AdminApplicationsPage() {
         return null;
     }
 
-    const pending = applications.filter((a) => a.application.status === "pending");
-    const reviewed = applications.filter((a) => a.application.status !== "pending");
+    const pending = applicationsList.filter((a) => a.application.status === "pending");
+    const reviewed = applicationsList.filter((a) => a.application.status !== "pending");
 
     return (
         <div className="p-8 max-w-5xl mx-auto">
-            <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest mb-2">
-                Shop Applications
-            </h1>
-            <p className="text-gallery-charcoal/70 font-serif italic text-lg mb-8">
-                Review and manage shop applications from users who want to sell on ArtBook.
-            </p>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <div>
+                    <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest mb-2">
+                        Shop Applications
+                    </h1>
+                    <p className="text-gallery-charcoal/70 font-serif italic text-lg">
+                        {totalApplications} total applications
+                    </p>
+                </div>
+                <div className="relative w-full sm:w-72">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gallery-charcoal/50" />
+                    <Input
+                        placeholder="Search by name, shop, or status..."
+                        value={search}
+                        onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                        className="pl-10 h-12 rounded-none bg-white border-gallery-charcoal/20 focus-visible:ring-0 focus-visible:border-gallery-red shadow-none transition-colors"
+                    />
+                </div>
+            </div>
 
-            {loading ? (
+            {isLoading ? (
                 <div className="flex justify-center py-20">
                     <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
                 </div>
@@ -227,6 +248,16 @@ export default function AdminApplicationsPage() {
                             </div>
                         </div>
                     )}
+
+                    <div className="mt-8">
+                        <AdminPagination
+                            currentPage={page}
+                            totalPages={totalPages}
+                            totalItems={totalApplications}
+                            itemsPerPage={limit}
+                            onPageChange={setPage}
+                        />
+                    </div>
                 </>
             )}
         </div>

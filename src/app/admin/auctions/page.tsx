@@ -7,7 +7,9 @@ import { Loader2, Search } from "lucide-react";
 import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { useDebounce } from "@/hooks/use-debounce";
 
 type AuctionRow = {
     id: string;
@@ -29,17 +31,25 @@ const statusColors: Record<string, string> = {
 
 export default function AdminAuctionsPage() {
     const { isAdmin, loading: authLoading } = useAuth();
-    const { data: auctions, isLoading } = useSWR<AuctionRow[]>(
-        isAdmin ? "/admin/auctions" : null,
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const limit = 10;
+
+    const debouncedSearch = useDebounce(search, 500);
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch]);
+
+    const { data: response, isLoading } = useSWR<{ data: AuctionRow[], total: number }>(
+        isAdmin ? `/admin/auctions?page=${page}&limit=${limit}${debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : ''}` : null,
         fetcher
     );
-    const [search, setSearch] = useState("");
 
-    const filtered = (auctions || []).filter(
-        (a) =>
-            a.id.toLowerCase().includes(search.toLowerCase()) ||
-            a.status.includes(search.toLowerCase())
-    );
+    const auctionsList = response?.data || [];
+    const totalAuctions = response?.total || 0;
+    const totalPages = Math.ceil(totalAuctions / limit);
 
     if (authLoading || isLoading) {
         return (
@@ -66,7 +76,7 @@ export default function AdminAuctionsPage() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                     <div>
                         <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Auction Management</h1>
-                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{filtered.length} total auctions</p>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{totalAuctions} total auctions</p>
                     </div>
                     <div className="relative w-full sm:w-72">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gallery-charcoal/50" />
@@ -95,7 +105,7 @@ export default function AdminAuctionsPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filtered.map((auction) => (
+                                {auctionsList.map((auction) => (
                                     <motion.tr
                                         key={auction.id}
                                         variants={fadeInUp}
@@ -130,11 +140,19 @@ export default function AdminAuctionsPage() {
                             </tbody>
                         </table>
                     </div>
-                    {filtered.length === 0 && (
+                    {auctionsList.length === 0 && (
                         <div className="py-16 text-center text-gallery-charcoal/50">
                             <p className="font-bold text-sm uppercase tracking-widest">No auctions found</p>
                         </div>
                     )}
+
+                    <AdminPagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        totalItems={totalAuctions}
+                        itemsPerPage={limit}
+                        onPageChange={setPage}
+                    />
                 </div>
             </motion.div>
         </div>

@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/swr";
 import { motion } from "framer-motion";
 import { ArtisticLoader } from "@/components/ui/artistic-loader";
-import { Package, Gavel, DollarSign, Image as ImageIcon, Plus, Settings, ArrowRight, CreditCard, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Package, Gavel, DollarSign, Image as ImageIcon, Plus, Settings, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

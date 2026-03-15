@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Heart, Store, LogOut, Settings, ShoppingBag, Sparkles, Image, User, Gavel, Loader2 } from "lucide-react";
+import { Search, Heart, Store, LogOut, Settings, ShoppingBag, Sparkles, User, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/context/auth-context";
 import { useRouter, usePathname } from "next/navigation";
@@ -295,20 +295,20 @@ const Navbar = () => {
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-none ml-1 p-0 hover:bg-gallery-cream border border-gallery-charcoal/20 focus-visible:outline-none ring-offset-background transition-colors">
-                  <Avatar className="h-8 w-8 rounded-none">
-                    <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-none object-cover" />
-                    <AvatarFallback className="bg-gallery-red text-white font-bold text-xs rounded-none">
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full ml-1 p-0 hover:bg-gallery-cream border border-gallery-charcoal/20 focus-visible:outline-none ring-offset-background transition-colors">
+                  <Avatar className="h-8 w-8 rounded-full">
+                    <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-full object-cover" />
+                    <AvatarFallback className="bg-gallery-red text-white font-bold text-xs rounded-full">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-72 p-4 rounded-none border-gallery-charcoal/20 shadow-2xl mt-2 bg-white" align="end" forceMount sideOffset={8}>
-                <div className="px-3 py-3 mb-4 flex items-center gap-3 bg-gallery-cream border border-gallery-charcoal/10 rounded-none mix-blend-multiply">
-                  <Avatar className="h-10 w-10 border border-gallery-charcoal/20 rounded-none shadow-none">
-                    <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-none object-cover" />
-                    <AvatarFallback className="bg-gallery-red text-white font-bold rounded-none">
+              <DropdownMenuContent className="w-64 p-2 rounded-xl border border-gallery-charcoal/20 shadow-2xl mt-2 bg-white" align="end" forceMount sideOffset={8}>
+                <div className="px-3 py-2 mb-2 flex items-center gap-3 bg-gallery-cream border border-gallery-charcoal/10 rounded-lg mix-blend-multiply">
+                  <Avatar className="h-10 w-10 border border-gallery-charcoal/20 rounded-full shadow-none">
+                    <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-full object-cover" />
+                    <AvatarFallback className="bg-gallery-red text-white font-bold rounded-full">
                       {user?.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -318,12 +318,12 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                <DropdownMenuSeparator className="bg-gallery-charcoal/10 my-2" />
+                <DropdownMenuSeparator className="bg-gallery-charcoal/10 my-1" />
 
                 {/* Purchases & Orders - Always visible */}
                 <DropdownMenuItem asChild>
-                  <Link href="/buyer/dashboard" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-none cursor-pointer transition-colors group">
-                    <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-red transition-colors">
+                  <Link href="/buyer/dashboard" className="flex items-center px-3 py-2 text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-md cursor-pointer transition-colors group">
+                    <div className="p-1.5 border border-gallery-charcoal/20 bg-white rounded-md mr-3 group-hover:border-gallery-red transition-colors">
                       <ShoppingBag className="h-4 w-4 text-gallery-charcoal group-hover:text-gallery-red" />
                     </div>
                     Purchases & Orders
@@ -333,8 +333,8 @@ const Navbar = () => {
                 {/* My Shop - if they have one */}
                 {hasShop && (
                   <DropdownMenuItem asChild>
-                    <Link href="/shop/dashboard" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-none cursor-pointer transition-colors group">
-                      <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-red transition-colors">
+                    <Link href="/shop/dashboard" className="flex items-center px-3 py-2 text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-md cursor-pointer transition-colors group">
+                      <div className="p-1.5 border border-gallery-charcoal/20 bg-white rounded-md mr-3 group-hover:border-gallery-red transition-colors">
                         <Store className="h-4 w-4 text-gallery-charcoal group-hover:text-gallery-red" />
                       </div>
                       My Shop
@@ -345,8 +345,8 @@ const Navbar = () => {
                 {/* Open Your Shop - if they don't have one */}
                 {!hasShop && (
                   <DropdownMenuItem asChild>
-                    <Link href="/shop/apply" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-red hover:bg-gallery-red hover:text-white rounded-none cursor-pointer transition-colors group">
-                      <div className="p-2 border border-gallery-red bg-white rounded-none mr-4 group-hover:bg-gallery-black group-hover:border-gallery-black transition-colors">
+                    <Link href="/shop/apply" className="flex items-center px-3 py-2 text-[10px] uppercase tracking-widest font-bold text-gallery-red hover:bg-gallery-red hover:text-white rounded-md cursor-pointer transition-colors group">
+                      <div className="p-1.5 border border-gallery-red bg-white rounded-md mr-3 group-hover:bg-gallery-black group-hover:border-gallery-black transition-colors">
                         <Sparkles className="h-4 w-4 text-gallery-red group-hover:text-white" />
                       </div>
                       Open Your Shop
@@ -355,18 +355,18 @@ const Navbar = () => {
                 )}
 
                 <DropdownMenuItem asChild>
-                  <Link href="/settings" className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-none cursor-pointer transition-colors group">
-                    <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-red transition-colors">
+                  <Link href="/settings" className="flex items-center px-3 py-2 text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red rounded-md cursor-pointer transition-colors group">
+                    <div className="p-1.5 border border-gallery-charcoal/20 bg-white rounded-md mr-3 group-hover:border-gallery-red transition-colors">
                       <Settings className="h-4 w-4 text-gallery-charcoal group-hover:text-gallery-red" />
                     </div>
                     Account Settings
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuSeparator className="bg-gallery-charcoal/10 my-2" />
+                <DropdownMenuSeparator className="bg-gallery-charcoal/10 my-1" />
 
-                <DropdownMenuItem onClick={handleLogout} className="flex items-center px-3 py-3 text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-black hover:text-white rounded-none cursor-pointer transition-colors group mt-2">
-                  <div className="p-2 border border-gallery-charcoal/20 bg-white rounded-none mr-4 group-hover:border-gallery-charcoal/40 group-hover:bg-gallery-charcoal transition-colors">
+                <DropdownMenuItem onClick={handleLogout} className="flex items-center px-3 py-2 text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal hover:bg-gallery-black hover:text-white rounded-md cursor-pointer transition-colors group mt-1">
+                  <div className="p-1.5 border border-gallery-charcoal/20 bg-white rounded-md mr-3 group-hover:border-gallery-charcoal/40 group-hover:bg-gallery-charcoal transition-colors">
                     <LogOut className="h-4 w-4 text-gallery-charcoal group-hover:text-white" />
                   </div>
                   Sign Out

@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import useSWRInfinite from "swr/infinite";
 import useSWR from "swr";
-import { motion } from "framer-motion";
-import { Search, Palette } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { Search, Palette, FilterX } from "lucide-react";
 import ArtworkCard from "@/features/home/artwork-card";
 import { fetcher } from "@/lib/swr";
-import { staggerContainer, fadeInUp } from "@/lib/animations";
+import { fastStaggerContainer, fadeInUp } from "@/lib/animations";
 import { ArtworkSkeletonGrid } from "@/components/artwork-skeleton";
+import { ArtisticLoader } from "@/components/ui/artistic-loader";
+import { ART_CATEGORIES } from "@/lib/constants";
 
 type ArtworkResponse = {
     id: string;
@@ -21,6 +24,7 @@ type ArtworkResponse = {
     status: string;
     listingType: string;
     createdAt: string;
+    dimensions?: string | null;
 };
 
 type ArtistResponse = {
@@ -30,40 +34,30 @@ type ArtistResponse = {
     profileImage: string | null;
 };
 
-import { ART_CATEGORIES } from "@/lib/constants";
-
-// ... (remove local constant definitions)
-
 export default function ArtworksPage() {
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [searchQuery, setSearchQuery] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
 
-    const { data: artworksRaw, isLoading } = useSWR<ArtworkResponse[]>(
-        "/artworks",
-        fetcher,
-        { refreshInterval: 15000 }
-    );
+    // Debounce for search and price filters
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [debouncedMinPrice, setDebouncedMinPrice] = useState("");
+    const [debouncedMaxPrice, setDebouncedMaxPrice] = useState("");
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+            setDebouncedMinPrice(minPrice);
+            setDebouncedMaxPrice(maxPrice);
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [searchQuery, minPrice, maxPrice]);
 
     const { data: artistsRaw } = useSWR<ArtistResponse[]>(
         "/users?role=artist",
         fetcher
     );
-
-    const artworks = (artworksRaw || []).map((item) => ({
-        id: item.id,
-        title: item.title,
-        artistId: item.artistId,
-        artist: "",
-        image: item.images?.[0] || item.imageUrl,
-        price: parseFloat(item.price),
-        medium: item.medium,
-        dimensions: "Variable",
-        year: new Date(item.createdAt).getFullYear(),
-        description: item.description,
-        isAuction: item.listingType === "auction",
-        currentBid: parseFloat(item.price),
-        minimumBid: parseFloat(item.price),
-    }));
 
     const artists = (artistsRaw || []).map((a) => ({
         id: a.id,
@@ -74,136 +68,203 @@ export default function ArtworksPage() {
 
     const getArtistById = (id: string) => artists.find((a) => a.id === id);
 
-    const filteredArtworks = artworks.filter((artwork) => {
-        // Exclude auctions
-        if (artwork.isAuction) return false;
+    const getKey = (pageIndex: number, previousPageData: ArtworkResponse[] | null) => {
+        if (previousPageData && !previousPageData.length) return null; // reached the end
 
-        const matchesCategory =
-            selectedCategory === "all" ||
-            artwork.medium.toLowerCase().includes(selectedCategory);
+        const params = new URLSearchParams({
+            page: (pageIndex + 1).toString(),
+            limit: "12",
+        });
 
-        const matchesSearch =
-            searchQuery === "" ||
-            artwork.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            artwork.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            artwork.medium.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
+        if (debouncedSearch) params.append("search", debouncedSearch);
+        if (selectedCategory !== "all") params.append("medium", selectedCategory);
+        if (debouncedMinPrice) params.append("minPrice", debouncedMinPrice);
+        if (debouncedMaxPrice) params.append("maxPrice", debouncedMaxPrice);
+
+        return `/artworks?${params.toString()}`;
+    };
+
+    const { data, size, setSize, isLoading } = useSWRInfinite<ArtworkResponse[]>(
+        getKey,
+        fetcher,
+        {
+            revalidateFirstPage: false,
+        }
+    );
+
+    const artworksRaw = data ? data.flat() : [];
+    const isLoadingMore = isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
+    const isEmpty = data?.[0]?.length === 0;
+    const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < 12);
+
+    const loaderRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(loaderRef, { margin: "200px" });
+
+    useEffect(() => {
+        if (isInView && !isReachingEnd && !isLoadingMore) {
+            setSize(size + 1);
+        }
+    }, [isInView, isReachingEnd, isLoadingMore, setSize, size]);
+
+    const artworks = artworksRaw.filter(item => item.listingType !== "auction").map((item) => ({
+        id: item.id,
+        title: item.title,
+        artistId: item.artistId,
+        artist: "",
+        image: item.images?.[0] || item.imageUrl,
+        price: parseFloat(item.price),
+        medium: item.medium,
+        dimensions: item.dimensions || "Variable",
+        year: new Date(item.createdAt).getFullYear(),
+        description: item.description,
+        isAuction: item.listingType === "auction",
+        currentBid: parseFloat(item.price),
+        minimumBid: parseFloat(item.price),
+    }));
+
+    const clearFilters = () => {
+        setSelectedCategory("all");
+        setSearchQuery("");
+        setMinPrice("");
+        setMaxPrice("");
+        setDebouncedSearch("");
+        setDebouncedMinPrice("");
+        setDebouncedMaxPrice("");
+        setSize(1);
+    };
 
     return (
         <div className="min-h-screen bg-gallery-cream">
-            {/* Header */}
-            <section className="bg-gallery-cream text-gallery-black py-20 border-b border-gallery-charcoal/10 relative overflow-hidden">
-                <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center">
-                    <motion.h1
-                        initial="hidden"
-                        animate="visible"
-                        variants={fadeInUp}
-                        className="font-serif text-5xl md:text-7xl font-black mb-6 uppercase tracking-tight"
-                    >
-                        Explore <span className="italic font-light lowercase text-4xl md:text-6xl tracking-normal text-gallery-charcoal">the</span> Gallery
-                    </motion.h1>
-                    <motion.p
-                        initial="hidden"
-                        animate="visible"
-                        variants={fadeInUp}
-                        className="text-gallery-charcoal/70 text-lg max-w-2xl font-medium"
-                    >
-                        Discover unique pieces from talented artists around the world.
-                        Browse, bid, and buy original artworks.
-                    </motion.p>
-
-                    <motion.div
-                        initial="hidden"
-                        animate="visible"
-                        variants={fadeInUp}
-                        className="mt-12 max-w-xl w-full"
-                    >
-                        <div className="relative group">
-                            <Search className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gallery-charcoal/50 w-5 h-5 group-focus-within:text-gallery-red transition-colors" />
-                            <input
-                                type="text"
-                                placeholder="Search artworks by title, medium, or description..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-8 pr-4 py-3 rounded-none bg-transparent border-t-0 border-l-0 border-r-0 border-b border-gallery-charcoal/30 text-gallery-black placeholder-gallery-charcoal/40 focus:outline-none focus:ring-0 focus:border-gallery-red transition-all shadow-none"
-                            />
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Filters */}
+            {/* Main Content Start */}
             <div className="container mx-auto px-4 py-8">
-                <div className="flex flex-col sm:flex-row gap-4 mb-10 items-center justify-center border-b border-gallery-charcoal/10 pb-8">
-                    <div className="flex flex-wrap justify-center gap-3">
-                        <button
-                            onClick={() => setSelectedCategory("all")}
-                            className={`px-5 py-2 rounded-full whitespace-nowrap transition-all text-xs uppercase tracking-widest font-semibold ${selectedCategory === "all"
-                                ? "bg-gallery-red text-white"
-                                : "bg-transparent text-gallery-charcoal hover:bg-gallery-charcoal/5 border border-gallery-charcoal/20"
-                                }`}
-                        >
-                            All
-                        </button>
-                        {ART_CATEGORIES.map((category) => (
+                <div className="flex flex-col lg:flex-row gap-12">
+
+                    {/* Left Sidebar Filters */}
+                    <aside className="w-full lg:w-1/4 flex flex-col gap-10">
+                        {/* Search */}
+                        <div>
+                            <h3 className="text-sm font-black uppercase tracking-widest mb-4 border-b border-gallery-charcoal/10 pb-3 text-gallery-black">Search</h3>
+                            <div className="relative group">
+                                <Search className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gallery-charcoal/40 w-4 h-4 group-focus-within:text-gallery-red transition-colors" />
+                                <input
+                                    type="text"
+                                    placeholder="Keywords..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full pl-7 pr-4 py-2 bg-transparent border-b border-gallery-charcoal/20 text-gallery-black placeholder-gallery-charcoal/40 focus:outline-none focus:border-gallery-red transition-all text-sm rounded-none"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Price Range */}
+                        <div>
+                            <h3 className="text-sm font-black uppercase tracking-widest mb-4 border-b border-gallery-charcoal/10 pb-3 text-gallery-black">Price ($)</h3>
+                            <div className="flex items-center gap-3">
+                                <input
+                                    type="number"
+                                    placeholder="Min"
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(e.target.value)}
+                                    className="w-full px-3 py-2 bg-transparent border border-gallery-charcoal/20 focus:border-gallery-red focus:outline-none text-sm transition-colors rounded-none placeholder-gallery-charcoal/40"
+                                />
+                                <span className="text-gallery-charcoal/30">-</span>
+                                <input
+                                    type="number"
+                                    placeholder="Max"
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                    className="w-full px-3 py-2 bg-transparent border border-gallery-charcoal/20 focus:border-gallery-red focus:outline-none text-sm transition-colors rounded-none placeholder-gallery-charcoal/40"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Mediums */}
+                        <div>
+                            <h3 className="text-sm font-black uppercase tracking-widest mb-4 border-b border-gallery-charcoal/10 pb-3 text-gallery-black">Medium</h3>
+                            <div className="flex flex-col gap-3">
+                                <button
+                                    onClick={() => setSelectedCategory("all")}
+                                    className={`text-left text-sm transition-all duration-300 ${selectedCategory === "all" ? "text-gallery-red font-bold pl-2 border-l-2 border-gallery-red" : "text-gallery-charcoal hover:text-gallery-black hover:pl-1 border-l-2 border-transparent"}`}
+                                >
+                                    All Mediums
+                                </button>
+                                {ART_CATEGORIES.map((c) => (
+                                    <button
+                                        key={c.id}
+                                        onClick={() => setSelectedCategory(c.id)}
+                                        className={`text-left text-sm transition-all duration-300 ${selectedCategory === c.id ? "text-gallery-red font-bold pl-2 border-l-2 border-gallery-red" : "text-gallery-charcoal hover:text-gallery-black hover:pl-1 border-l-2 border-transparent"}`}
+                                    >
+                                        {c.name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Clear Filters */}
+                        {(searchQuery || minPrice || maxPrice || selectedCategory !== "all") && (
                             <button
-                                key={category.id}
-                                onClick={() => setSelectedCategory(category.id)}
-                                className={`px-5 py-2 rounded-full whitespace-nowrap transition-all text-xs uppercase tracking-widest font-semibold ${selectedCategory === category.id
-                                    ? "bg-gallery-red text-white"
-                                    : "bg-transparent text-gallery-charcoal hover:bg-gallery-charcoal/5 border border-gallery-charcoal/20"
-                                    }`}
+                                onClick={clearFilters}
+                                className="flex items-center justify-center gap-2 py-3 border border-gallery-charcoal/20 text-xs font-bold uppercase tracking-widest text-gallery-charcoal hover:bg-gallery-charcoal hover:text-white transition-colors"
                             >
-                                {category.name}
+                                <FilterX className="w-4 h-4" />
+                                Clear Filters
                             </button>
-                        ))}
+                        )}
+                    </aside>
+
+                    {/* Main Content Area */}
+                    <div className="w-full lg:w-3/4">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-bold tracking-tight text-gallery-black">Artworks collection</h2>
+                        </div>
+
+                        {isEmpty && !isLoading ? (
+                            <div className="text-center py-24 bg-white/50 border border-gallery-charcoal/10 mix-blend-multiply">
+                                <Palette className="w-12 h-12 text-gallery-charcoal/20 mx-auto mb-4" />
+                                <h2 className="text-xl font-black mb-2 uppercase tracking-wide text-gallery-black">
+                                    No artworks found
+                                </h2>
+                                <p className="text-gallery-charcoal/60 text-sm">
+                                    Adjust your filters to discover more pieces.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="space-y-12">
+                                <motion.div
+                                    variants={fastStaggerContainer}
+                                    initial="hidden"
+                                    animate="visible"
+                                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                                >
+                                    {artworks.map((artwork, idx) => (
+                                        <motion.div key={`${artwork.id}-${idx}`} variants={fadeInUp}>
+                                            <ArtworkCard
+                                                artwork={artwork}
+                                                artist={getArtistById(artwork.artistId) || { id: artwork.artistId, name: "Unknown Artist" }}
+                                            />
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
+
+                                {/* Loading Skeletons for initial load */}
+                                {isLoading && artworks.length === 0 && (
+                                    <div className="mt-8">
+                                        <ArtworkSkeletonGrid count={8} />
+                                    </div>
+                                )}
+
+                                {/* Virtual Loader for Infinite Scroll */}
+                                <div ref={loaderRef} className="w-full flex justify-center py-12">
+                                    {isLoadingMore && artworks.length > 0 && (
+                                        <div className="scale-75 origin-center opacity-80">
+                                            <ArtisticLoader fullScreen={false} />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
-
-                <p className="text-gallery-charcoal/60 mb-8 font-serif italic text-center text-lg">
-                    {isLoading ? "" : `${filteredArtworks.length} ${filteredArtworks.length === 1 ? "artwork" : "artworks"} found`}
-                </p>
-
-                {/* Content */}
-                {isLoading ? (
-                    <ArtworkSkeletonGrid count={8} />
-                ) : filteredArtworks.length === 0 ? (
-                    <div className="text-center py-32 bg-white border border-gallery-charcoal/10 rounded-none mix-blend-multiply">
-                        <Palette className="w-12 h-12 text-gallery-charcoal/20 mx-auto mb-6" />
-                        <h2 className="text-2xl font-serif font-black mb-3 uppercase tracking-wider text-gallery-black">
-                            No artworks found
-                        </h2>
-                        <p className="text-gallery-charcoal/60 mb-8">
-                            We couldn&apos;t find any artworks matching your current filters.
-                        </p>
-                        <button
-                            onClick={() => {
-                                setSelectedCategory("all");
-                                setSearchQuery("");
-                            }}
-                            className="bg-transparent hover:bg-gallery-charcoal text-gallery-black hover:text-white border border-gallery-charcoal px-8 py-3 rounded-none text-xs uppercase tracking-widest font-semibold transition-colors"
-                        >
-                            Clear all filters
-                        </button>
-                    </div>
-                ) : (
-                    <motion.div
-                        variants={staggerContainer}
-                        initial="hidden"
-                        animate="visible"
-                        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
-                    >
-                        {filteredArtworks.map((artwork) => (
-                            <motion.div key={artwork.id} variants={fadeInUp}>
-                                <ArtworkCard
-                                    artwork={artwork}
-                                    artist={getArtistById(artwork.artistId) || { id: artwork.artistId, name: "Unknown Artist" }}
-                                />
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                )}
             </div>
         </div>
     );

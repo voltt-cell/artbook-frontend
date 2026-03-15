@@ -7,7 +7,9 @@ import { Loader2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { useDebounce } from "@/hooks/use-debounce";
 
 type OrderRow = {
     id: string;
@@ -30,18 +32,25 @@ const statusColors: Record<string, string> = {
 
 export default function AdminOrdersPage() {
     const { isAdmin, loading: authLoading } = useAuth();
-    const { data: orders, isLoading } = useSWR<OrderRow[]>(
-        isAdmin ? "/admin/orders" : null,
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const limit = 10;
+
+    const debouncedSearch = useDebounce(search, 500);
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setPage(1);
+    }, [debouncedSearch]);
+
+    const { data: response, isLoading } = useSWR<{ data: OrderRow[], total: number }>(
+        isAdmin ? `/admin/orders?page=${page}&limit=${limit}${debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : ''}` : null,
         fetcher
     );
-    const [search, setSearch] = useState("");
 
-    const filtered = (orders || []).filter(
-        (o) =>
-            o.id.toLowerCase().includes(search.toLowerCase()) ||
-            o.status.includes(search.toLowerCase()) ||
-            o.type.includes(search.toLowerCase())
-    );
+    const ordersList = response?.data || [];
+    const totalOrders = response?.total || 0;
+    const totalPages = Math.ceil(totalOrders / limit);
 
     if (authLoading || isLoading) {
         return (
@@ -68,7 +77,7 @@ export default function AdminOrdersPage() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                     <div>
                         <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Order Management</h1>
-                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{filtered.length} total orders</p>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{totalOrders} total orders</p>
                     </div>
                     <div className="relative w-full sm:w-72">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gallery-charcoal/50" />
@@ -96,7 +105,7 @@ export default function AdminOrdersPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filtered.map((order) => (
+                                {ordersList.map((order) => (
                                     <motion.tr
                                         key={order.id}
                                         variants={fadeInUp}
@@ -128,11 +137,19 @@ export default function AdminOrdersPage() {
                             </tbody>
                         </table>
                     </div>
-                    {filtered.length === 0 && (
+                    {ordersList.length === 0 && (
                         <div className="py-16 text-center text-gallery-charcoal/50">
                             <p className="font-bold text-sm uppercase tracking-widest">No orders found</p>
                         </div>
                     )}
+
+                    <AdminPagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        totalItems={totalOrders}
+                        itemsPerPage={limit}
+                        onPageChange={setPage}
+                    />
                 </div>
             </motion.div>
         </div>
