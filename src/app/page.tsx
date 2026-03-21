@@ -113,6 +113,14 @@ const Page = () => {
   const featuredArtists = artists.slice(0, 12);
 
   const getArtistById = (id: string) => artists.find((a) => a.id === id);
+  const fallbackArtist = (id: string) => ({
+    id,
+    name: "Unknown Artist",
+    bio: "",
+    profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100",
+    location: "",
+    followers: 0,
+  });
 
   const allArtworks = artworks;
 
@@ -155,7 +163,7 @@ const Page = () => {
                       <CarouselItem key={artwork.id} className="pl-4 basis-[80%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
                         <ArtworkCard
                           artwork={artwork}
-                          artist={getArtistById(artwork.artistId)!}
+                          artist={getArtistById(artwork.artistId) || fallbackArtist(artwork.artistId)}
                         />
                       </CarouselItem>
                     ))}
@@ -220,7 +228,7 @@ const Page = () => {
                     <CarouselItem key={auctionItem.auction.id} className="pl-4 basis-[80%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
                       <AuctionCard
                         item={auctionItem}
-                        artist={getArtistById(auctionItem.artwork.artistId)!}
+                        artist={getArtistById(auctionItem.artwork.artistId) || fallbackArtist(auctionItem.artwork.artistId)}
                       />
                     </CarouselItem>
                   ))}

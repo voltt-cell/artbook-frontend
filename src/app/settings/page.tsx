@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/auth-context";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -32,12 +32,14 @@ export default function SettingsPage() {
 
     // Initialize form with user data
     const [initialized, setInitialized] = useState(false);
-    if (user && !initialized) {
-        setName(user.name);
-        setBio(user.bio || "");
-        setProfileImage(user.profileImage || "");
-        setInitialized(true);
-    }
+    useEffect(() => {
+        if (user && !initialized) {
+            setName(user.name);
+            setBio(user.bio || "");
+            setProfileImage(user.profileImage || "");
+            setInitialized(true);
+        }
+    }, [user, initialized]);
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -48,7 +50,7 @@ export default function SettingsPage() {
             const formData = new FormData();
             formData.append("file", file);
 
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8787";
 
             const response = await fetch(`${API_URL}/upload`, {
                 method: "POST",

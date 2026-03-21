@@ -1,9 +1,9 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import Link from "next/link";
@@ -13,13 +13,40 @@ function CheckoutSuccessContent() {
     const searchParams = useSearchParams();
     const { clearCart } = useCart();
     const sessionId = searchParams.get("session_id");
+    const [status, setStatus] = useState<"verifying" | "success" | "error">(
+        sessionId ? "verifying" : "error"
+    );
+    const [errorMessage, setErrorMessage] = useState("We could not verify this checkout session.");
 
     useEffect(() => {
-        if (sessionId) {
-            clearCart();
-            api.get(`/payments/verify-session?session_id=${sessionId}`)
-                .catch(err => console.error("Verification failed", err));
+        let cancelled = false;
+
+        async function verifySession() {
+            if (!sessionId) {
+                setStatus("error");
+                return;
+            }
+
+            setStatus("verifying");
+            try {
+                await api.get(`/payments/verify-session?session_id=${sessionId}`);
+                if (!cancelled) {
+                    clearCart();
+                    setStatus("success");
+                }
+            } catch (err) {
+                if (!cancelled) {
+                    setStatus("error");
+                    setErrorMessage(err instanceof Error ? err.message : "Verification failed");
+                }
+            }
         }
+
+        verifySession();
+
+        return () => {
+            cancelled = true;
+        };
     }, [sessionId, clearCart]);
 
     if (!sessionId) {
@@ -30,6 +57,50 @@ function CheckoutSuccessContent() {
                     <Link href="/">
                         <Button className="w-full bg-gallery-black hover:bg-gallery-red text-white h-12 rounded-none font-bold uppercase tracking-widest text-xs transition-colors">Return to Gallery</Button>
                     </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (status === "verifying") {
+        return (
+            <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gallery-cream px-4">
+                <div className="text-center p-16 bg-white border border-gallery-charcoal/20 max-w-xl w-full">
+                    <Loader2 className="h-8 w-8 animate-spin text-gallery-red mx-auto mb-6" />
+                    <h1 className="text-2xl font-serif font-black text-gallery-black mb-4 uppercase tracking-widest">
+                        Verifying Payment
+                    </h1>
+                    <p className="text-gallery-charcoal/70">
+                        We&apos;re confirming your order with Stripe before marking it complete.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    if (status === "error") {
+        return (
+            <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gallery-cream px-4">
+                <div className="text-center p-16 bg-white border border-gallery-charcoal/20 max-w-xl w-full">
+                    <AlertCircle className="h-8 w-8 text-gallery-red mx-auto mb-6" />
+                    <h1 className="text-2xl font-serif font-black text-gallery-black mb-4 uppercase tracking-widest">
+                        Verification Needed
+                    </h1>
+                    <p className="text-gallery-charcoal/70 mb-8">
+                        {errorMessage}
+                    </p>
+                    <div className="space-y-4">
+                        <Link href="/buyer/dashboard">
+                            <Button className="w-full bg-gallery-black hover:bg-gallery-red text-white h-12 rounded-none font-bold uppercase tracking-widest text-xs transition-colors">
+                                View Orders
+                            </Button>
+                        </Link>
+                        <Link href="/contact">
+                            <Button variant="outline" className="w-full bg-white hover:bg-gallery-cream text-gallery-black border border-gallery-charcoal/20 h-12 rounded-none font-bold uppercase tracking-widest text-xs transition-colors">
+                                Contact Support
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
             </div>
         );

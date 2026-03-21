@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import PartySocket from "partysocket";
 
 const PARTY_HOST = process.env.NEXT_PUBLIC_PARTY_HOST || "localhost:1999";
+const PARTY_NAME = "auction";
 
 type BidUpdate = {
     type: "new-bid";
@@ -37,8 +38,13 @@ export function useAuctionSocket(auctionId: string | null) {
     useEffect(() => {
         if (!auctionId) return;
 
+        setCurrentBid(null);
+        setBidHistory([]);
+        setAuctionEnded(false);
+
         const socket = new PartySocket({
             host: PARTY_HOST,
+            party: PARTY_NAME,
             room: `auction-${auctionId}`,
         });
 

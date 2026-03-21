@@ -1,7 +1,7 @@
 
 import useSWR from "swr";
 import { fetcher } from "@/lib/swr";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -61,7 +61,7 @@ export function useCart() {
     const checkout = async () => {
         setCheckoutLoading(true);
         try {
-            const res = await api.post<{ sessionUrl: string }>("/cart/checkout", {});
+            const res = await api.post<{ sessionUrl: string; totalSessions: number }>("/cart/checkout", {});
             if (res.sessionUrl) {
                 window.location.href = res.sessionUrl;
             } else {
@@ -81,14 +81,9 @@ export function useCart() {
 
     const total = data?.reduce((acc, item) => acc + parseFloat(item.artwork.price), 0) || 0;
 
-    const clearCart = () => {
-        // This function previously mutated to an empty array, but the instruction implies
-        // a more direct state manipulation if `data` was managed by useState.
-        // Given `data` is from SWR, `mutate([])` is the correct way to clear SWR cache.
-        // The instruction's `setItems([])` and `setCartError(null)` suggest a different state structure.
-        // Sticking to SWR's `mutate` for data clearing and adding `setCartError(null)`.
-        mutate([], false); // Clear SWR cache for cart items
-    };
+    const clearCart = useCallback(() => {
+        mutate([], false);
+    }, [mutate]);
 
     return {
         cartItems: data || [],

@@ -38,6 +38,7 @@ import { toast } from "sonner";
 import { fadeInUp, fadeIn } from "@/lib/animations";
 import { useCart } from "@/hooks/useCart";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useAuctionSocket } from "@/hooks/useAuctionSocket";
 import { StripeProvider } from "@/components/providers/stripe-provider";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Shield } from "lucide-react";
@@ -155,6 +156,8 @@ export default function ArtworkDetailPage({
         fetcher,
         { refreshInterval: 10000 }
     );
+    const { currentBid: socketBid, bidHistory: liveBidHistory, isConnected: isAuctionLive, liveViewers, auctionEnded: socketAuctionEnded } =
+        useAuctionSocket(auctionData?.auction?.id ?? null);
 
     // Countdown timer
     useEffect(() => {
@@ -294,9 +297,32 @@ export default function ArtworkDetailPage({
         }
     };
 
-    const auctionEnded = timeLeft && timeLeft.d === 0 && timeLeft.h === 0 && timeLeft.m === 0 && timeLeft.s === 0;
+    const combinedBids = auctionData?.bids
+        ? [
+            ...liveBidHistory.map((bid) => ({
+                id: `${bid.bidderId}-${bid.timestamp}`,
+                amount: bid.amount.toString(),
+                createdAt: bid.timestamp,
+                bidderName: bid.bidderName,
+                bidderId: bid.bidderId,
+            })),
+            ...auctionData.bids.filter((bid) => !liveBidHistory.some((liveBid) =>
+                liveBid.bidderId === bid.bidderId &&
+                liveBid.timestamp === bid.createdAt &&
+                liveBid.amount.toString() === bid.amount
+            )),
+        ]
+        : liveBidHistory.map((bid) => ({
+            id: `${bid.bidderId}-${bid.timestamp}`,
+            amount: bid.amount.toString(),
+            createdAt: bid.timestamp,
+            bidderName: bid.bidderName,
+            bidderId: bid.bidderId,
+        }));
+
+    const auctionEnded = socketAuctionEnded || (!!timeLeft && timeLeft.d === 0 && timeLeft.h === 0 && timeLeft.m === 0 && timeLeft.s === 0);
     const livePrice = auctionData?.auction
-        ? parseFloat(auctionData.auction.currentBid || auctionData.auction.startingBid)
+        ? socketBid ?? parseFloat(auctionData.auction.currentBid || auctionData.auction.startingBid)
         : null;
 
     const openLightbox = (index: number) => {
@@ -545,10 +571,20 @@ export default function ArtworkDetailPage({
                                     <p className="text-4xl md:text-5xl font-sans font-black text-gallery-black tracking-tight">
                                         {formatPrice(isAuction && livePrice !== null ? livePrice : price)}
                                     </p>
-                                    {isAuction && auctionData?.bids && auctionData.bids.length > 0 && (
+                                    {isAuction && combinedBids.length > 0 && (
                                         <p className="text-xs font-bold text-gallery-charcoal/60 mt-3 uppercase tracking-widest">
-                                            {auctionData.bids.length} bid{auctionData.bids.length !== 1 ? 's' : ''} placed
+                                            {combinedBids.length} bid{combinedBids.length !== 1 ? 's' : ''} placed
                                         </p>
+                                    )}
+                                    {isAuction && (
+                                        <div className="mt-3 flex items-center gap-3 text-[10px] uppercase tracking-widest font-bold">
+                                            <span className={isAuctionLive ? "text-gallery-red" : "text-gallery-charcoal/40"}>
+                                                {isAuctionLive ? "Live" : "Polling"}
+                                            </span>
+                                            <span className="text-gallery-charcoal/40">
+                                                {liveViewers} viewer{liveViewers !== 1 ? "s" : ""}
+                                            </span>
+                                        </div>
                                     )}
                                 </div>
                                 {!isOwner && artwork.status !== 'sold' && (
@@ -607,14 +643,14 @@ export default function ArtworkDetailPage({
                         </div>
 
                         {/* Bid History — for auction artworks */}
-                        {isAuction && auctionData?.bids && auctionData.bids.length > 0 && (
+                        {isAuction && combinedBids.length > 0 && (
                             <div className="bg-white rounded-none p-5 md:p-6 border border-gallery-charcoal/20 mb-6 shadow-none">
                                 <h3 className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal mb-4 flex items-center gap-2">
                                     <Users className="w-4 h-4 text-gallery-charcoal" />
                                     Bid History
                                 </h3>
                                 <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
-                                    {auctionData.bids.map((bid, idx) => (
+                                    {combinedBids.map((bid, idx) => (
                                         <div
                                             key={bid.id}
                                             className={`flex items-center justify-between py-2.5 px-3 rounded-none text-sm transition-colors ${idx === 0 ? 'bg-gallery-cream border border-gallery-charcoal/10' : 'bg-transparent border border-gallery-charcoal/5 hover:bg-gallery-charcoal/5'}`}
