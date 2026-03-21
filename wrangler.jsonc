@@ -13,15 +13,31 @@
 	},
 	"services": [
 		{
-			// Self-reference service binding, the service name must match the worker name
-			// see https://opennext.js.org/cloudflare/caching
 			"binding": "WORKER_SELF_REFERENCE",
-			"service": "art-book"
+			"service": "artbook-frontend"
 		}
 	],
 	"images": {
-		// Enable image optimization
-		// see https://opennext.js.org/cloudflare/howtos/image
 		"binding": "IMAGES"
+	},
+	"env": {
+		"dev": {
+			"name": "artbook-frontend-dev",
+			"services": [
+				{
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "artbook-frontend-dev"
+				}
+			]
+		},
+		"production": {
+			"name": "artbook-frontend-production",
+			"services": [
+				{
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "artbook-frontend-production"
+				}
+			]
+		}
 	}
 }
