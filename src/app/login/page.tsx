@@ -150,7 +150,7 @@ const Login = () => {
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="absolute right-0 top-0"
+                          className="absolute right-2 top-2"
                           onClick={() => setShowPassword(!showPassword)}
                         >
                           {showPassword ? (
