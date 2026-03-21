@@ -161,7 +161,7 @@ export default function AdminUsersPage() {
                                         <td className="py-4 px-6">
                                             <Select
                                                 value={user.role}
-                                                onValueChange={(value) => handleRoleChange(user.id, value)}
+                                                onValueChange={(value: string) => handleRoleChange(user.id, value)}
                                                 disabled={user.id === currentUser?.id}
                                             >
                                                 <SelectTrigger className={`h-8 text-xs font-bold uppercase tracking-widest px-3 py-0 rounded-none border focus:ring-0 shadow-none bg-transparent ${roleColors[user.role]}`}>
