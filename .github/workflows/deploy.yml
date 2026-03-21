@@ -7,10 +7,11 @@ on:
       - dev
 
 jobs:
-  deploy:
+
+  deploy-dev:
+    if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
+    environment: dev
 
     steps:
       - name: Checkout repo
@@ -21,20 +22,35 @@ jobs:
           corepack enable
           pnpm install
 
-      - name: Build and Deploy to Cloudflare
+      - name: Deploy to Cloudflare (Dev)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
         run: |
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
-            pnpm opennextjs-cloudflare build
-            pnpm wrangler deploy --env production
-          elif [[ "${{ github.ref_name }}" == "dev" ]]; then
-            pnpm opennextjs-cloudflare build
-            pnpm wrangler deploy --env dev
-          else
-            echo "No matching deployment environment."
-            exit 1
-          fi
+          pnpm wrangler deploy --env dev
+
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Enable and install pnpm
+        run: |
+          corepack enable
+          pnpm install
+
+      - name: Deploy to Cloudflare (Production)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+        run: |
+          pnpm wrangler deploy --env production
