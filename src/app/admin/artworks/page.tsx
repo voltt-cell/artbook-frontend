@@ -178,7 +178,7 @@ export default function AdminArtworksPage() {
                                         <td className="py-4 px-6">
                                             <Select
                                                 value={artwork.status}
-                                                onValueChange={(value) => handleStatusChange(artwork.id, value)}
+                                                onValueChange={(value: string) => handleStatusChange(artwork.id, value)}
                                             >
                                                 <SelectTrigger className={`h-8 text-[10px] font-bold uppercase tracking-widest px-3 py-0 rounded-none border shadow-none ${statusColors[artwork.status]}`}>
                                                     <SelectValue />
