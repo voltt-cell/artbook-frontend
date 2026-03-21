@@ -1,7 +1,7 @@
 "use client";
 
 import { AuthProvider } from "@/context/auth-context";
-
+import { ReactLenis } from "lenis/react";
 
 /**
  * Client-side providers wrapper.
@@ -10,9 +10,10 @@ import { AuthProvider } from "@/context/auth-context";
  */
 export default function Providers({ children }: { children: React.ReactNode }) {
     return (
-        <AuthProvider>
-            {children}
-
-        </AuthProvider>
+        <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+            <AuthProvider>
+                {children}
+            </AuthProvider>
+        </ReactLenis>
     );
 }
