@@ -1,7 +1,6 @@
 "use client";
 import useSWR from "swr";
 import { motion } from "framer-motion";
-
 import { ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import ArtworkCard from "@/features/home/artwork-card";
@@ -10,8 +9,14 @@ import AuctionCard from "@/features/auctions/auction-card";
 import Banner from "@/features/home/banner";
 import JoinCommunity from "@/features/home/join-community";
 import { fetcher } from "@/lib/swr";
-import { staggerContainer, fadeInUp } from "@/lib/animations";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { fadeInUp } from "@/lib/animations";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 // Types matching backend response
 type ArtworkResponse = {
@@ -61,9 +66,10 @@ type AuctionItem = {
   };
 };
 
-const Page = () => {
-  // Unused state removed
+// Threshold — only show the "Discover More" card when there are more than this many artworks
+const DISCOVER_MORE_THRESHOLD = 5;
 
+const Page = () => {
   const { data: artworksRaw, isLoading: artworksLoading } = useSWR<ArtworkResponse[]>(
     "/artworks?limit=20&listingType=fixed",
     fetcher,
@@ -108,7 +114,6 @@ const Page = () => {
     followers: a.followerCount || 0,
   }));
 
-  // Limit for display
   const activeAuctions = (auctionItemsRaw || []).slice(0, 15);
   const featuredArtists = artists.slice(0, 12);
 
@@ -122,94 +127,40 @@ const Page = () => {
     followers: 0,
   });
 
-  const allArtworks = artworks;
+  // Only show "Discover More" card when there are enough artworks that it makes sense
+  const showDiscoverMore = artworks.length > DISCOVER_MORE_THRESHOLD;
+
+  const isLoading = artworksLoading || artistsLoading;
 
   return (
     <div className="min-h-screen bg-gallery-cream flex flex-col">
       <Banner />
 
-      <div className="py-8">
-        {/* Latest Artworks */}
-        {allArtworks.length > 0 && (
-          <section className="py-4 border-b border-gallery-charcoal/10">
-            <div className="container mx-auto px-4">
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={fadeInUp}
-                className="flex justify-between items-center mb-8"
-              >
-                <h2 className="font-sans text-4xl font-black text-gallery-black uppercase tracking-tight">Latest Works</h2>
-                <Link
-                  href="/artworks"
-                  className="flex items-center text-xs px-6 py-2 rounded-none border border-gallery-charcoal font-semibold uppercase tracking-widest hover:bg-gallery-charcoal hover:text-white transition-colors text-gallery-black"
-                >
-                  View all
-                </Link>
-              </motion.div>
+      {/* Loading state */}
+      {isLoading && artworks.length === 0 && artists.length === 0 && (
+        <div className="flex items-center justify-center py-24">
+          <Loader2 className="w-8 h-8 animate-spin text-gallery-charcoal/40" />
+        </div>
+      )}
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="relative"
-              >
-                <Carousel
-                  opts={{ align: "start", dragFree: true }}
-                  className="w-full relative"
-                >
-                  <CarouselContent className="-ml-2 md:-ml-4">
-                    {allArtworks.map((artwork) => (
-                      <CarouselItem key={artwork.id} className="pl-4 basis-[80%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
-                        <ArtworkCard
-                          artwork={artwork}
-                          artist={getArtistById(artwork.artistId) || fallbackArtist(artwork.artistId)}
-                        />
-                      </CarouselItem>
-                    ))}
-                    <CarouselItem className="pl-4 basis-[80%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5 py-0">
-                      <Link href="/artworks" className="block w-full">
-                        <div className="w-full relative overflow-hidden rounded-none aspect-square border border-gallery-charcoal/20 bg-gallery-cream flex flex-col items-center justify-center hover:bg-gallery-charcoal/5 transition-colors group">
-                          <span className="font-bold text-xs uppercase tracking-widest text-gallery-charcoal group-hover:text-gallery-red transition-colors mb-2">
-                            Discover More
-                          </span>
-                          <span className="font-bold text-xs uppercase tracking-widest text-gallery-black px-6 py-2 bg-white border border-gallery-charcoal/20 shadow-none rounded-none group-hover:bg-gallery-red group-hover:text-white group-hover:border-gallery-red transition-all">
-                            View all
-                          </span>
-                        </div>
-                        <div className="p-3 opacity-0">Spacer</div>
-                      </Link>
-                    </CarouselItem>
-                  </CarouselContent>
-                  <div className="hidden md:block">
-                    <CarouselPrevious className="-left-4 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                    <CarouselNext className="-right-4 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                  </div>
-                </Carousel>
-              </motion.div>
-            </div>
-          </section>
-        )}
-      </div>
-
-      {/* Active Auctions — only render if there are any */}
-      {activeAuctions.length > 0 && (
-        <section className="py-24 bg-white border-t border-gallery-charcoal/10">
-          <div className="container mx-auto px-4">
+      {/* Latest Artworks */}
+      {artworks.length > 0 && (
+        <section className="py-12 border-b border-gallery-charcoal/10">
+          <div className="container mx-auto px-4 sm:px-6">
             <motion.div
               initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
+              animate="visible"
               variants={fadeInUp}
-              className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
+              className="flex justify-between items-center mb-8"
             >
-              <h2 className="font-sans text-4xl font-black text-gallery-black uppercase tracking-tight">Live Auctions</h2>
+              <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-black text-gallery-black uppercase tracking-tight">
+                Latest Works
+              </h2>
               <Link
-                href="/auctions"
-                className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
+                href="/artworks"
+                className="flex items-center text-xs px-4 sm:px-6 py-2 border border-gallery-charcoal font-semibold uppercase tracking-widest hover:bg-gallery-charcoal hover:text-white transition-colors text-gallery-black whitespace-nowrap"
               >
                 View All
-                <ChevronRight className="w-4 h-4 ml-1" />
               </Link>
             </motion.div>
 
@@ -217,25 +168,46 @@ const Page = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="relative"
             >
               <Carousel
                 opts={{ align: "start", dragFree: true }}
-                className="w-full relative"
+                className="w-full"
               >
-                <CarouselContent className="-ml-2 md:-ml-4">
-                  {activeAuctions.map((auctionItem) => (
-                    <CarouselItem key={auctionItem.auction.id} className="pl-4 basis-[80%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
-                      <AuctionCard
-                        item={auctionItem}
-                        artist={getArtistById(auctionItem.artwork.artistId) || fallbackArtist(auctionItem.artwork.artistId)}
+                <CarouselContent className="-ml-3 sm:-ml-4">
+                  {artworks.map((artwork) => (
+                    <CarouselItem
+                      key={artwork.id}
+                      className="pl-3 sm:pl-4 basis-[78%] sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+                    >
+                      <ArtworkCard
+                        artwork={artwork}
+                        artist={getArtistById(artwork.artistId) || fallbackArtist(artwork.artistId)}
                       />
                     </CarouselItem>
                   ))}
+
+                  {/* Only show "Discover More" when there are enough artworks */}
+                  {showDiscoverMore && (
+                    <CarouselItem className="pl-3 sm:pl-4 basis-[78%] sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+                      <Link href="/artworks" className="block w-full">
+                        <div className="w-full relative overflow-hidden aspect-square border border-gallery-charcoal/20 bg-gallery-cream flex flex-col items-center justify-center hover:bg-gallery-charcoal/5 transition-colors group cursor-pointer">
+                          <span className="font-bold text-xs uppercase tracking-widest text-gallery-charcoal group-hover:text-gallery-red transition-colors mb-3">
+                            Discover More
+                          </span>
+                          <span className="font-bold text-xs uppercase tracking-widest text-gallery-black px-6 py-2 bg-white border border-gallery-charcoal/20 shadow-none group-hover:bg-gallery-red group-hover:text-white group-hover:border-gallery-red transition-all">
+                            View All
+                          </span>
+                        </div>
+                        <div className="p-3 opacity-0 select-none">Spacer</div>
+                      </Link>
+                    </CarouselItem>
+                  )}
                 </CarouselContent>
+
+                {/* Prev/Next only on md+ */}
                 <div className="hidden md:block">
-                  <CarouselPrevious className="-left-4 bg-white border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                  <CarouselNext className="-right-4 bg-white border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                  <CarouselPrevious className="-left-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                  <CarouselNext className="-right-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
                 </div>
               </Carousel>
             </motion.div>
@@ -243,24 +215,26 @@ const Page = () => {
         </section>
       )}
 
-      {/* Featured Artists — only render if there are any */}
-      {featuredArtists.length > 0 && (
-        <section className="py-24 bg-gallery-cream border-t border-gallery-charcoal/10">
-          <div className="container mx-auto px-4">
+      {/* Active Auctions */}
+      {activeAuctions.length > 0 && (
+        <section className="py-16 sm:py-24 bg-white border-t border-gallery-charcoal/10">
+          <div className="container mx-auto px-4 sm:px-6">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeInUp}
-              className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
+              className="flex justify-between items-center mb-8 sm:mb-12 border-b border-gallery-charcoal/20 pb-4"
             >
-              <h2 className="font-sans text-4xl font-black text-gallery-black uppercase tracking-tight">Magazine / Artists</h2>
+              <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-black text-gallery-black uppercase tracking-tight">
+                Live Auctions
+              </h2>
               <Link
-                href="/artists"
-                className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity"
+                href="/auctions"
+                className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity whitespace-nowrap"
               >
                 View All
-                <ChevronRight className="w-4 h-4 ml-1" />
+                <ChevronRight className="w-4 h-4 ml-1 flex-shrink-0" />
               </Link>
             </motion.div>
 
@@ -268,22 +242,81 @@ const Page = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="relative"
             >
               <Carousel
                 opts={{ align: "start", dragFree: true }}
-                className="w-full relative"
+                className="w-full"
               >
-                <CarouselContent className="-ml-2 md:-ml-4">
+                <CarouselContent className="-ml-3 sm:-ml-4">
+                  {activeAuctions.map((auctionItem) => (
+                    <CarouselItem
+                      key={auctionItem.auction.id}
+                      className="pl-3 sm:pl-4 basis-[75%] xs:basis-[60%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+                    >
+                      <AuctionCard
+                        item={auctionItem}
+                        artist={getArtistById(auctionItem.artwork.artistId) || fallbackArtist(auctionItem.artwork.artistId)}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+
+                <div className="hidden md:block">
+                  <CarouselPrevious className="-left-5 bg-white border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                  <CarouselNext className="-right-5 bg-white border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                </div>
+              </Carousel>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Featured Artists */}
+      {featuredArtists.length > 0 && (
+        <section className="py-16 sm:py-24 bg-gallery-cream border-t border-gallery-charcoal/10">
+          <div className="container mx-auto px-4 sm:px-6">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="flex justify-between items-center mb-8 sm:mb-12 border-b border-gallery-charcoal/20 pb-4"
+            >
+              <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-black text-gallery-black uppercase tracking-tight">
+                Featured Artists
+              </h2>
+              <Link
+                href="/artists"
+                className="flex items-center text-gallery-red text-xs uppercase tracking-widest font-semibold hover:opacity-70 transition-opacity whitespace-nowrap"
+              >
+                View All
+                <ChevronRight className="w-4 h-4 ml-1 flex-shrink-0" />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Carousel
+                opts={{ align: "start", dragFree: true }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-3 sm:-ml-4">
                   {featuredArtists.map((artist) => (
-                    <CarouselItem key={artist.id} className="pl-4 basis-[80%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/4">
+                    <CarouselItem
+                      key={artist.id}
+                      className="pl-3 sm:pl-4 basis-[48%] sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
+                    >
                       <ArtistCard artist={artist} />
                     </CarouselItem>
                   ))}
                 </CarouselContent>
+
                 <div className="hidden md:block">
-                  <CarouselPrevious className="-left-4 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                  <CarouselNext className="-right-4 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                  <CarouselPrevious className="-left-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                  <CarouselNext className="-right-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
                 </div>
               </Carousel>
             </motion.div>
