@@ -1,3 +1,17 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const staggerContainer = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.1 } },
+};
+
 export default function FAQPage() {
     const faqs = [
         {
@@ -19,33 +33,48 @@ export default function FAQPage() {
     ];
 
     return (
-        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
-            <div className="max-w-4xl mx-auto px-6">
-                <div className="text-center space-y-6 mb-24">
-                    <div className="inline-flex items-center border border-gallery-charcoal/20 bg-white px-4 py-1 text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-12 sm:pt-16 lg:pt-24 pb-16 sm:pb-24 lg:pb-32">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6">
+                <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    variants={staggerContainer}
+                    className="text-center space-y-4 sm:space-y-6 mb-12 sm:mb-16 lg:mb-24"
+                >
+                    <motion.div variants={fadeInUp} className="inline-flex items-center border border-gallery-charcoal/20 bg-white px-4 py-1 text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal">
                         Information
-                    </div>
-                    <h1 className="font-serif text-5xl md:text-7xl font-black tracking-widest uppercase text-gallery-black">
+                    </motion.div>
+                    <motion.h1 variants={fadeInUp} className="font-serif text-3xl sm:text-5xl md:text-7xl font-black tracking-widest uppercase text-gallery-black">
                         FAQ
-                    </h1>
-                    <p className="text-xl md:text-2xl font-serif italic text-gallery-charcoal/70 max-w-2xl mx-auto">
+                    </motion.h1>
+                    <motion.p variants={fadeInUp} className="text-base sm:text-xl md:text-2xl font-serif italic text-gallery-charcoal/70 max-w-2xl mx-auto">
                         Frequently asked questions about buying and selling on the platform.
-                    </p>
-                </div>
+                    </motion.p>
+                </motion.div>
 
-                <div className="space-y-0 border border-gallery-charcoal/20 bg-white">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={staggerContainer}
+                    className="space-y-0 border border-gallery-charcoal/20 bg-white"
+                >
                     {faqs.map((faq, i) => (
-                        <div key={i} className="p-8 md:p-12 border-b border-gallery-charcoal/20 last:border-b-0 hover:bg-gallery-cream/30 transition-colors">
-                            <h3 className="font-serif text-2xl md:text-3xl font-black text-gallery-black mb-6 uppercase tracking-widest">
+                        <motion.div
+                            key={i}
+                            variants={fadeInUp}
+                            className="p-6 sm:p-8 md:p-12 border-b border-gallery-charcoal/20 last:border-b-0 hover:bg-gallery-cream/30 transition-colors"
+                        >
+                            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-black text-gallery-black mb-4 sm:mb-6 uppercase tracking-widest">
                                 {faq.q}
                             </h3>
-                            <div className="h-px w-12 bg-gallery-red mb-6" />
-                            <p className="text-gallery-charcoal/80 leading-relaxed font-serif text-lg">
+                            <div className="h-px w-12 bg-gallery-red mb-4 sm:mb-6" />
+                            <p className="text-gallery-charcoal/80 leading-relaxed font-serif text-base sm:text-lg">
                                 {faq.a}
                             </p>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </div>
     );

@@ -107,29 +107,29 @@ function ConnectContent() {
 
     return (
         <div className="min-h-screen bg-gallery-cream">
-            <div className="container mx-auto py-12 px-4 max-w-3xl">
+            <div className="container mx-auto py-8 sm:py-12 px-4 max-w-3xl">
                 <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
                     {/* Back */}
                     <Link
                         href="/shop/dashboard"
-                        className="inline-flex items-center text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:text-gallery-red transition-colors mb-10"
+                        className="inline-flex items-center text-xs uppercase tracking-widest font-bold text-gallery-charcoal hover:text-gallery-red transition-colors mb-8 sm:mb-10"
                     >
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Dashboard
                     </Link>
 
                     {/* Header */}
-                    <div className="mb-10 border-b border-gallery-charcoal/20 pb-6">
-                        <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">
+                    <div className="mb-8 sm:mb-10 border-b border-gallery-charcoal/20 pb-6">
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">
                             Stripe Connect
                         </h1>
-                        <p className="text-gallery-charcoal/70 mt-2 font-serif italic text-lg tracking-wide">
+                        <p className="text-gallery-charcoal/70 mt-2 font-serif italic text-base sm:text-lg tracking-wide">
                             Connect your Stripe account to receive payments directly
                         </p>
                     </div>
 
                     {/* Status Card */}
-                    <div className="bg-white border border-gallery-charcoal/20 p-8 md:p-10 mb-8">
+                    <div className="bg-white border border-gallery-charcoal/20 p-6 sm:p-8 md:p-10 mb-8">
                         {isComplete ? (
                             /* Fully connected */
                             <div className="text-center py-6">
@@ -204,7 +204,7 @@ function ConnectContent() {
                     </div>
 
                     {/* How it works */}
-                    <div className="bg-white border border-gallery-charcoal/20 p-8 md:p-10">
+                    <div className="bg-white border border-gallery-charcoal/20 p-6 sm:p-8 md:p-10">
                         <h3 className="text-xs uppercase font-bold tracking-widest text-gallery-charcoal mb-6">
                             How It Works
                         </h3>

@@ -50,8 +50,10 @@ export default function AdminDashboard() {
 
     if (authLoading || isLoading) {
         return (
-            <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
+            <div className="flex-1 flex items-center justify-center min-h-[60vh] bg-gallery-cream">
+                <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-gallery-red" />
+                </div>
             </div>
         );
     }
@@ -76,7 +78,7 @@ export default function AdminDashboard() {
     const hasUserData = stats?.userGrowth && stats.userGrowth.length > 0;
 
     return (
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
             {/* Header Area */}
             <motion.div
                 initial="hidden"
@@ -84,13 +86,13 @@ export default function AdminDashboard() {
                 variants={fadeInUp}
                 className="mb-8"
             >
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 border justify-center items-center flex border-gallery-charcoal/30 bg-white">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
+                    <div className="p-2 border justify-center items-center flex border-gallery-charcoal/30 bg-white flex-shrink-0">
                         <Activity className="h-5 w-5 text-gallery-charcoal" />
                     </div>
-                    <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Platform Overview</h1>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Platform Overview</h1>
                 </div>
-                <p className="text-gallery-charcoal/70 ml-[52px] font-serif italic text-lg mt-2">Monitor your marketplace performance and key metrics in real-time.</p>
+                <p className="text-gallery-charcoal/70 sm:ml-[52px] font-serif italic text-base sm:text-lg mt-2">Monitor your marketplace performance and key metrics in real-time.</p>
             </motion.div>
 
             {/* Key Metrics Grid */}
@@ -98,7 +100,7 @@ export default function AdminDashboard() {
                 variants={staggerContainer}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-10"
             >
                 {statCards.map((card) => {
                     const Icon = card.icon;
@@ -114,7 +116,7 @@ export default function AdminDashboard() {
                                         Real-time
                                     </div>
                                 </div>
-                                <p className="text-4xl font-serif font-black text-gallery-black tracking-tighter">{formatValue(card.key, value)}</p>
+                                <p className="text-2xl sm:text-4xl font-serif font-black text-gallery-black tracking-tighter">{formatValue(card.key, value)}</p>
                                 <p className="text-xs uppercase tracking-widest font-bold text-gallery-charcoal/50 mt-3 pt-3 border-t border-gallery-charcoal/10">{card.label}</p>
                             </div>
                         </motion.div>
@@ -127,7 +129,7 @@ export default function AdminDashboard() {
                 variants={staggerContainer}
                 initial="hidden"
                 animate="visible"
-                className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8"
             >
                 {/* Revenue Graph */}
                 <motion.div variants={fadeInUp} className="bg-white border border-gallery-charcoal/20 p-6">

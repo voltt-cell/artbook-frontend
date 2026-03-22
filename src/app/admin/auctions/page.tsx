@@ -53,8 +53,10 @@ export default function AdminAuctionsPage() {
 
     if (authLoading || isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
+            <div className="min-h-screen flex items-center justify-center bg-gallery-cream">
+                <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-gallery-red" />
+                </div>
             </div>
         );
     }
@@ -71,12 +73,12 @@ export default function AdminAuctionsPage() {
     }
 
     return (
-        <div className="p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                     <div>
-                        <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Auction Management</h1>
-                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2">{totalAuctions} total auctions</p>
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Auction Management</h1>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-base sm:text-lg mt-2">{totalAuctions} total auctions</p>
                     </div>
                     <div className="relative w-full sm:w-72">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gallery-charcoal/50" />

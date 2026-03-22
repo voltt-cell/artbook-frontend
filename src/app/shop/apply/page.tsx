@@ -137,7 +137,9 @@ export default function ShopApplyPage() {
     if (authLoading || loadingApp) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gallery-cream">
-                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
+                <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center mx-auto">
+                    <Loader2 className="h-6 w-6 animate-spin text-gallery-red" />
+                </div>
             </div>
         );
     }

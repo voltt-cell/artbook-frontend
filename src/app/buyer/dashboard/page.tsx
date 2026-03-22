@@ -123,8 +123,8 @@ export default function BuyerDashboard() {
 
     return (
         <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pb-24">
-            <div className="bg-white border-b border-gallery-charcoal/20 pt-16 pb-12 mb-12 relative">
-                <div className="max-w-7xl mx-auto px-6 lg:px-12">
+            <div className="bg-white border-b border-gallery-charcoal/20 pt-10 sm:pt-16 pb-8 sm:pb-12 mb-8 sm:mb-12 relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
                     <motion.div
                         initial="hidden"
                         animate="visible"
@@ -133,10 +133,10 @@ export default function BuyerDashboard() {
                         <div className="inline-flex items-center border border-gallery-charcoal/20 bg-white px-4 py-1 text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal mb-6">
                             Collector Profile
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-serif font-black text-gallery-black uppercase tracking-widest mb-4">
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-black text-gallery-black uppercase tracking-widest mb-4">
                             Dashboard
                         </h1>
-                        <p className="text-xl font-serif italic text-gallery-charcoal/70">
+                        <p className="text-base sm:text-xl font-serif italic text-gallery-charcoal/70">
                             Welcome back, <span className="font-bold border-b border-gallery-red lowercase">{user?.name}</span>
                         </p>
                     </motion.div>
@@ -145,13 +145,13 @@ export default function BuyerDashboard() {
                 <div className="absolute bottom-0 right-1/4 w-px h-12 bg-gallery-charcoal/10" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 lg:px-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
                 {/* Tabs */}
                 <motion.div
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="flex flex-wrap gap-0 mb-12 border border-gallery-charcoal/20 bg-white shadow-none w-fit"
+                    className="flex gap-0 mb-8 sm:mb-12 border border-gallery-charcoal/20 bg-white shadow-none w-full sm:w-fit overflow-x-auto"
                 >
                     {tabs.map((tab) => {
                         const Icon = tab.icon;
@@ -165,7 +165,7 @@ export default function BuyerDashboard() {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 px-6 py-4 text-xs font-bold uppercase tracking-widest transition-colors border-r border-gallery-charcoal/20 last:border-r-0 ${isActive
+                                className={`flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-colors border-r border-gallery-charcoal/20 last:border-r-0 whitespace-nowrap flex-shrink-0 ${isActive
                                     ? "bg-gallery-black text-white"
                                     : "text-gallery-charcoal/70 hover:bg-gallery-cream hover:text-gallery-red"
                                     }`}
@@ -196,7 +196,7 @@ export default function BuyerDashboard() {
                 >
                     {/* Summary Tab */}
                     {activeTab === "summary" && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                             {/* Profile Card */}
                             <motion.div variants={fadeInUp} className="bg-white border border-gallery-charcoal/20 shadow-none md:col-span-1 h-fit">
                                 <div className="p-8 flex flex-col items-center text-center">

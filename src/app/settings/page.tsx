@@ -120,8 +120,10 @@ export default function SettingsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
+            <div className="min-h-screen flex items-center justify-center bg-gallery-cream">
+                <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center mx-auto">
+                    <Loader2 className="h-6 w-6 animate-spin text-gallery-red" />
+                </div>
             </div>
         );
     }
@@ -132,13 +134,13 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-24 pb-32">
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-16 sm:pt-24 pb-24 sm:pb-32">
             <div className="container mx-auto px-4 max-w-2xl">
                 <motion.h1
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
-                    className="font-serif text-5xl md:text-6xl font-black tracking-widest uppercase text-gallery-black text-center mb-16"
+                    className="font-serif text-3xl sm:text-5xl md:text-6xl font-black tracking-widest uppercase text-gallery-black text-center mb-10 sm:mb-16"
                 >
                     Settings
                 </motion.h1>

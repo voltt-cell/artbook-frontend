@@ -98,8 +98,8 @@ export default function ShopOrdersPage() {
                     className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gallery-charcoal/20 pb-6"
                 >
                     <div>
-                        <h2 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Your Sales History</h2>
-                        <p className="text-gallery-charcoal/70 font-serif italic text-lg mt-2 tracking-wide">Manage and track the artworks you&apos;ve sold.</p>
+                        <h2 className="text-2xl sm:text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">Your Sales History</h2>
+                        <p className="text-gallery-charcoal/70 font-serif italic text-base sm:text-lg mt-2 tracking-wide">Manage and track the artworks you&apos;ve sold.</p>
                     </div>
 
                     <div className="relative w-full md:w-80">
@@ -122,7 +122,9 @@ export default function ShopOrdersPage() {
                 >
                     {ordersLoading ? (
                         <div className="py-20 flex justify-center">
-                            <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
+                            <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center">
+                                <Loader2 className="h-6 w-6 animate-spin text-gallery-red" />
+                            </div>
                         </div>
                     ) : orders.length === 0 ? (
                         <div className="py-20 text-center px-4 bg-gallery-cream border border-gallery-charcoal/10 m-4">

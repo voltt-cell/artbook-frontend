@@ -24,7 +24,9 @@ export default function FavoritesPage() {
     if (authLoading || isLoading) {
         return (
             <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gallery-cream">
-                <Loader2 className="w-8 h-8 animate-spin text-gallery-red" />
+                <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center mx-auto">
+                    <Loader2 className="w-6 h-6 animate-spin text-gallery-red" />
+                </div>
             </div>
         );
     }
@@ -54,9 +56,9 @@ export default function FavoritesPage() {
 
     return (
         <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pb-24">
-            <div className="bg-white border-b border-gallery-charcoal/20 pt-16 pb-12 mb-16 relative">
-                <div className="max-w-7xl mx-auto px-6 lg:px-12">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="bg-white border-b border-gallery-charcoal/20 pt-10 sm:pt-16 pb-8 sm:pb-12 mb-10 sm:mb-16 relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 sm:gap-8">
                         <div>
                             <div className="flex items-center gap-4 mb-6">
                                 <Link href="/artworks" className="text-gallery-charcoal/50 hover:text-gallery-red transition-colors flex items-center gap-2 group">
@@ -66,7 +68,7 @@ export default function FavoritesPage() {
                                     <span className="text-[10px] font-bold uppercase tracking-widest">Back to Gallery</span>
                                 </Link>
                             </div>
-                            <h1 className="font-serif text-5xl md:text-6xl font-black uppercase tracking-widest text-gallery-black flex items-center gap-4">
+                            <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-widest text-gallery-black flex items-center gap-3 sm:gap-4">
                                 Curated <span className="text-gallery-red font-serif italic lowercase font-normal leading-none transform translate-y-1">collection</span>
                             </h1>
                         </div>
@@ -86,11 +88,12 @@ export default function FavoritesPage() {
                 <div className="absolute bottom-0 right-1/4 w-px h-12 bg-gallery-charcoal/10" />
             </div>
 
-            <div className="max-w-full 2xl:max-w-[1600px] mx-auto px-6 lg:px-12">
+            <div className="max-w-full 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12">
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8"
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                 >
                     {favorites.map((fav) => (
                         <motion.div key={fav.favoriteId} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

@@ -209,16 +209,16 @@ export default function EditArtworkPage({
 
     return (
         <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pb-24">
-            <div className="bg-white border-b border-gallery-charcoal/20 pt-16 pb-12 mb-12 relative">
-                <div className="max-w-3xl mx-auto px-6 lg:px-12">
+            <div className="bg-white border-b border-gallery-charcoal/20 pt-10 sm:pt-16 pb-8 sm:pb-12 mb-8 sm:mb-12 relative">
+                <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-12">
                     <Link
                         href={`/artwork/${id}`}
-                        className="inline-flex items-center text-xs font-bold uppercase tracking-widest text-gallery-charcoal hover:text-gallery-red transition-colors mb-8 border border-gallery-charcoal/20 p-2 bg-white"
+                        className="inline-flex items-center text-xs font-bold uppercase tracking-widest text-gallery-charcoal hover:text-gallery-red transition-colors mb-6 sm:mb-8 border border-gallery-charcoal/20 p-2 bg-white"
                     >
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Artwork
                     </Link>
-                    <h1 className="font-serif text-4xl md:text-5xl font-black uppercase tracking-widest text-gallery-black">Edit Artwork</h1>
+                    <h1 className="font-serif text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-widest text-gallery-black">Edit Artwork</h1>
                 </div>
                 {/* Decorative Line */}
                 <div className="absolute bottom-0 right-1/4 w-px h-12 bg-gallery-charcoal/10" />
@@ -228,9 +228,9 @@ export default function EditArtworkPage({
                 initial="hidden"
                 animate="visible"
                 variants={fadeInUp}
-                className="max-w-3xl mx-auto px-6 lg:px-12"
+                className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-12"
             >
-                <form onSubmit={handleSubmit} className="space-y-12 bg-white p-8 md:p-12 border border-gallery-charcoal/20">
+                <form onSubmit={handleSubmit} className="space-y-10 sm:space-y-12 bg-white p-6 sm:p-8 md:p-12 border border-gallery-charcoal/20">
 
                     <div className="space-y-8">
                         <div>

@@ -29,7 +29,9 @@ export default function CartPage() {
     if (authLoading || isLoading) {
         return (
             <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gallery-cream">
-                <Loader2 className="w-8 h-8 animate-spin text-gallery-red" />
+                <div className="w-16 h-16 border border-gallery-charcoal/20 bg-white flex items-center justify-center mx-auto">
+                    <Loader2 className="w-6 h-6 animate-spin text-gallery-red" />
+                </div>
             </div>
         );
     }
@@ -59,15 +61,15 @@ export default function CartPage() {
 
     return (
         <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pb-24">
-            <div className="bg-white border-b border-gallery-charcoal/20 pt-16 pb-12 mb-12 relative">
-                <div className="max-w-7xl mx-auto px-6 lg:px-12">
-                    <div className="flex items-center gap-6 mb-4">
-                        <Link href="/artworks" className="text-gallery-charcoal hover:text-gallery-red transition-colors border border-gallery-charcoal/20 p-2 bg-white">
+            <div className="bg-white border-b border-gallery-charcoal/20 pt-10 sm:pt-16 pb-8 sm:pb-12 mb-8 sm:mb-12 relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+                    <div className="flex items-center gap-4 sm:gap-6 mb-4">
+                        <Link href="/artworks" className="text-gallery-charcoal hover:text-gallery-red transition-colors border border-gallery-charcoal/20 p-2 bg-white flex-shrink-0">
                             <ArrowLeft className="w-5 h-5" />
                         </Link>
-                        <h1 className="font-serif text-4xl md:text-5xl font-black uppercase tracking-widest text-gallery-black">Acquisitions Cart</h1>
+                        <h1 className="font-serif text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-widest text-gallery-black">Acquisitions Cart</h1>
                     </div>
-                    <p className="font-serif italic text-gallery-charcoal/70 ml-[4.5rem]">
+                    <p className="font-serif italic text-gallery-charcoal/70 ml-0 sm:ml-[4.5rem]">
                         {cartItems.length} item{cartItems.length !== 1 ? 's' : ''} queued for purchase
                     </p>
                 </div>
@@ -75,8 +77,8 @@ export default function CartPage() {
                 <div className="absolute bottom-0 right-1/4 w-px h-12 bg-gallery-charcoal/10" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 lg:px-12">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     {/* Cart Items List */}
                     <div className="lg:col-span-2 space-y-0 border border-gallery-charcoal/20 bg-white">
                         <div className="px-8 flex items-center justify-between border-b border-gallery-charcoal/20 min-h-[4rem] bg-gallery-cream/50">
@@ -90,10 +92,11 @@ export default function CartPage() {
                                     initial={{ opacity: 0, y: 0 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="p-8 border-b border-gallery-charcoal/20 last:border-b-0 flex gap-8 items-start hover:bg-gallery-cream/30 transition-colors"
+                                    className="p-4 sm:p-8 border-b border-gallery-charcoal/20 last:border-b-0 hover:bg-gallery-cream/30 transition-colors"
                                 >
+                                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
                                     {/* Image */}
-                                    <div className="w-32 h-32 bg-gallery-cream border border-gallery-charcoal/20 flex-shrink-0">
+                                    <div className="w-full sm:w-32 h-48 sm:h-32 bg-gallery-cream border border-gallery-charcoal/20 flex-shrink-0">
                                         <img
                                             src={item.artwork.imageUrl}
                                             alt={item.artwork.title}
@@ -103,9 +106,9 @@ export default function CartPage() {
 
                                     {/* Info */}
                                     <div className="flex-grow min-w-0">
-                                        <div className="flex justify-between items-start">
+                                        <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-3">
                                             <div>
-                                                <h3 className="font-serif text-2xl font-black uppercase tracking-widest text-gallery-black mb-2">
+                                                <h3 className="font-serif text-lg sm:text-2xl font-black uppercase tracking-widest text-gallery-black mb-2">
                                                     {item.artwork.title}
                                                 </h3>
                                                 <div className="flex items-center gap-3 mb-2">
@@ -124,7 +127,7 @@ export default function CartPage() {
                                                 </div>
                                                 <p className="text-[10px] text-gallery-charcoal/60 uppercase tracking-widest border border-gallery-charcoal/10 bg-white px-2 py-0.5 inline-block">{item.artwork.listingType}</p>
                                             </div>
-                                            <div className="flex flex-col items-end gap-4 border-l border-gallery-charcoal/10 pl-6 ml-4">
+                                            <div className="flex items-center sm:flex-col sm:items-end gap-4 sm:gap-4 sm:border-l border-gallery-charcoal/10 sm:pl-6 sm:ml-4">
                                                 <p className="font-serif font-black text-2xl text-gallery-black">
                                                     {formatPrice(parseFloat(item.artwork.price))}
                                                 </p>
@@ -143,6 +146,7 @@ export default function CartPage() {
                                                 </Button>
                                             </div>
                                         </div>
+                                    </div>
                                     </div>
                                 </motion.div>
                             ))}

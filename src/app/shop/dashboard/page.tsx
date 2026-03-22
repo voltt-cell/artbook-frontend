@@ -107,15 +107,15 @@ export default function ShopDashboard() {
                     )}
 
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-10 border-b border-gallery-charcoal/20 pb-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-10 border-b border-gallery-charcoal/20 pb-6 gap-4">
                         <div>
-                            <h1 className="text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">
+                            <h1 className="text-2xl sm:text-4xl font-serif font-black text-gallery-black uppercase tracking-widest">
                                 {user?.shopName || "My Shop"}
                             </h1>
-                            <p className="text-gallery-charcoal/70 mt-2 font-serif italic text-lg tracking-wide">Manage your artworks, orders, and shop settings</p>
+                            <p className="text-gallery-charcoal/70 mt-2 font-serif italic text-base sm:text-lg tracking-wide">Manage your artworks, orders, and shop settings</p>
                         </div>
-                        <Link href="/shop/create">
-                            <Button className="bg-gallery-black hover:bg-gallery-red text-white rounded-none h-12 px-8 uppercase tracking-widest text-xs font-bold transition-all">
+                        <Link href="/shop/create" className="w-full sm:w-auto">
+                            <Button className="w-full sm:w-auto bg-gallery-black hover:bg-gallery-red text-white rounded-none h-12 px-8 uppercase tracking-widest text-xs font-bold transition-all">
                                 <Plus className="mr-2 h-4 w-4" /> New Artwork
                             </Button>
                         </Link>
@@ -213,7 +213,7 @@ export default function ShopDashboard() {
                                 </Link>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                                 {artworks.slice(0, 8).map((artwork) => {
                                     const imgUrl = artwork.images?.[0] || artwork.imageUrl;
                                     return (
