@@ -113,7 +113,8 @@ export default function ArtistsPage() {
                     <div className="space-y-12">
                         <motion.div
                             initial="hidden"
-                            animate="visible"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-50px" }}
                             variants={fastStaggerContainer}
                             className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
                         >

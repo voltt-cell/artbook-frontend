@@ -6,6 +6,7 @@ import { Gavel, Loader2 } from "lucide-react";
 import AuctionCard from "@/features/auctions/auction-card";
 import { fetcher } from "@/lib/swr";
 import { fastStaggerContainer, fadeInUp } from "@/lib/animations";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type AuctionItem = {
     auction: {
@@ -54,8 +55,21 @@ export default function AuctionsPage() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-gallery-red" />
+            <div className="min-h-screen bg-gallery-cream pt-20 pb-32">
+                <div className="container mx-auto px-4">
+                    <div className="mb-16 text-center">
+                        <Skeleton className="h-16 w-72 mx-auto mb-6 rounded-none bg-gallery-charcoal/5" />
+                        <Skeleton className="h-5 w-96 max-w-full mx-auto rounded-none bg-gallery-charcoal/5" />
+                    </div>
+                    <Skeleton className="h-8 w-40 mb-8 rounded-none bg-gallery-charcoal/5" />
+                    <Skeleton className="h-[400px] max-w-3xl mx-auto mb-16 rounded-none bg-gallery-charcoal/5" />
+                    <Skeleton className="h-8 w-32 mb-8 rounded-none bg-gallery-charcoal/5" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <Skeleton key={i} className="h-[320px] rounded-none bg-gallery-charcoal/5" />
+                        ))}
+                    </div>
+                </div>
             </div>
         );
     }
@@ -63,7 +77,7 @@ export default function AuctionsPage() {
     return (
         <div className="min-h-screen bg-gallery-cream pt-20 pb-32">
             <div className="container mx-auto px-4">
-                <motion.div
+            <motion.div
                     initial="hidden"
                     animate="visible"
                     variants={fadeInUp}
@@ -88,11 +102,12 @@ export default function AuctionsPage() {
                     </div>
                 ) : (
                     <>
-                        {/* Featured Auction - Show the first one larger if it exists */}
+                        {/* Featured Auction */}
                         {auctionItems.length > 0 && (
                             <motion.div
                                 initial="hidden"
-                                animate="visible"
+                                whileInView="visible"
+                                viewport={{ once: true }}
                                 variants={fadeInUp}
                                 className="mb-16"
                             >
@@ -117,16 +132,18 @@ export default function AuctionsPage() {
                         <motion.div
                             variants={fastStaggerContainer}
                             initial="hidden"
-                            animate="visible"
-                            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-50px" }}
+                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
                         >
                             {auctionItems.slice(1).map((item) => (
-                                <AuctionCard
-                                    key={item.auction.id}
-                                    item={item}
-                                    artist={getArtist(item.artwork.artistId)}
-                                    isFeatured={false}
-                                />
+                                <motion.div key={item.auction.id} variants={fadeInUp}>
+                                    <AuctionCard
+                                        item={item}
+                                        artist={getArtist(item.artwork.artistId)}
+                                        isFeatured={false}
+                                    />
+                                </motion.div>
                             ))}
                         </motion.div>
                     </>

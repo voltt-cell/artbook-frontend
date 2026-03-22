@@ -136,7 +136,7 @@ export default function ArtistProfilePage() {
     }
 
     return (
-        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-6 pb-12">
+        <div className="min-h-[calc(100vh-80px)] bg-gallery-cream pt-4 sm:pt-6 pb-12">
             <div className="container mx-auto px-4 max-w-5xl">
                 <div className="mb-6">
                     <Link
@@ -189,7 +189,7 @@ export default function ArtistProfilePage() {
                                 animate="visible"
                                 className="flex-1 text-center md:text-left pt-2 md:pt-20 flex flex-col justify-center"
                             >
-                                <motion.h1 variants={fadeInUp} className="text-3xl md:text-5xl font-sans font-black uppercase tracking-widest text-gallery-black">
+                                <motion.h1 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-5xl font-sans font-black uppercase tracking-widest text-gallery-black">
                                     {artist.name}
                                 </motion.h1>
                                 <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-4">
@@ -256,7 +256,7 @@ export default function ArtistProfilePage() {
                 {/* Artworks Portfolio */}
                 <div className="mb-6 border-b border-gallery-charcoal/20 pb-3 flex items-center justify-between">
                     <div>
-                        <h2 className="text-3xl font-sans font-black uppercase tracking-widest text-gallery-black">Portfolio</h2>
+                        <h2 className="text-2xl sm:text-3xl font-sans font-black uppercase tracking-widest text-gallery-black">Portfolio</h2>
                         <p className="text-gallery-charcoal/60 text-xs mt-1 uppercase tracking-widest font-bold">Explore creations by {artist.name}</p>
                     </div>
                 </div>
@@ -266,7 +266,8 @@ export default function ArtistProfilePage() {
                 ) : artworks && artworks.length > 0 ? (
                     <motion.div
                         initial="hidden"
-                        animate="visible"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
                         variants={{
                             hidden: { opacity: 0 },
                             visible: {
@@ -274,7 +275,7 @@ export default function ArtistProfilePage() {
                                 transition: { staggerChildren: 0.1 }
                             }
                         }}
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
                     >
                         {artworks.map((artwork: Artwork) => (
                             <motion.div

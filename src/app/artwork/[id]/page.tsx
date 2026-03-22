@@ -466,11 +466,11 @@ export default function ArtworkDetailPage({
                         variants={fadeInUp}
                         className="flex flex-col"
                     >
-                        <div className="flex items-start justify-between mb-4">
-                            <h1 className="font-sans text-3xl md:text-4xl lg:text-5xl font-black text-gallery-black uppercase tracking-widest leading-none">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+                            <h1 className="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gallery-black uppercase tracking-widest leading-none">
                                 {artwork.title}
                             </h1>
-                            <div className="flex items-center gap-3 ml-6 flex-shrink-0 md:mt-2">
+                            <div className="flex items-center gap-3 flex-shrink-0">
                                 {/* Favorite Button */}
                                 {isOwner ? null : (
                                     <Button
@@ -478,7 +478,7 @@ export default function ArtworkDetailPage({
                                         size="icon"
                                         onClick={handleToggleFavorite}
                                         disabled={isTogglingFav}
-                                        className={`rounded-none h-12 w-12 border border-gallery-charcoal/20 shadow-none transition-all ${isFav ? "bg-gallery-red text-white border-gallery-red hover:bg-gallery-red/90" : "bg-transparent text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red"
+                                        className={`rounded-none h-10 w-10 sm:h-12 sm:w-12 border border-gallery-charcoal/20 shadow-none transition-all ${isFav ? "bg-gallery-red text-white border-gallery-red hover:bg-gallery-red/90" : "bg-transparent text-gallery-charcoal hover:bg-gallery-cream hover:text-gallery-red"
                                             }`}
                                     >
                                         <Heart className={`w-5 h-5 ${isFav ? "fill-current" : ""}`} />
@@ -490,7 +490,7 @@ export default function ArtworkDetailPage({
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            className="rounded-none h-12 px-6 uppercase tracking-widest text-[10px] font-bold border-gallery-charcoal/20 text-gallery-charcoal hover:bg-gallery-cream shadow-none"
+                                            className="rounded-none h-10 sm:h-12 px-4 sm:px-6 uppercase tracking-widest text-[10px] font-bold border-gallery-charcoal/20 text-gallery-charcoal hover:bg-gallery-cream shadow-none"
                                         >
                                             <Pencil className="w-3.5 h-3.5 mr-2" />
                                             Edit
@@ -568,7 +568,7 @@ export default function ArtworkDetailPage({
                                     <p className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50 mb-1">
                                         {isAuction ? 'Current Bid' : 'Price'}
                                     </p>
-                                    <p className="text-4xl md:text-5xl font-sans font-black text-gallery-black tracking-tight">
+                                    <p className="text-3xl sm:text-4xl md:text-5xl font-sans font-black text-gallery-black tracking-tight">
                                         {formatPrice(isAuction && livePrice !== null ? livePrice : price)}
                                     </p>
                                     {isAuction && combinedBids.length > 0 && (
@@ -588,7 +588,7 @@ export default function ArtworkDetailPage({
                                     )}
                                 </div>
                                 {!isOwner && artwork.status !== 'sold' && (
-                                    <div className="flex flex-col gap-3 sm:flex-row w-full lg:w-auto">
+                                    <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                                         {isAuction ? (
                                             <Button
                                                 size="lg"

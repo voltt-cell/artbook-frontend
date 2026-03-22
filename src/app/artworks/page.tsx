@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 import useSWR from "swr";
 import { motion, useInView } from "framer-motion";
-import { Search, Palette, FilterX } from "lucide-react";
+import { Search, Palette, FilterX, SlidersHorizontal, X } from "lucide-react";
 import ArtworkCard from "@/features/home/artwork-card";
 import { fetcher } from "@/lib/swr";
 import { fastStaggerContainer, fadeInUp } from "@/lib/animations";
@@ -39,6 +39,7 @@ export default function ArtworksPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
+    const [filtersOpen, setFiltersOpen] = useState(false);
 
     // Debounce for search and price filters
     const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -135,12 +136,38 @@ export default function ArtworksPage() {
 
     return (
         <div className="min-h-screen bg-gallery-cream">
-            {/* Main Content Start */}
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex flex-col lg:flex-row gap-12">
+            {/* Page Header */}
+            <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={fadeInUp}
+                className="container mx-auto px-4 pt-16 sm:pt-20 pb-8 sm:pb-12 text-center"
+            >
+                <h1 className="font-sans text-5xl md:text-7xl font-black mb-6 uppercase tracking-tight text-gallery-black">
+                    Artworks <span className="font-light lowercase text-4xl md:text-6xl tracking-normal text-gallery-charcoal">Collection</span>
+                </h1>
+                <p className="text-gallery-charcoal/70 text-lg max-w-2xl mx-auto font-medium">
+                    Discover original works from our curated gallery of emerging and established artists.
+                </p>
+            </motion.div>
 
-                    {/* Left Sidebar Filters */}
-                    <aside className="w-full lg:w-1/4 flex flex-col gap-10">
+            {/* Mobile Filter Toggle */}
+            <div className="container mx-auto px-4 lg:hidden mb-6">
+                <button
+                    onClick={() => setFiltersOpen(!filtersOpen)}
+                    className="flex items-center gap-2 text-xs uppercase tracking-widest font-bold text-gallery-charcoal border border-gallery-charcoal/20 px-5 py-3 hover:bg-gallery-charcoal hover:text-white transition-colors w-full justify-center"
+                >
+                    <SlidersHorizontal className="w-4 h-4" />
+                    {filtersOpen ? "Hide Filters" : "Show Filters"}
+                </button>
+            </div>
+
+            {/* Main Content */}
+            <div className="container mx-auto px-4 pb-8">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+
+                    {/* Left Sidebar Filters — collapsible on mobile */}
+                    <aside className={`w-full lg:w-1/4 flex flex-col gap-8 ${filtersOpen ? 'block' : 'hidden lg:flex'}`}>
                         {/* Search */}
                         <div>
                             <h3 className="text-sm font-black uppercase tracking-widest mb-4 border-b border-gallery-charcoal/10 pb-3 text-gallery-black">Search</h3>
@@ -215,7 +242,7 @@ export default function ArtworksPage() {
                     {/* Main Content Area */}
                     <div className="w-full lg:w-3/4">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold tracking-tight text-gallery-black">Artworks collection</h2>
+                            <h2 className="text-xs font-black uppercase tracking-widest text-gallery-charcoal/50">{artworks.length} works</h2>
                         </div>
 
                         {isEmpty && !isLoading ? (
@@ -233,7 +260,8 @@ export default function ArtworksPage() {
                                 <motion.div
                                     variants={fastStaggerContainer}
                                     initial="hidden"
-                                    animate="visible"
+                                    whileInView="visible"
+                                    viewport={{ once: true, margin: "-50px" }}
                                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                                 >
                                     {artworks.map((artwork, idx) => (

@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "ArtBook" }],
   creator: "ArtBook",
-  metadataBase: new URL("https://artbook.gallery"),
+  metadataBase: new URL("https://artbook-frontend-production.artbook.workers.dev"),
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -49,10 +49,11 @@ export const metadata: Metadata = {
       "Discover, buy, and auction original artwork from emerging and established artists.",
     images: [
       {
-        url: "/images/gallery_about.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "ArtBook — The Digital Gallery",
+        type: "image/png",
       },
     ],
   },
@@ -61,7 +62,8 @@ export const metadata: Metadata = {
     title: "ArtBook — The Digital Gallery",
     description:
       "Discover, buy, and auction original artwork from emerging and established artists.",
-    images: ["/images/gallery_about.jpg"],
+    images: ["/og-image.png"],
+    creator: "@artbook_gallery",
   },
   robots: {
     index: true,
