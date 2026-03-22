@@ -5,6 +5,7 @@ import Navbar from "@/features/common/nabvar";
 import Footer from "@/features/common/footer";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
+import OfflineGuard from "@/components/offline-guard";
 
 const fontOutfit = Outfit({
   variable: "--font-outfit",
@@ -38,6 +39,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Toaster />
+          <OfflineGuard />
         </Providers>
       </body>
     </html>
