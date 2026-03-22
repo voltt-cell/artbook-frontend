@@ -261,7 +261,7 @@ export default function ArtworksPage() {
                                     variants={fastStaggerContainer}
                                     initial="hidden"
                                     whileInView="visible"
-                                    viewport={{ once: true, margin: "-50px" }}
+                                    viewport={{ once: true, margin: "0px" }}
                                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                                 >
                                     {artworks.map((artwork, idx) => (

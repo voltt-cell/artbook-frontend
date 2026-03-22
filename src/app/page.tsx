@@ -228,7 +228,7 @@ const Page = () => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "0px" }}
               variants={staggerContainer}
             >
               <Carousel
@@ -375,7 +375,7 @@ const Page = () => {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "0px" }}
               variants={staggerContainer}
             >
               <Carousel
