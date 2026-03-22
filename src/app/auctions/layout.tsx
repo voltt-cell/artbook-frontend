@@ -8,13 +8,13 @@ export const metadata: Metadata = {
     title: "Live Auctions | ArtBook",
     description:
       "Bid on exclusive original artworks in live auctions on ArtBook.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
   },
   twitter: {
     title: "Live Auctions | ArtBook",
     description:
       "Bid on exclusive original artworks in live auctions on ArtBook.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
   },
 };
 

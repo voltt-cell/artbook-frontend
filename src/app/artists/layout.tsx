@@ -8,13 +8,13 @@ export const metadata: Metadata = {
     title: "Featured Artists | ArtBook",
     description:
       "Explore the curated portfolio of celebrated artists on ArtBook.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
   },
   twitter: {
     title: "Featured Artists | ArtBook",
     description:
       "Explore the curated portfolio of celebrated artists on ArtBook.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
   },
 };
 

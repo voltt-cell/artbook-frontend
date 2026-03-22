@@ -241,9 +241,7 @@ export default function ArtworksPage() {
 
                     {/* Main Content Area */}
                     <div className="w-full lg:w-3/4">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xs font-black uppercase tracking-widest text-gallery-charcoal/50">{artworks.length} works</h2>
-                        </div>
+
 
                         {isEmpty && !isLoading ? (
                             <div className="text-center py-24 bg-white/50 border border-gallery-charcoal/10 mix-blend-multiply">
@@ -257,22 +255,22 @@ export default function ArtworksPage() {
                             </div>
                         ) : (
                             <div className="space-y-12">
-                                <motion.div
-                                    variants={fastStaggerContainer}
-                                    initial="hidden"
-                                    whileInView="visible"
-                                    viewport={{ once: true, margin: "0px" }}
-                                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                                >
-                                    {artworks.map((artwork, idx) => (
-                                        <motion.div key={`${artwork.id}-${idx}`} variants={fadeInUp}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {artworks.map((artwork, idx) => (
+                                    <motion.div 
+                                        key={`${artwork.id}-${idx}`} 
+                                        initial="hidden"
+                                        animate="visible"
+                                        variants={fadeInUp}
+                                        transition={{ delay: Math.min(idx * 0.05, 0.5) }}
+                                    >
                                             <ArtworkCard
                                                 artwork={artwork}
                                                 artist={getArtistById(artwork.artistId) || { id: artwork.artistId, name: "Unknown Artist" }}
                                             />
                                         </motion.div>
-                                    ))}
-                                </motion.div>
+                                ))}
+                            </div>
 
                                 {/* Loading Skeletons for initial load */}
                                 {isLoading && artworks.length === 0 && (

@@ -49,7 +49,7 @@ export const metadata: Metadata = {
       "Discover, buy, and auction original artwork from emerging and established artists.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/icon.svg",
         width: 1200,
         height: 630,
         alt: "ArtBook — The Digital Gallery",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     title: "ArtBook — The Digital Gallery",
     description:
       "Discover, buy, and auction original artwork from emerging and established artists.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
     creator: "@artbook_gallery",
   },
   robots: {

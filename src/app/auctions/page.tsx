@@ -129,15 +129,15 @@ export default function AuctionsPage() {
                             <h2 className="font-serif text-2xl font-black uppercase tracking-widest text-gallery-black">All Lots</h2>
                         </div>
 
-                        <motion.div
-                            variants={fastStaggerContainer}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "0px" }}
-                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-                        >
-                            {auctionItems.slice(1).map((item) => (
-                                <motion.div key={item.auction.id} variants={fadeInUp}>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                            {auctionItems.slice(1).map((item, idx) => (
+                                <motion.div 
+                                    key={item.auction.id} 
+                                    initial="hidden"
+                                    animate="visible"
+                                    variants={fadeInUp}
+                                    transition={{ delay: Math.min(idx * 0.05, 0.5) }}
+                                >
                                     <AuctionCard
                                         item={item}
                                         artist={getArtist(item.artwork.artistId)}
@@ -145,7 +145,7 @@ export default function AuctionsPage() {
                                     />
                                 </motion.div>
                             ))}
-                        </motion.div>
+                        </div>
                     </>
                 )}
             </div>

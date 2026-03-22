@@ -62,14 +62,14 @@ export async function generateMetadata({
       openGraph: {
         title: `${title} | ArtBook`,
         description,
-        images: image ? [{ url: image, width: 1200, height: 630, alt: title }] : ["/og-image.png"],
+        images: image ? [{ url: image, width: 1200, height: 630, alt: title }] : ["/icon.svg"],
         type: "article",
       },
       twitter: {
         card: "summary_large_image",
         title: `${title} | ArtBook`,
         description,
-        images: image ? [image] : ["/og-image.png"],
+        images: image ? [image] : ["/icon.svg"],
       },
     };
   } catch {

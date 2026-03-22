@@ -111,15 +111,15 @@ export default function ArtistsPage() {
                     </div>
                 ) : (
                     <div className="space-y-12">
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "0px" }}
-                            variants={fastStaggerContainer}
-                            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-                        >
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                             {artistsRaw.map((artist, idx) => (
-                                <motion.div key={`${artist.id}-${idx}`} variants={fadeInUp}>
+                                <motion.div 
+                                    key={`${artist.id}-${idx}`} 
+                                    initial="hidden"
+                                    animate="visible"
+                                    variants={fadeInUp}
+                                    transition={{ delay: Math.min(idx * 0.05, 0.5) }}
+                                >
                                     <ArtistCard artist={{
                                         id: artist.id,
                                         name: artist.name,
@@ -129,7 +129,7 @@ export default function ArtistsPage() {
                                     }} />
                                 </motion.div>
                             ))}
-                        </motion.div>
+                        </div>
 
                         {isLoading && artistsRaw.length === 0 && (
                             <div className="mt-8">

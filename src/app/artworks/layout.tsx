@@ -8,13 +8,13 @@ export const metadata: Metadata = {
     title: "Artworks Collection | ArtBook",
     description:
       "Browse and buy original artworks from emerging and established artists.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
   },
   twitter: {
     title: "Artworks Collection | ArtBook",
     description:
       "Browse and buy original artworks from emerging and established artists.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
   },
 };
 

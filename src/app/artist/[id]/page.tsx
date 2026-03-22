@@ -264,26 +264,17 @@ export default function ArtistProfilePage() {
                 {artworksLoading ? (
                     <ArtworkSkeletonGrid count={3} />
                 ) : artworks && artworks.length > 0 ? (
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "0px" }}
-                        variants={{
-                            hidden: { opacity: 0 },
-                            visible: {
-                                opacity: 1,
-                                transition: { staggerChildren: 0.1 }
-                            }
-                        }}
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
-                    >
-                        {artworks.map((artwork: Artwork) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {artworks.map((artwork: Artwork, idx: number) => (
                             <motion.div
                                 key={artwork.id}
+                                initial="hidden"
+                                animate="visible"
                                 variants={{
                                     hidden: { opacity: 0, y: 30 },
                                     visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 12 } }
                                 }}
+                                transition={{ delay: Math.min(idx * 0.05, 0.5) }}
                             >
                                 <ArtworkCard
                                     artwork={{
@@ -304,7 +295,7 @@ export default function ArtistProfilePage() {
                                 />
                             </motion.div>
                         ))}
-                    </motion.div>
+                    </div>
                 ) : (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}

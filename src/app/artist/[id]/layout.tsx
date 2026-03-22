@@ -38,14 +38,14 @@ export async function generateMetadata({
         description,
         images: artist.profileImage
           ? [{ url: artist.profileImage, width: 600, height: 600, alt: artist.name }]
-          : ["/og-image.png"],
+          : ["/icon.svg"],
         type: "profile",
       },
       twitter: {
         card: "summary_large_image",
         title: `${artist.name} | ArtBook`,
         description,
-        images: artist.profileImage ? [artist.profileImage] : ["/og-image.png"],
+        images: artist.profileImage ? [artist.profileImage] : ["/icon.svg"],
       },
     };
   } catch {
