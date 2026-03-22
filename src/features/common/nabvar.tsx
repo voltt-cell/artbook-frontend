@@ -141,7 +141,7 @@ const Navbar = () => {
             href="/"
             className="font-serif text-3xl font-black tracking-tighter text-gallery-black shrink-0 hover:opacity-80 transition-opacity flex items-center gap-2"
           >
-            <div className="w-4 h-4 bg-gallery-red hidden sm:block" />
+            <div className="w-4 h-4 bg-gallery-red" />
             ArtBook
           </Link>
 
@@ -151,9 +151,8 @@ const Navbar = () => {
               <Link
                 key={href}
                 href={href}
-                className={`text-xs uppercase tracking-widest font-semibold px-4 py-1 transition-colors ${
-                  pathname === href ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
-                }`}
+                className={`text-xs uppercase tracking-widest font-semibold px-4 py-1 transition-colors ${pathname === href ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
+                  }`}
               >
                 {label}
               </Link>
@@ -413,9 +412,8 @@ const Navbar = () => {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gallery-cream z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
-          mobileOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gallery-cream z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${mobileOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Drawer Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gallery-charcoal/10">
@@ -452,9 +450,8 @@ const Navbar = () => {
               key={href}
               href={href}
               onClick={() => setMobileOpen(false)}
-              className={`block px-3 py-3 text-xs uppercase tracking-widest font-bold border-b border-gallery-charcoal/10 transition-colors ${
-                pathname === href ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
-              }`}
+              className={`block px-3 py-3 text-xs uppercase tracking-widest font-bold border-b border-gallery-charcoal/10 transition-colors ${pathname === href ? "text-gallery-red" : "text-gallery-charcoal hover:text-gallery-red"
+                }`}
             >
               {label}
             </Link>
