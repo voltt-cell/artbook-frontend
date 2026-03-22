@@ -25,6 +25,7 @@ type ConnectStatus = {
     connected: boolean;
     onboardingComplete: boolean;
     payoutEnabled: boolean;
+    chargesEnabled: boolean;
     stripeAccountId: string | null;
 };
 
@@ -99,7 +100,9 @@ function ConnectContent() {
         return null;
     }
 
-    const isComplete = status?.onboardingComplete && status?.payoutEnabled;
+    // In test mode, payouts_enabled may stay false even after onboarding.
+    // details_submitted (onboardingComplete) is the primary signal.
+    const isComplete = status?.onboardingComplete;
     const isPartial = status?.connected && !isComplete;
 
     return (

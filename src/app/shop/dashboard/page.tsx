@@ -30,6 +30,7 @@ type ConnectStatus = {
     connected: boolean;
     onboardingComplete: boolean;
     payoutEnabled: boolean;
+    chargesEnabled: boolean;
     stripeAccountId: string | null;
 };
 
@@ -69,7 +70,7 @@ export default function ShopDashboard() {
         return null;
     }
 
-    const connectComplete = connectStatus?.onboardingComplete && connectStatus?.payoutEnabled;
+    const connectComplete = connectStatus?.onboardingComplete;
 
     return (
         <div className="min-h-screen relative overflow-hidden bg-gallery-cream">
