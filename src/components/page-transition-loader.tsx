@@ -8,30 +8,34 @@ import { ArtisticLoader } from "@/components/ui/artistic-loader";
  * Watches for pathname / search-param changes and briefly shows
  * the ArtisticLoader between page transitions.
  *
- * Strategy:
- *  - When the path changes, immediately show the loader.
- *  - After a short delay (300 ms) we hide it, letting the new
- *    page's own skeleton loaders take over naturally.
- *  - A minimum display time of 500 ms prevents flickering on
- *    fast navigations.
+ * Shows on:
+ *  - Initial page load / refresh
+ *  - Every client-side route change
  */
-const MIN_SHOW_MS = 500;
-const HIDE_AFTER_MS = 350; // how long after mount to start hide-timer
+const MIN_SHOW_MS = 600;
+const HIDE_AFTER_MS = 1000;
 
 function PageTransitionInner() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // start true for initial load
   const prevPath = useRef<string | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const showStart = useRef<number>(0);
+  const showStart = useRef<number>(Date.now());
 
   const currentKey = pathname + searchParams.toString();
 
   useEffect(() => {
-    // Skip very first render (no navigation has happened yet)
+    // Initial load — show loader then hide after minimum time
     if (prevPath.current === null) {
       prevPath.current = currentKey;
+      showStart.current = Date.now();
+
+      hideTimer.current = setTimeout(() => {
+        const elapsed = Date.now() - showStart.current;
+        const remaining = Math.max(0, MIN_SHOW_MS - elapsed);
+        setTimeout(() => setLoading(false), remaining);
+      }, HIDE_AFTER_MS);
       return;
     }
 
@@ -43,7 +47,6 @@ function PageTransitionInner() {
       showStart.current = Date.now();
       setLoading(true);
 
-      // After HIDE_AFTER_MS the route component is mounting; start hide
       hideTimer.current = setTimeout(() => {
         const elapsed = Date.now() - showStart.current;
         const remaining = Math.max(0, MIN_SHOW_MS - elapsed);

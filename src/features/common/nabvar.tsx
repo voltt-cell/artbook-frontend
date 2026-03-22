@@ -146,7 +146,7 @@ const Navbar = () => {
           </Link>
 
           {/* Center nav — desktop only */}
-          <nav className="hidden lg:flex items-center justify-center space-x-6 absolute left-1/2 -translate-x-1/2">
+          <nav className="hidden lg:flex items-center justify-center space-x-4 xl:space-x-6 flex-1 mx-4">
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
@@ -163,7 +163,7 @@ const Navbar = () => {
           {/* Right Actions */}
           <div className="flex items-center gap-1 shrink-0">
             {/* Search — desktop only */}
-            <div ref={searchRef} className="hidden md:flex relative w-64 mr-2">
+            <div ref={searchRef} className="hidden lg:flex relative w-64 mr-2">
               <form onSubmit={handleSearch} className="relative w-full">
                 <Input
                   type="text"
@@ -284,7 +284,7 @@ const Navbar = () => {
 
             {/* Favorites — logged in only, desktop */}
             {isAuthenticated && (
-              <Link href="/favorites" className="hidden sm:inline-flex">
+              <Link href="/favorites" className="hidden lg:inline-flex">
                 <Button variant="ghost" size="icon" className="hover:text-gallery-red hover:bg-transparent rounded-none text-gallery-charcoal">
                   <Heart className="h-5 w-5" />
                 </Button>
@@ -293,7 +293,7 @@ const Navbar = () => {
 
             {/* Shop icon — desktop */}
             {hasShop && (
-              <Link href="/shop/dashboard" className="hidden sm:inline-flex">
+              <Link href="/shop/dashboard" className="hidden lg:inline-flex">
                 <Button variant="ghost" size="icon" className="hover:text-gallery-red hover:bg-transparent rounded-none text-gallery-charcoal">
                   <Store className="h-5 w-5" />
                 </Button>
@@ -307,7 +307,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full ml-1 p-0 hover:bg-gallery-cream border border-gallery-charcoal/20 focus-visible:outline-none ring-offset-background transition-colors hidden sm:flex">
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full ml-1 p-0 hover:bg-gallery-cream border border-gallery-charcoal/20 focus-visible:outline-none ring-offset-background transition-colors hidden lg:flex">
                     <Avatar className="h-8 w-8 rounded-full">
                       <AvatarImage src={user?.profileImage} alt={user?.name} className="rounded-full object-cover" />
                       <AvatarFallback className="bg-gallery-red text-white font-bold text-xs rounded-full">
@@ -383,16 +383,16 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link href="/login" className="hidden sm:inline-flex ml-2">
+              <Link href="/login" className="hidden lg:inline-flex ml-2">
                 <Button variant="ghost" size="sm" className="font-semibold text-xs tracking-widest uppercase text-gallery-charcoal hover:bg-transparent hover:text-gallery-red rounded-none px-4 h-9 transition-colors">
                   Sign In
                 </Button>
               </Link>
             )}
 
-            {/* Hamburger — mobile only (< sm) */}
+            {/* Hamburger — visible below lg */}
             <button
-              className="sm:hidden ml-1 p-2 text-gallery-charcoal hover:text-gallery-red transition-colors"
+              className="lg:hidden ml-1 p-2 text-gallery-charcoal hover:text-gallery-red transition-colors"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Toggle menu"
             >
@@ -406,25 +406,23 @@ const Navbar = () => {
       {/* Backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-gallery-black/50 sm:hidden"
+          className="fixed inset-0 z-40 bg-gallery-black/50 backdrop-blur-sm lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-gallery-cream z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out sm:hidden ${
+        className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gallery-cream z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out lg:hidden ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between px-5 py-5 border-b border-gallery-charcoal/10">
-          <Link href="/" onClick={() => setMobileOpen(false)} className="font-serif text-2xl font-black tracking-tighter text-gallery-black">
-            ArtBook
-          </Link>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gallery-charcoal/10">
+          <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-gallery-charcoal/60">Menu</span>
           <button
             onClick={() => setMobileOpen(false)}
-            className="p-1 text-gallery-charcoal hover:text-gallery-red transition-colors"
+            className="p-1.5 text-gallery-charcoal hover:text-gallery-red hover:bg-gallery-charcoal/5 transition-colors"
             aria-label="Close menu"
           >
             <X className="w-5 h-5" />

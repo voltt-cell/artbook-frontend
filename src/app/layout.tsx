@@ -6,6 +6,7 @@ import Footer from "@/features/common/footer";
 import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 import OfflineGuard from "@/components/offline-guard";
+import PageTransitionLoader from "@/components/page-transition-loader";
 
 const fontOutfit = Outfit({
   variable: "--font-outfit",
@@ -18,8 +19,59 @@ const fontPlayfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "ArtBook — The Digital Gallery",
-  description: "A modern digital gallery for artists and collectors. Discover, buy, and auction original artwork.",
+  title: {
+    default: "ArtBook — The Digital Gallery",
+    template: "%s | ArtBook",
+  },
+  description:
+    "Discover, buy, and auction original artwork from emerging and established artists. ArtBook is the modern digital gallery for collectors and creators.",
+  keywords: [
+    "art",
+    "gallery",
+    "artwork",
+    "buy art",
+    "sell art",
+    "auction",
+    "digital gallery",
+    "artists",
+    "collectors",
+    "original artwork",
+  ],
+  authors: [{ name: "ArtBook" }],
+  creator: "ArtBook",
+  metadataBase: new URL("https://artbook.gallery"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "ArtBook",
+    title: "ArtBook — The Digital Gallery",
+    description:
+      "Discover, buy, and auction original artwork from emerging and established artists.",
+    images: [
+      {
+        url: "/images/gallery_about.jpg",
+        width: 1200,
+        height: 630,
+        alt: "ArtBook — The Digital Gallery",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ArtBook — The Digital Gallery",
+    description:
+      "Discover, buy, and auction original artwork from emerging and established artists.",
+    images: ["/images/gallery_about.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +85,7 @@ export default function RootLayout({
         className={`${fontOutfit.variable} ${fontPlayfair.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
         <Providers>
+          <PageTransitionLoader />
           <Navbar />
           <main className="flex-1">
             {children}

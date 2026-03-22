@@ -9,13 +9,15 @@ import AuctionCard from "@/features/auctions/auction-card";
 import Banner from "@/features/home/banner";
 import JoinCommunity from "@/features/home/join-community";
 import { fetcher } from "@/lib/swr";
-import { fadeInUp } from "@/lib/animations";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
+import React from "react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 
 // Types matching backend response
@@ -68,6 +70,58 @@ type AuctionItem = {
 
 // Threshold — only show the "Discover More" card when there are more than this many artworks
 const DISCOVER_MORE_THRESHOLD = 5;
+
+/* Dot indicators for carousels on mobile/tablet */
+function CarouselDots({ api }: { api: CarouselApi | undefined }) {
+  const [selected, setSelected] = React.useState(0);
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!api) return;
+    setCount(api.scrollSnapList().length);
+    setSelected(api.selectedScrollSnap());
+    api.on("select", () => setSelected(api.selectedScrollSnap()));
+    api.on("reInit", () => {
+      setCount(api.scrollSnapList().length);
+      setSelected(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  if (count <= 1) return null;
+
+  // Show max 7 dots; if more, show a condensed set around the selected index
+  const maxDots = 7;
+  let dots: number[];
+  if (count <= maxDots) {
+    dots = Array.from({ length: count }, (_, i) => i);
+  } else {
+    const half = Math.floor(maxDots / 2);
+    let start = Math.max(0, selected - half);
+    let end = start + maxDots;
+    if (end > count) {
+      end = count;
+      start = Math.max(0, end - maxDots);
+    }
+    dots = Array.from({ length: end - start }, (_, i) => start + i);
+  }
+
+  return (
+    <div className="flex items-center justify-center gap-1.5 mt-4 md:hidden">
+      {dots.map((i) => (
+        <button
+          key={i}
+          className={`rounded-full transition-all duration-200 ${
+            i === selected
+              ? "w-5 h-1.5 bg-gallery-red"
+              : "w-1.5 h-1.5 bg-gallery-charcoal/25 hover:bg-gallery-charcoal/40"
+          }`}
+          onClick={() => api?.scrollTo(i)}
+          aria-label={`Go to slide ${i + 1}`}
+        />
+      ))}
+    </div>
+  );
+}
 
 const Page = () => {
   const { data: artworksRaw, isLoading: artworksLoading } = useSWR<ArtworkResponse[]>(
@@ -129,6 +183,13 @@ const Page = () => {
 
   // Only show "Discover More" card when there are enough artworks that it makes sense
   const showDiscoverMore = artworks.length > DISCOVER_MORE_THRESHOLD;
+  const showAuctionDiscoverMore = activeAuctions.length > 3;
+  const showArtistDiscoverMore = featuredArtists.length > 4;
+
+  // Carousel APIs for dot indicators
+  const [artworksApi, setArtworksApi] = React.useState<CarouselApi>();
+  const [auctionsApi, setAuctionsApi] = React.useState<CarouselApi>();
+  const [artistsApi, setArtistsApi] = React.useState<CarouselApi>();
 
   const isLoading = artworksLoading || artistsLoading;
 
@@ -165,13 +226,15 @@ const Page = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
             >
               <Carousel
                 opts={{ align: "start", dragFree: true }}
                 className="w-full"
+                setApi={setArtworksApi}
               >
                 <CarouselContent className="-ml-3 sm:-ml-4">
                   {artworks.map((artwork) => (
@@ -204,11 +267,9 @@ const Page = () => {
                   )}
                 </CarouselContent>
 
-                {/* Prev/Next only on md+ */}
-                <div className="hidden md:block">
-                  <CarouselPrevious className="-left-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                  <CarouselNext className="-right-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                </div>
+                <CarouselPrevious className="-left-3 md:-left-5 bg-gallery-cream border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                <CarouselNext className="-right-3 md:-right-5 bg-gallery-cream border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                <CarouselDots api={artworksApi} />
               </Carousel>
             </motion.div>
           </div>
@@ -246,6 +307,7 @@ const Page = () => {
               <Carousel
                 opts={{ align: "start", dragFree: true }}
                 className="w-full"
+                setApi={setAuctionsApi}
               >
                 <CarouselContent className="-ml-3 sm:-ml-4">
                   {activeAuctions.map((auctionItem) => (
@@ -259,12 +321,28 @@ const Page = () => {
                       />
                     </CarouselItem>
                   ))}
+
+                  {/* Discover More */}
+                  {showAuctionDiscoverMore && (
+                    <CarouselItem className="pl-3 sm:pl-4 basis-full sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+                      <Link href="/auctions" className="block w-full">
+                        <div className="w-full relative overflow-hidden aspect-square border border-gallery-charcoal/20 bg-white flex flex-col items-center justify-center hover:bg-gallery-charcoal/5 transition-colors group cursor-pointer">
+                          <span className="font-bold text-xs uppercase tracking-widest text-gallery-charcoal group-hover:text-gallery-red transition-colors mb-3">
+                            More Auctions
+                          </span>
+                          <span className="font-bold text-xs uppercase tracking-widest text-gallery-black px-6 py-2 bg-gallery-cream border border-gallery-charcoal/20 shadow-none group-hover:bg-gallery-red group-hover:text-white group-hover:border-gallery-red transition-all">
+                            View All
+                          </span>
+                        </div>
+                        <div className="p-3 opacity-0 select-none">Spacer</div>
+                      </Link>
+                    </CarouselItem>
+                  )}
                 </CarouselContent>
 
-                <div className="hidden md:block">
-                  <CarouselPrevious className="-left-5 bg-white border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                  <CarouselNext className="-right-5 bg-white border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                </div>
+                <CarouselPrevious className="-left-3 md:-left-5 bg-white border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                <CarouselNext className="-right-3 md:-right-5 bg-white border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                <CarouselDots api={auctionsApi} />
               </Carousel>
             </motion.div>
           </div>
@@ -295,13 +373,15 @@ const Page = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
             >
               <Carousel
                 opts={{ align: "start", dragFree: true }}
                 className="w-full"
+                setApi={setArtistsApi}
               >
                 <CarouselContent className="-ml-3 sm:-ml-4">
                   {featuredArtists.map((artist) => (
@@ -312,12 +392,27 @@ const Page = () => {
                       <ArtistCard artist={artist} />
                     </CarouselItem>
                   ))}
+
+                  {/* Discover More */}
+                  {showArtistDiscoverMore && (
+                    <CarouselItem className="pl-3 sm:pl-4 basis-[48%] sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+                      <Link href="/artists" className="block w-full">
+                        <div className="w-full relative overflow-hidden aspect-square border border-gallery-charcoal/20 bg-gallery-cream flex flex-col items-center justify-center hover:bg-gallery-charcoal/5 transition-colors group cursor-pointer rounded-full">
+                          <span className="font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal group-hover:text-gallery-red transition-colors mb-2 text-center px-2">
+                            More Artists
+                          </span>
+                          <span className="font-bold text-[10px] uppercase tracking-widest text-gallery-black px-4 py-1.5 bg-white border border-gallery-charcoal/20 shadow-none group-hover:bg-gallery-red group-hover:text-white group-hover:border-gallery-red transition-all">
+                            View All
+                          </span>
+                        </div>
+                      </Link>
+                    </CarouselItem>
+                  )}
                 </CarouselContent>
 
-                <div className="hidden md:block">
-                  <CarouselPrevious className="-left-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                  <CarouselNext className="-right-5 bg-gallery-cream border border-gallery-charcoal w-10 h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
-                </div>
+                <CarouselPrevious className="-left-3 md:-left-5 bg-gallery-cream border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                <CarouselNext className="-right-3 md:-right-5 bg-gallery-cream border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                <CarouselDots api={artistsApi} />
               </Carousel>
             </motion.div>
           </div>
