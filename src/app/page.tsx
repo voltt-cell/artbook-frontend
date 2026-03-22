@@ -177,7 +177,7 @@ const Page = () => {
                   {artworks.map((artwork) => (
                     <CarouselItem
                       key={artwork.id}
-                      className="pl-3 sm:pl-4 basis-[78%] sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+                      className="pl-3 sm:pl-4 basis-full sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
                     >
                       <ArtworkCard
                         artwork={artwork}
@@ -188,7 +188,7 @@ const Page = () => {
 
                   {/* Only show "Discover More" when there are enough artworks */}
                   {showDiscoverMore && (
-                    <CarouselItem className="pl-3 sm:pl-4 basis-[78%] sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+                    <CarouselItem className="pl-3 sm:pl-4 basis-full sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
                       <Link href="/artworks" className="block w-full">
                         <div className="w-full relative overflow-hidden aspect-square border border-gallery-charcoal/20 bg-gallery-cream flex flex-col items-center justify-center hover:bg-gallery-charcoal/5 transition-colors group cursor-pointer">
                           <span className="font-bold text-xs uppercase tracking-widest text-gallery-charcoal group-hover:text-gallery-red transition-colors mb-3">
@@ -251,7 +251,7 @@ const Page = () => {
                   {activeAuctions.map((auctionItem) => (
                     <CarouselItem
                       key={auctionItem.auction.id}
-                      className="pl-3 sm:pl-4 basis-[75%] xs:basis-[60%] sm:basis-[45%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+                      className="pl-3 sm:pl-4 basis-full sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
                     >
                       <AuctionCard
                         item={auctionItem}
