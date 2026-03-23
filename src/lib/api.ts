@@ -21,6 +21,7 @@ export async function apiRequest<T>(endpoint: string, options: RequestOptions = 
             ...headers,
         },
         credentials: 'include', // sends JWT cookie automatically
+        cache: 'no-store', // Disable Next.js / Browser caching for dynamic API responses
         body: body ? JSON.stringify(body) : undefined,
     };
 

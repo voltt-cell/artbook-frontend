@@ -76,7 +76,7 @@ export function useCart() {
     };
 
     const isInCart = (artworkId: string) => {
-        return data?.some(item => item.artwork.id === artworkId) || false;
+        return data?.some(item => String(item.artwork.id) === String(artworkId)) || false;
     };
 
     const total = data?.reduce((acc, item) => acc + parseFloat(item.artwork.price), 0) || 0;

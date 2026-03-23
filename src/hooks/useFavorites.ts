@@ -30,7 +30,7 @@ export function useFavorites() {
     const [togglingId, setTogglingId] = useState<string | null>(null);
 
     const isFavorite = (artworkId: string) => {
-        return data?.some((item) => item.artwork.id === artworkId) || false;
+        return data?.some((item) => String(item.artwork.id) === String(artworkId)) || false;
     };
 
     const toggleFavorite = async (artworkId: string, artworkDetails?: FavoriteItem['artwork'], artistDetails?: FavoriteItem['artist']) => {
@@ -41,7 +41,7 @@ export function useFavorites() {
             let newData: FavoriteItem[] | undefined;
 
             if (isFav) {
-                newData = data?.filter(item => item.artwork.id !== artworkId);
+                newData = data?.filter(item => String(item.artwork.id) !== String(artworkId));
             } else if (artworkDetails && artistDetails) {
                 const optimisticItem: FavoriteItem = {
                     favoriteId: `temp-${Date.now()}`,

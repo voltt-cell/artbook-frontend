@@ -106,7 +106,13 @@ export default function ArtistProfilePage() {
             return;
         }
 
+        const newIsFollowing = !isFollowing;
+        const newCount = newIsFollowing ? followerCount + 1 : Math.max(0, followerCount - 1);
+        
+        // Optimistic update
+        mutateFollowers({ isFollowing: newIsFollowing, followerCount: newCount }, false);
         setFollowLoading(true);
+
         try {
             if (isFollowing) {
                 await api.delete(`/users/${params.id}/follow`);
@@ -118,6 +124,8 @@ export default function ArtistProfilePage() {
             mutateFollowers();
         } catch (error) {
             toast.error((error as Error).message);
+            // Rollback on error
+            mutateFollowers();
         } finally {
             setFollowLoading(false);
         }
@@ -238,11 +246,7 @@ export default function ArtistProfilePage() {
                                                 }
                                             >
                                                 <Users className="w-4 h-4 mr-3" />
-                                                {followLoading
-                                                    ? "Wait..."
-                                                    : isFollowing
-                                                        ? "Unfollow"
-                                                        : "Follow Artist"}
+                                                {isFollowing ? "Unfollow" : "Follow Artist"}
                                             </Button>
                                         </div>
                                     )}
