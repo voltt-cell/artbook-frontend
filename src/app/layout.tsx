@@ -47,22 +47,12 @@ export const metadata: Metadata = {
     title: "ArtBook — The Digital Gallery",
     description:
       "Discover, buy, and auction original artwork from emerging and established artists.",
-    images: [
-      {
-        url: "/icon.svg",
-        width: 1200,
-        height: 630,
-        alt: "ArtBook — The Digital Gallery",
-        type: "image/png",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "ArtBook — The Digital Gallery",
     description:
       "Discover, buy, and auction original artwork from emerging and established artists.",
-    images: ["/icon.svg"],
     creator: "@artbook_gallery",
   },
   robots: {

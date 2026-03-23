@@ -131,6 +131,102 @@ const Navbar = () => {
     return null;
   }
 
+  const renderDropdownContent = () => {
+    if (!searchResults) return null;
+    return (
+      <>
+        {searchResults.artworks.length > 0 && (
+          <div>
+            <div className="px-4 py-2 bg-gallery-cream/80 border-b border-gallery-charcoal/10">
+              <span className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/60">Artworks</span>
+            </div>
+            {searchResults.artworks.map((art) => (
+              <Link
+                key={art.id}
+                href={`/artwork/${art.id}`}
+                onClick={handleResultClick}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
+              >
+                <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden">
+                  <img src={art.images?.[0] || art.imageUrl} alt={art.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gallery-black truncate">{art.title}</p>
+                  <p className="text-[10px] uppercase tracking-widest text-gallery-charcoal/50 font-semibold">{art.medium}</p>
+                </div>
+                <span className="text-sm font-serif font-bold text-gallery-black">{formatPrice(art.price)}</span>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {searchResults.artists.length > 0 && (
+          <div>
+            <div className="px-4 py-2 bg-gallery-cream/80 border-b border-gallery-charcoal/10">
+              <span className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/60">Artists</span>
+            </div>
+            {searchResults.artists.map((artist) => (
+              <Link
+                key={artist.id}
+                href={`/artist/${artist.id}`}
+                onClick={handleResultClick}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
+              >
+                <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden rounded-full border border-gallery-charcoal/20">
+                  {artist.profileImage ? (
+                    <img src={artist.profileImage} alt={artist.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gallery-red text-white text-xs font-bold">
+                      {artist.name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gallery-black truncate">{artist.shopName || artist.name}</p>
+                  <p className="text-[10px] uppercase tracking-widest text-gallery-charcoal/50 font-semibold">Artist</p>
+                </div>
+                <User className="w-4 h-4 text-gallery-charcoal/30" />
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {searchResults.auctions.length > 0 && (
+          <div>
+            <div className="px-4 py-2 bg-gallery-cream/80 border-b border-gallery-charcoal/10">
+              <span className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/60">Live Auctions</span>
+            </div>
+            {searchResults.auctions.map((auction) => (
+              <Link
+                key={auction.auctionId}
+                href={`/artwork/${auction.artworkId}`}
+                onClick={handleResultClick}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
+              >
+                <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden">
+                  <img src={auction.artworkImages?.[0] || auction.artworkImage} alt={auction.artworkTitle} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gallery-black truncate">{auction.artworkTitle}</p>
+                  <p className="text-[10px] uppercase tracking-widest text-gallery-red font-bold">Live Auction</p>
+                </div>
+                <span className="text-sm font-serif font-bold text-gallery-black">
+                  {formatPrice(auction.currentBid || auction.startingBid)}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {searchResults.artworks.length === 0 && searchResults.artists.length === 0 && searchResults.auctions.length === 0 && (
+          <div className="px-4 py-8 text-center">
+            <p className="text-sm text-gallery-charcoal/50 font-serif italic">No results found for &ldquo;{searchQuery}&rdquo;</p>
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       <header className="bg-gallery-cream sticky top-0 z-50 border-b border-gallery-beige">
@@ -189,94 +285,7 @@ const Navbar = () => {
               {/* Search Dropdown */}
               {showDropdown && searchResults && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gallery-charcoal/20 shadow-2xl z-[100] max-h-[70vh] overflow-y-auto">
-                  {searchResults.artworks.length > 0 && (
-                    <div>
-                      <div className="px-4 py-2 bg-gallery-cream/80 border-b border-gallery-charcoal/10">
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/60">Artworks</span>
-                      </div>
-                      {searchResults.artworks.map((art) => (
-                        <Link
-                          key={art.id}
-                          href={`/artwork/${art.id}`}
-                          onClick={handleResultClick}
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
-                        >
-                          <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden">
-                            <img src={art.images?.[0] || art.imageUrl} alt={art.title} className="w-full h-full object-cover" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gallery-black truncate">{art.title}</p>
-                            <p className="text-[10px] uppercase tracking-widest text-gallery-charcoal/50 font-semibold">{art.medium}</p>
-                          </div>
-                          <span className="text-sm font-serif font-bold text-gallery-black">{formatPrice(art.price)}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-
-                  {searchResults.artists.length > 0 && (
-                    <div>
-                      <div className="px-4 py-2 bg-gallery-cream/80 border-b border-gallery-charcoal/10">
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/60">Artists</span>
-                      </div>
-                      {searchResults.artists.map((artist) => (
-                        <Link
-                          key={artist.id}
-                          href={`/artist/${artist.id}`}
-                          onClick={handleResultClick}
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
-                        >
-                          <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden rounded-full border border-gallery-charcoal/20">
-                            {artist.profileImage ? (
-                              <img src={artist.profileImage} alt={artist.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gallery-red text-white text-xs font-bold">
-                                {artist.name.charAt(0)}
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gallery-black truncate">{artist.shopName || artist.name}</p>
-                            <p className="text-[10px] uppercase tracking-widest text-gallery-charcoal/50 font-semibold">Artist</p>
-                          </div>
-                          <User className="w-4 h-4 text-gallery-charcoal/30" />
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-
-                  {searchResults.auctions.length > 0 && (
-                    <div>
-                      <div className="px-4 py-2 bg-gallery-cream/80 border-b border-gallery-charcoal/10">
-                        <span className="text-[10px] uppercase tracking-widest font-bold text-gallery-charcoal/60">Live Auctions</span>
-                      </div>
-                      {searchResults.auctions.map((auction) => (
-                        <Link
-                          key={auction.auctionId}
-                          href={`/artwork/${auction.artworkId}`}
-                          onClick={handleResultClick}
-                          className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
-                        >
-                          <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden">
-                            <img src={auction.artworkImages?.[0] || auction.artworkImage} alt={auction.artworkTitle} className="w-full h-full object-cover" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gallery-black truncate">{auction.artworkTitle}</p>
-                            <p className="text-[10px] uppercase tracking-widest text-gallery-red font-bold">Live Auction</p>
-                          </div>
-                          <span className="text-sm font-serif font-bold text-gallery-black">
-                            {formatPrice(auction.currentBid || auction.startingBid)}
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-
-                  {searchResults.artworks.length === 0 && searchResults.artists.length === 0 && searchResults.auctions.length === 0 && (
-                    <div className="px-4 py-8 text-center">
-                      <p className="text-sm text-gallery-charcoal/50 font-serif italic">No results found for &ldquo;{searchQuery}&rdquo;</p>
-                    </div>
-                  )}
+                  {renderDropdownContent()}
                 </div>
               )}
             </div>
@@ -428,7 +437,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Search */}
-        <div className="px-5 py-4 border-b border-gallery-charcoal/10">
+        <div className="px-5 py-4 border-b border-gallery-charcoal/10 relative">
           <form onSubmit={handleSearch} className="relative">
             <Input
               type="text"
@@ -436,11 +445,23 @@ const Navbar = () => {
               className="w-full pl-4 pr-10 h-10 rounded-none border border-gallery-charcoal/30 bg-white focus:ring-0 focus:border-gallery-red text-sm shadow-none"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => {
+                if (searchResults && (searchResults.artworks.length > 0 || searchResults.artists.length > 0 || searchResults.auctions.length > 0)) {
+                  setShowDropdown(true);
+                }
+              }}
             />
             <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-gallery-charcoal hover:text-gallery-red">
               {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
             </button>
           </form>
+
+          {/* Mobile Search Dropdown */}
+          {showDropdown && searchResults && (
+            <div className="absolute top-full left-5 right-5 mt-1 bg-white border border-gallery-charcoal/20 shadow-2xl z-[100] max-h-[50vh] overflow-y-auto">
+              {renderDropdownContent()}
+            </div>
+          )}
         </div>
 
         {/* Nav Links */}
