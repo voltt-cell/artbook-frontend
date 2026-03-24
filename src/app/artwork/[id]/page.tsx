@@ -140,6 +140,9 @@ export default function ArtworkDetailPage({
     const [bidAmount, setBidAmount] = useState("");
     const [bidLoading, setBidLoading] = useState(false);
     const [timeLeft, setTimeLeft] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
+    const [mainImageLoaded, setMainImageLoaded] = useState(false);
+    const [lightboxImageLoaded, setLightboxImageLoaded] = useState(false);
+    const [artistImageLoaded, setArtistImageLoaded] = useState(false);
 
     const { addToCart, isInCart, addingIds } = useCart();
     const { isFavorite, toggleFavorite, togglingId } = useFavorites();
@@ -381,17 +384,28 @@ export default function ArtworkDetailPage({
                         <div className="relative overflow-hidden rounded-none shadow-none border border-gallery-charcoal/20 bg-white">
                             {/* Main image */}
                             <AnimatePresence mode="wait">
-                                <motion.img
-                                    key={currentSlide}
-                                    src={allImages[currentSlide]}
-                                    alt={`${artwork.title} - image ${currentSlide + 1}`}
-                                    className="w-full h-auto max-h-[600px] object-contain cursor-zoom-in"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                    onClick={() => openLightbox(currentSlide)}
-                                />
+                                <div className="relative w-full h-auto min-h-[400px] flex items-center justify-center bg-gallery-cream overflow-hidden">
+                                    {!mainImageLoaded && (
+                                        <div className="absolute inset-0 z-10">
+                                            <Skeleton className="w-full h-full rounded-none" />
+                                        </div>
+                                    )}
+                                    <motion.img
+                                        key={currentSlide}
+                                        src={allImages[currentSlide]}
+                                        alt={`${artwork.title} - image ${currentSlide + 1}`}
+                                        className={`w-full h-auto max-h-[600px] object-contain cursor-zoom-in transition-opacity duration-300 ${mainImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: mainImageLoaded ? 1 : 0 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        onLoad={() => setMainImageLoaded(true)}
+                                        onClick={() => {
+                                            setLightboxImageLoaded(false);
+                                            openLightbox(currentSlide);
+                                        }}
+                                    />
+                                </div>
                             </AnimatePresence>
 
                             {/* Zoom indicator */}
@@ -442,7 +456,12 @@ export default function ArtworkDetailPage({
                                 {allImages.map((img, idx) => (
                                     <button
                                         key={idx}
-                                        onClick={() => setCurrentSlide(idx)}
+                                        onClick={() => {
+                                            if (idx !== currentSlide) {
+                                                setMainImageLoaded(false);
+                                                setCurrentSlide(idx);
+                                            }
+                                        }}
                                         className={`flex-shrink-0 rounded-none overflow-hidden transition-all border ${idx === currentSlide
                                             ? "border-gallery-black p-1"
                                             : "border-gallery-charcoal/20 opacity-60 hover:opacity-100"
@@ -506,13 +525,21 @@ export default function ArtworkDetailPage({
                                 href={`/artist/${artist.id}`}
                                 className="flex items-center gap-4 mb-6 group py-3 border-y border-gallery-charcoal/10"
                             >
-                                <div className="w-12 h-12 rounded-none border border-gallery-charcoal/20 bg-gallery-cream flex items-center justify-center overflow-hidden">
+                                <div className="w-12 h-12 rounded-none border border-gallery-charcoal/20 bg-gallery-cream flex items-center justify-center overflow-hidden relative">
                                     {artist.profileImage ? (
-                                        <img
-                                            src={artist.profileImage}
-                                            alt={artist.name}
-                                            className="w-full h-full object-cover grayscale opacity-90"
-                                        />
+                                        <>
+                                            {!artistImageLoaded && (
+                                                <div className="absolute inset-0 z-10">
+                                                    <Skeleton className="w-full h-full rounded-none" />
+                                                </div>
+                                            )}
+                                            <img
+                                                src={artist.profileImage}
+                                                alt={artist.name}
+                                                className={`w-full h-full object-cover grayscale transition-opacity duration-300 ${artistImageLoaded ? 'opacity-90' : 'opacity-0'}`}
+                                                onLoad={() => setArtistImageLoaded(true)}
+                                            />
+                                        </>
                                     ) : (
                                         <span className="text-gallery-black font-sans font-black text-xl uppercase">
                                             {artist.name.charAt(0)}
@@ -592,7 +619,7 @@ export default function ArtworkDetailPage({
                                         {isAuction ? (
                                             <Button
                                                 size="lg"
-                                                className="bg-gallery-black hover:bg-gallery-red text-white flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
+                                                className="bg-gallery-black hover:bg-gallery-red text-white w-full sm:flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                 disabled={!!auctionEnded}
                                                 onClick={() => {
                                                     if (!isAuthenticated) {
@@ -613,7 +640,7 @@ export default function ArtworkDetailPage({
                                                     variant="outline"
                                                     onClick={handleAddToCart}
                                                     disabled={isAddedToCart || isAddingToCart}
-                                                    className="border-gallery-charcoal/20 text-gallery-charcoal bg-transparent flex-1 lg:flex-none rounded-none shadow-none hover:bg-gallery-cream hover:text-gallery-red h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
+                                                    className="border-gallery-charcoal/20 text-gallery-charcoal bg-transparent w-full sm:flex-1 lg:flex-none rounded-none shadow-none hover:bg-gallery-cream hover:text-gallery-red h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                 >
                                                     {isAddingToCart ? (
                                                         <Loader2 className="w-4 h-4 mr-3 animate-spin" />
@@ -624,7 +651,7 @@ export default function ArtworkDetailPage({
                                                 </Button>
                                                 <Button
                                                     size="lg"
-                                                    className="bg-gallery-black hover:bg-gallery-red text-white flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
+                                                    className="bg-gallery-black hover:bg-gallery-red text-white w-full sm:flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                     onClick={handleBuyNow}
                                                 >
                                                     <ShoppingBag className="w-4 h-4 mr-3" />
@@ -763,48 +790,86 @@ export default function ArtworkDetailPage({
 
             {/* Lightbox Dialog */}
             <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-                <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none flex items-center justify-center">
+                <DialogContent
+                    showCloseButton={false}
+                    className="max-w-[100vw] h-full sm:max-w-[95vw] sm:max-h-[95vh] p-0 bg-black/95 border-none flex flex-col items-center justify-center overflow-hidden"
+                >
                     <button
                         onClick={() => setLightboxOpen(false)}
-                        className="absolute top-4 right-4 z-50 text-white/80 hover:text-white bg-white/10 rounded-full p-2 transition-colors"
+                        className="absolute top-6 right-6 z-[60] text-white/80 hover:text-white bg-white/10 backdrop-blur-md rounded-full p-2 transition-all hover:scale-110 active:scale-90"
                     >
                         <X className="w-5 h-5" />
                     </button>
 
-                    <AnimatePresence mode="wait">
-                        <motion.img
-                            key={lightboxIndex}
-                            src={allImages[lightboxIndex]}
-                            alt={`${artwork.title} - fullsize ${lightboxIndex + 1}`}
-                            className="max-w-full max-h-[85vh] object-contain"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.2 }}
-                        />
-                    </AnimatePresence>
+                    <div className="relative flex-1 w-full flex items-center justify-center p-4 sm:p-12">
+                        {!lightboxImageLoaded && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <Loader2 className="w-8 h-8 text-white/20 animate-spin" />
+                            </div>
+                        )}
+                        <AnimatePresence mode="wait">
+                            <motion.img
+                                key={lightboxIndex}
+                                src={allImages[lightboxIndex]}
+                                alt={`${artwork.title} - fullsize ${lightboxIndex + 1}`}
+                                className={`max-w-full max-h-[70vh] sm:max-h-[80vh] object-contain transition-opacity duration-300 ${lightboxImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: lightboxImageLoaded ? 1 : 0, scale: lightboxImageLoaded ? 1 : 0.95 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                transition={{ duration: 0.2 }}
+                                onLoad={() => setLightboxImageLoaded(true)}
+                            />
+                        </AnimatePresence>
+                    </div>
+
+                    {/* Lightbox Controls & Thumbnails */}
+                    <div className="w-full pb-8 px-4 flex flex-col items-center gap-6">
+                        {allImages.length > 1 && (
+                            <div className="flex gap-2 overflow-x-auto pb-2 max-w-full">
+                                {allImages.map((img, idx) => (
+                                    <button
+                                        key={`lb-${idx}`}
+                                        onClick={() => {
+                                            if (idx !== lightboxIndex) {
+                                                setLightboxImageLoaded(false);
+                                                setLightboxIndex(idx);
+                                            }
+                                        }}
+                                        className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 border-2 transition-all ${idx === lightboxIndex ? "border-white" : "border-white/20 opacity-50 hover:opacity-100"
+                                            }`}
+                                    >
+                                        <img src={img} alt="" className="w-full h-full object-cover" />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
+                            {lightboxIndex + 1} / {allImages.length}
+                        </p>
+                    </div>
 
                     {allImages.length > 1 && (
                         <>
                             <button
-                                onClick={prevLightbox}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-colors"
+                                onClick={() => {
+                                    setLightboxImageLoaded(false);
+                                    prevLightbox();
+                                }}
+                                className="absolute left-4 top-1/2 -translate-y-1/2 z-[60] bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-all hover:scale-110"
                             >
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
                             <button
-                                onClick={nextLightbox}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-colors"
+                                onClick={() => {
+                                    setLightboxImageLoaded(false);
+                                    nextLightbox();
+                                }}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 z-[60] bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-all hover:scale-110"
                             >
                                 <ChevronRight className="w-6 h-6" />
                             </button>
                         </>
                     )}
-
-                    {/* Image counter */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm bg-black/50 px-3 py-1 rounded-full">
-                        {lightboxIndex + 1} / {allImages.length}
-                    </div>
                 </DialogContent>
             </Dialog>
 
