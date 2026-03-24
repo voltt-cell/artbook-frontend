@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -390,20 +391,12 @@ export default function ArtworkDetailPage({
                                             <Skeleton className="w-full h-full rounded-none" />
                                         </div>
                                     )}
-                                    <motion.img
-                                        key={currentSlide}
+                                    <OptimizedImage
                                         src={allImages[currentSlide]}
                                         alt={`${artwork.title} - image ${currentSlide + 1}`}
-                                        className={`w-full h-auto max-h-[600px] object-contain cursor-zoom-in transition-opacity duration-300 ${mainImageLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: mainImageLoaded ? 1 : 0 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                        onLoad={() => setMainImageLoaded(true)}
-                                        onClick={() => {
-                                            setLightboxImageLoaded(false);
-                                            openLightbox(currentSlide);
-                                        }}
+                                        className="w-full h-auto max-h-[600px] object-contain cursor-zoom-in"
+                                        containerClassName="w-full h-auto max-h-[600px]"
+                                        onClick={() => openLightbox(currentSlide)}
                                     />
                                 </div>
                             </AnimatePresence>
@@ -526,25 +519,12 @@ export default function ArtworkDetailPage({
                                 className="flex items-center gap-4 mb-6 group py-3 border-y border-gallery-charcoal/10"
                             >
                                 <div className="w-12 h-12 rounded-none border border-gallery-charcoal/20 bg-gallery-cream flex items-center justify-center overflow-hidden relative">
-                                    {artist.profileImage ? (
-                                        <>
-                                            {!artistImageLoaded && (
-                                                <div className="absolute inset-0 z-10">
-                                                    <Skeleton className="w-full h-full rounded-none" />
-                                                </div>
-                                            )}
-                                            <img
-                                                src={artist.profileImage}
-                                                alt={artist.name}
-                                                className={`w-full h-full object-cover grayscale transition-opacity duration-300 ${artistImageLoaded ? 'opacity-90' : 'opacity-0'}`}
-                                                onLoad={() => setArtistImageLoaded(true)}
-                                            />
-                                        </>
-                                    ) : (
-                                        <span className="text-gallery-black font-sans font-black text-xl uppercase">
-                                            {artist.name.charAt(0)}
-                                        </span>
-                                    )}
+                                    <OptimizedImage
+                                        src={artist.profileImage || undefined}
+                                        alt={artist.name}
+                                        className="w-full h-full object-cover grayscale opacity-90"
+                                        containerClassName="w-full h-full"
+                                    />
                                 </div>
                                 <div>
                                     <p className="font-bold uppercase tracking-widest text-gallery-black group-hover:text-gallery-red transition-colors">
@@ -792,60 +772,28 @@ export default function ArtworkDetailPage({
             <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
                 <DialogContent
                     showCloseButton={false}
-                    className="max-w-[100vw] h-full sm:max-w-[95vw] sm:max-h-[95vh] p-0 bg-black/95 border-none flex flex-col items-center justify-center overflow-hidden"
+                    className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none flex items-center justify-center overflow-hidden"
                 >
                     <button
                         onClick={() => setLightboxOpen(false)}
-                        className="absolute top-6 right-6 z-[60] text-white/80 hover:text-white bg-white/10 backdrop-blur-md rounded-full p-2 transition-all hover:scale-110 active:scale-90"
+                        className="absolute top-4 right-4 z-[60] text-white/80 hover:text-white bg-white/10 rounded-full p-2 transition-colors"
                     >
                         <X className="w-5 h-5" />
                     </button>
 
-                    <div className="relative flex-1 w-full flex items-center justify-center p-4 sm:p-12">
-                        {!lightboxImageLoaded && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <Loader2 className="w-8 h-8 text-white/20 animate-spin" />
-                            </div>
-                        )}
-                        <AnimatePresence mode="wait">
-                            <motion.img
-                                key={lightboxIndex}
-                                src={allImages[lightboxIndex]}
-                                alt={`${artwork.title} - fullsize ${lightboxIndex + 1}`}
-                                className={`max-w-full max-h-[70vh] sm:max-h-[80vh] object-contain transition-opacity duration-300 ${lightboxImageLoaded ? 'opacity-100' : 'opacity-0'}`}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: lightboxImageLoaded ? 1 : 0, scale: lightboxImageLoaded ? 1 : 0.95 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.2 }}
-                                onLoad={() => setLightboxImageLoaded(true)}
-                            />
-                        </AnimatePresence>
+                    <div className="relative w-full h-full flex items-center justify-center p-4">
+                        <OptimizedImage
+                            key={lightboxIndex}
+                            src={allImages[lightboxIndex]}
+                            alt={`${artwork.title} - fullsize ${lightboxIndex + 1}`}
+                            className="max-w-full max-h-[85vh] object-contain"
+                            containerClassName="w-full h-full"
+                        />
                     </div>
 
-                    {/* Lightbox Controls & Thumbnails */}
-                    <div className="w-full pb-8 px-4 flex flex-col items-center gap-6">
-                        {allImages.length > 1 && (
-                            <div className="flex gap-2 overflow-x-auto pb-2 max-w-full">
-                                {allImages.map((img, idx) => (
-                                    <button
-                                        key={`lb-${idx}`}
-                                        onClick={() => {
-                                            if (idx !== lightboxIndex) {
-                                                setLightboxImageLoaded(false);
-                                                setLightboxIndex(idx);
-                                            }
-                                        }}
-                                        className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 border-2 transition-all ${idx === lightboxIndex ? "border-white" : "border-white/20 opacity-50 hover:opacity-100"
-                                            }`}
-                                    >
-                                        <img src={img} alt="" className="w-full h-full object-cover" />
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                        <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">
-                            {lightboxIndex + 1} / {allImages.length}
-                        </p>
+                    {/* Image counter */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/50 text-[10px] uppercase tracking-widest font-bold">
+                        {lightboxIndex + 1} / {allImages.length}
                     </div>
 
                     {allImages.length > 1 && (

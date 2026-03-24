@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -20,10 +21,11 @@ function Banner() {
       <div className="block lg:hidden relative">
         {/* Background image */}
         <div className="relative w-full aspect-[4/5] sm:aspect-[4/3]">
-          <img
+          <OptimizedImage
             src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=2458&q=80"
             alt="Contemporary Art"
             className="w-full h-full object-cover"
+            containerClassName="w-full h-full"
           />
           {/* Gradient overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-gallery-black/80 via-gallery-black/40 to-transparent" />
@@ -120,10 +122,11 @@ function Banner() {
               variants={fadeInRight}
             >
               <div className="aspect-[4/3] w-full overflow-hidden">
-                <img
+                <OptimizedImage
                   src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=2458&q=80"
                   alt="Contemporary Art"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                  containerClassName="w-full h-full"
                 />
               </div>
             </motion.div>

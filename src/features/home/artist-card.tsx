@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 interface ArtistCardProps {
   artist: {
@@ -18,10 +21,11 @@ const ArtistCard = ({ artist }: ArtistCardProps) => {
       <div className="flex flex-col items-center w-full">
         <Link href={`/artist/${artist.id}`} className="mb-4 relative">
           <div className="absolute inset-0 rounded-full border border-gallery-charcoal/20 scale-[1.05] group-hover:scale-[1.1] transition-transform duration-500"></div>
-          <img
+          <OptimizedImage
             src={artist.profileImage || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"}
             alt={artist.name}
             className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover shadow-md filter group-hover:brightness-110 transition-all duration-500"
+            containerClassName="w-24 h-24 md:w-28 md:h-28 rounded-full"
           />
         </Link>
 

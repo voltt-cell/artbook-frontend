@@ -3,6 +3,7 @@
 import { useCart } from "@/hooks/useCart";
 import { useAuth } from "@/context/auth-context";
 import { Loader2, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -97,10 +98,11 @@ export default function CartPage() {
                                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
                                     {/* Image */}
                                     <div className="w-full sm:w-32 h-48 sm:h-32 bg-gallery-cream border border-gallery-charcoal/20 flex-shrink-0">
-                                        <img
+                                        <OptimizedImage
                                             src={item.artwork.imageUrl}
                                             alt={item.artwork.title}
                                             className="w-full h-full object-cover"
+                                            containerClassName="w-full h-full"
                                         />
                                     </div>
 
@@ -112,17 +114,12 @@ export default function CartPage() {
                                                     {item.artwork.title}
                                                 </h3>
                                                 <div className="flex items-center gap-3 mb-2">
-                                                    {item.artist.profileImage ? (
-                                                        <img
-                                                            src={item.artist.profileImage}
-                                                            alt={item.artist.name}
-                                                            className="w-6 h-6 object-cover border border-gallery-charcoal/20"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-6 h-6 bg-white border border-gallery-charcoal/20 flex items-center justify-center text-[10px] font-bold text-gallery-black">
-                                                            {item.artist.name.charAt(0)}
-                                                        </div>
-                                                    )}
+                                                    <OptimizedImage
+                                                        src={item.artist.profileImage || undefined}
+                                                        alt={item.artist.name}
+                                                        className="w-6 h-6 object-cover border border-gallery-charcoal/20"
+                                                        containerClassName="w-6 h-6"
+                                                    />
                                                     <span className="text-[10px] font-bold uppercase tracking-widest text-gallery-charcoal">{item.artist.name}</span>
                                                 </div>
                                                 <p className="text-[10px] text-gallery-charcoal/60 uppercase tracking-widest border border-gallery-charcoal/10 bg-white px-2 py-0.5 inline-block">{item.artwork.listingType}</p>

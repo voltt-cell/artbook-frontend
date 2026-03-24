@@ -8,6 +8,7 @@ import {
   Sparkles, User, Loader2, Menu, X,
 } from "lucide-react";
 import Link from "next/link";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 import { useAuth } from "@/context/auth-context";
 import { useRouter, usePathname } from "next/navigation";
 import { CartBadge } from "@/components/cart-badge";
@@ -148,7 +149,12 @@ const Navbar = () => {
                 className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
               >
                 <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden">
-                  <img src={art.images?.[0] || art.imageUrl} alt={art.title} className="w-full h-full object-cover" />
+                <OptimizedImage
+                  src={art.images?.[0] || art.imageUrl}
+                  alt={art.title}
+                  className="w-full h-full object-cover"
+                  containerClassName="w-full h-full"
+                />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gallery-black truncate">{art.title}</p>
@@ -174,7 +180,12 @@ const Navbar = () => {
               >
                 <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden rounded-full border border-gallery-charcoal/20">
                   {artist.profileImage ? (
-                    <img src={artist.profileImage} alt={artist.name} className="w-full h-full object-cover" />
+                    <OptimizedImage
+                      src={artist.profileImage}
+                      alt={artist.name}
+                      className="w-full h-full object-cover"
+                      containerClassName="w-full h-full"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gallery-red text-white text-xs font-bold">
                       {artist.name.charAt(0)}
@@ -204,7 +215,12 @@ const Navbar = () => {
                 className="flex items-center gap-3 px-4 py-3 hover:bg-gallery-cream/50 transition-colors border-b border-gallery-charcoal/5 last:border-b-0"
               >
                 <div className="w-10 h-10 bg-gallery-cream flex-shrink-0 overflow-hidden">
-                  <img src={auction.artworkImages?.[0] || auction.artworkImage} alt={auction.artworkTitle} className="w-full h-full object-cover" />
+                  <OptimizedImage
+                    src={auction.artworkImages?.[0] || auction.artworkImage}
+                    alt={auction.artworkTitle}
+                    className="w-full h-full object-cover"
+                    containerClassName="w-full h-full"
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gallery-black truncate">{auction.artworkTitle}</p>

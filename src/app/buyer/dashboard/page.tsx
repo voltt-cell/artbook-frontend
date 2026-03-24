@@ -4,6 +4,7 @@ import useSWR from "swr";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/auth-context";
 import { Loader2, ShoppingBag, Gavel, Trophy, CreditCard, LayoutDashboard, User, Clock, ChevronRight } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 import { Button } from "@/components/ui/button";
 import { fetcher } from "@/lib/swr";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
@@ -201,11 +202,12 @@ export default function BuyerDashboard() {
                             <motion.div variants={fadeInUp} className="bg-white border border-gallery-charcoal/20 shadow-none md:col-span-1 h-fit">
                                 <div className="p-8 flex flex-col items-center text-center">
                                     <div className="h-28 w-28 bg-gallery-cream flex border border-gallery-charcoal/20 items-center justify-center text-gallery-black text-4xl font-serif font-black mb-6 uppercase">
-                                        {user?.profileImage ? (
-                                            <img src={user.profileImage} alt={user.name} className="h-full w-full object-cover" />
-                                        ) : (
-                                            user?.name?.charAt(0)
-                                        )}
+                                        <OptimizedImage
+                                            src={user?.profileImage || undefined}
+                                            alt={user?.name || "User"}
+                                            className="h-full w-full object-cover"
+                                            containerClassName="h-full w-full"
+                                        />
                                     </div>
                                     <h2 className="text-xl font-serif font-black text-gallery-black uppercase tracking-widest leading-tight">{user?.name}</h2>
                                     <p className="text-gallery-charcoal/60 text-xs font-bold uppercase tracking-widest mb-8 mt-2">{user?.email}</p>
@@ -392,10 +394,11 @@ export default function BuyerDashboard() {
                                                     >
                                                         <td className="py-5 px-6">
                                                             <div className="flex items-center gap-4">
-                                                                <img
+                                                                <OptimizedImage
                                                                     src={item.artwork.imageUrl}
                                                                     alt={item.artwork.title}
                                                                     className="w-10 h-10 object-cover border border-gallery-charcoal/20"
+                                                                    containerClassName="w-10 h-10"
                                                                 />
                                                                 <span className="font-bold text-xs uppercase tracking-widest text-gallery-black max-w-[180px] truncate">
                                                                     {item.artwork.title}
@@ -471,10 +474,11 @@ export default function BuyerDashboard() {
                                                 className="bg-white border border-gallery-charcoal/20 shadow-none overflow-hidden group hover:border-gallery-black transition-colors"
                                             >
                                                 <div className="relative overflow-hidden aspect-square">
-                                                    <img
+                                                    <OptimizedImage
                                                         src={item.artwork.imageUrl}
                                                         alt={item.artwork.title}
                                                         className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
+                                                        containerClassName="w-full h-full"
                                                     />
                                                     <div className="absolute top-4 right-4">
                                                         <span

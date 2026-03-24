@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { toast } from "sonner";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 type AuctionItem = {
     auction: {
@@ -101,10 +102,11 @@ export default function AuctionCard({
         >
             <Link href={`/artwork/${artwork.id}`}>
                 <div className={`relative overflow-hidden ${isFeatured ? 'aspect-[16/9]' : 'aspect-square'}`}>
-                    <img
+                    <OptimizedImage
                         src={imageUrl}
                         alt={artwork.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        containerClassName="w-full h-full"
                     />
 
                     {/* Status Badge */}

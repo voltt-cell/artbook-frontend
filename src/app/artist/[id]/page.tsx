@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import ArtworkCard from "@/features/home/artwork-card";
 import { toast } from "sonner";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 import { useState } from "react";
 import Link from "next/link";
 import { ArtworkSkeletonGrid } from "@/components/artwork-skeleton";
@@ -179,11 +180,12 @@ export default function ArtistProfilePage() {
                             >
                                 <div className="w-full h-full rounded-none bg-gallery-cream flex items-center justify-center text-gallery-black text-3xl md:text-5xl font-sans font-black overflow-hidden border border-gallery-charcoal/10 uppercase">
                                     {artist.profileImage ? (
-                                        <img
-                                            src={artist.profileImage}
-                                            alt={artist.name}
-                                            className="w-full h-full object-cover grayscale opacity-90"
-                                        />
+                                    <OptimizedImage
+                                        src={artist.profileImage || ""}
+                                        alt={artist.name}
+                                        className="w-full h-full object-cover grayscale opacity-90"
+                                        containerClassName="w-full h-full"
+                                    />
                                     ) : (
                                         artist.name.charAt(0)
                                     )}

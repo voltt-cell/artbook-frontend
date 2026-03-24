@@ -10,7 +10,7 @@ import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useFavorites } from "@/hooks/useFavorites";
-import { Skeleton } from "@/components/ui/skeleton";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 
 interface ArtworkCardProps {
   artwork: {
@@ -43,7 +43,6 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
   const { isFavorite, toggleFavorite, togglingId } = useFavorites();
   const isOwner = user?.id === artwork.artistId;
   const [imgError, setImgError] = useState(false);
-  const [imgLoaded, setImgLoaded] = useState(false);
 
   const isFav = isFavorite(String(artwork.id));
   const isToggling = togglingId === String(artwork.id);
@@ -104,20 +103,13 @@ const ArtworkCard = ({ artwork, artist }: ArtworkCardProps) => {
       <div className="relative overflow-hidden aspect-square border border-transparent bg-gallery-cream">
         <Link href={`/artwork/${artwork.id}`} className="block w-full h-full">
           {artwork.image && !imgError ? (
-            <>
-              {!imgLoaded && (
-                <div className="absolute inset-0 z-10">
-                  <Skeleton className="w-full h-full rounded-none" />
-                </div>
-              )}
-              <img
-                src={artwork.image}
-                alt={artwork.title}
-                className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03] ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-                onLoad={() => setImgLoaded(true)}
-                onError={() => setImgError(true)}
-              />
-            </>
+            <OptimizedImage
+              src={artwork.image}
+              alt={artwork.title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              containerClassName="w-full h-full"
+              onError={() => setImgError(true)}
+            />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gallery-beige">
               <ImageOff className="w-8 h-8 text-gallery-charcoal/20 mb-2" />

@@ -7,6 +7,7 @@ import { fetcher } from "@/lib/swr";
 import { motion } from "framer-motion";
 import { ArtisticLoader } from "@/components/ui/artistic-loader";
 import { Package, Gavel, DollarSign, Image as ImageIcon, Plus, Settings, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { OptimizedImage } from "@/components/ui/optimized-image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -221,10 +222,11 @@ export default function ShopDashboard() {
                                             <div className="rounded-none overflow-hidden border border-gallery-charcoal/20 bg-gallery-cream hover:border-gallery-charcoal transition-all duration-300">
                                                 <div className="aspect-square bg-gallery-charcoal/5 relative overflow-hidden">
                                                     {imgUrl && (
-                                                        <img
+                                                        <OptimizedImage
                                                             src={imgUrl}
                                                             alt={artwork.title}
                                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                            containerClassName="w-full h-full"
                                                         />
                                                     )}
                                                     <div className="absolute top-3 right-3">
