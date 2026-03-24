@@ -141,11 +141,8 @@ export default function ArtworkDetailPage({
     const [bidAmount, setBidAmount] = useState("");
     const [bidLoading, setBidLoading] = useState(false);
     const [timeLeft, setTimeLeft] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
-    const [mainImageLoaded, setMainImageLoaded] = useState(false);
-    const [lightboxImageLoaded, setLightboxImageLoaded] = useState(false);
-    const [artistImageLoaded, setArtistImageLoaded] = useState(false);
-
     const { addToCart, isInCart, addingIds } = useCart();
+
     const { isFavorite, toggleFavorite, togglingId } = useFavorites();
 
     const { data: artwork, isLoading } = useSWR<ArtworkResponse>(
@@ -384,22 +381,16 @@ export default function ArtworkDetailPage({
                     <motion.div initial="hidden" animate="visible" variants={fadeIn}>
                         <div className="relative overflow-hidden rounded-none shadow-none border border-gallery-charcoal/20 bg-white">
                             {/* Main image */}
-                            <AnimatePresence mode="wait">
-                                <div className="relative w-full h-auto min-h-[400px] flex items-center justify-center bg-gallery-cream overflow-hidden">
-                                    {!mainImageLoaded && (
-                                        <div className="absolute inset-0 z-10">
-                                            <Skeleton className="w-full h-full rounded-none" />
-                                        </div>
-                                    )}
-                                    <OptimizedImage
-                                        src={allImages[currentSlide]}
-                                        alt={`${artwork.title} - image ${currentSlide + 1}`}
-                                        className="w-full h-auto max-h-[600px] object-contain cursor-zoom-in"
-                                        containerClassName="w-full h-auto max-h-[600px]"
-                                        onClick={() => openLightbox(currentSlide)}
-                                    />
-                                </div>
-                            </AnimatePresence>
+                            <div className="relative w-full h-auto min-h-[400px] flex items-center justify-center bg-gallery-cream overflow-hidden">
+                                <OptimizedImage
+                                    key={allImages[currentSlide]}
+                                    src={allImages[currentSlide]}
+                                    alt={`${artwork.title} - image ${currentSlide + 1}`}
+                                    className="w-full h-auto max-h-[600px] object-contain cursor-zoom-in"
+                                    containerClassName="w-full h-full"
+                                    onClick={() => openLightbox(currentSlide)}
+                                />
+                            </div>
 
                             {/* Zoom indicator */}
                             <button
@@ -451,7 +442,6 @@ export default function ArtworkDetailPage({
                                         key={idx}
                                         onClick={() => {
                                             if (idx !== currentSlide) {
-                                                setMainImageLoaded(false);
                                                 setCurrentSlide(idx);
                                             }
                                         }}
@@ -595,11 +585,11 @@ export default function ArtworkDetailPage({
                                     )}
                                 </div>
                                 {!isOwner && artwork.status !== 'sold' && (
-                                    <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                                    <div className="flex flex-col sm:flex-row gap-3 w-full lg:flex-1 lg:justify-end">
                                         {isAuction ? (
                                             <Button
                                                 size="lg"
-                                                className="bg-gallery-black hover:bg-gallery-red text-white w-full sm:flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
+                                                className="bg-gallery-black hover:bg-gallery-red text-white w-full sm:flex-1 lg:max-w-[200px] rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                 disabled={!!auctionEnded}
                                                 onClick={() => {
                                                     if (!isAuthenticated) {
@@ -620,7 +610,7 @@ export default function ArtworkDetailPage({
                                                     variant="outline"
                                                     onClick={handleAddToCart}
                                                     disabled={isAddedToCart || isAddingToCart}
-                                                    className="border-gallery-charcoal/20 text-gallery-charcoal bg-transparent w-full sm:flex-1 lg:flex-none rounded-none shadow-none hover:bg-gallery-cream hover:text-gallery-red h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
+                                                    className="border-gallery-charcoal/20 text-gallery-charcoal bg-transparent w-full sm:flex-1 lg:max-w-[200px] rounded-none shadow-none hover:bg-gallery-cream hover:text-gallery-red h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                 >
                                                     {isAddingToCart ? (
                                                         <Loader2 className="w-4 h-4 mr-3 animate-spin" />
@@ -631,7 +621,7 @@ export default function ArtworkDetailPage({
                                                 </Button>
                                                 <Button
                                                     size="lg"
-                                                    className="bg-gallery-black hover:bg-gallery-red text-white w-full sm:flex-1 lg:flex-none rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
+                                                    className="bg-gallery-black hover:bg-gallery-red text-white w-full sm:flex-1 lg:max-w-[200px] rounded-none shadow-none h-[60px] uppercase text-xs tracking-widest font-bold px-8 transition-colors"
                                                     onClick={handleBuyNow}
                                                 >
                                                     <ShoppingBag className="w-4 h-4 mr-3" />
@@ -800,7 +790,6 @@ export default function ArtworkDetailPage({
                         <>
                             <button
                                 onClick={() => {
-                                    setLightboxImageLoaded(false);
                                     prevLightbox();
                                 }}
                                 className="absolute left-4 top-1/2 -translate-y-1/2 z-[60] bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-all hover:scale-110"
@@ -809,7 +798,6 @@ export default function ArtworkDetailPage({
                             </button>
                             <button
                                 onClick={() => {
-                                    setLightboxImageLoaded(false);
                                     nextLightbox();
                                 }}
                                 className="absolute right-4 top-1/2 -translate-y-1/2 z-[60] bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-all hover:scale-110"
