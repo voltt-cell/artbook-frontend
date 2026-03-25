@@ -10,6 +10,7 @@ interface OptimizedImageProps extends HTMLMotionProps<"img"> {
   containerClassName?: string;
   skeletonClassName?: string;
   fallbackIcon?: React.ReactNode;
+  aspectRatio?: number | string;
 }
 
 export function OptimizedImage({
@@ -19,6 +20,7 @@ export function OptimizedImage({
   containerClassName,
   skeletonClassName,
   fallbackIcon,
+  aspectRatio,
   onLoad,
   onError,
   ...props
@@ -35,7 +37,10 @@ export function OptimizedImage({
   }, [src]);
 
   return (
-    <div className={cn("relative overflow-hidden", containerClassName)}>
+    <div 
+      className={cn("relative overflow-hidden", containerClassName)}
+      style={aspectRatio ? { aspectRatio: String(aspectRatio) } : undefined}
+    >
       <AnimatePresence mode="wait">
         {!isLoaded && !error && (
           <motion.div

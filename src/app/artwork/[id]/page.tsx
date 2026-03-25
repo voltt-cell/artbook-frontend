@@ -388,6 +388,7 @@ export default function ArtworkDetailPage({
                                     alt={`${artwork.title} - image ${currentSlide + 1}`}
                                     className="w-full h-auto max-h-[600px] object-contain cursor-zoom-in"
                                     containerClassName="w-full h-full"
+                                    aspectRatio="4/3"
                                     onClick={() => openLightbox(currentSlide)}
                                 />
                             </div>
@@ -762,7 +763,7 @@ export default function ArtworkDetailPage({
             <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
                 <DialogContent
                     showCloseButton={false}
-                    className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none flex items-center justify-center overflow-hidden"
+                    className="max-w-[95vw] w-full h-[90vh] p-0 bg-black/95 border-none flex flex-col items-center justify-center overflow-hidden"
                 >
                     <button
                         onClick={() => setLightboxOpen(false)}
@@ -776,8 +777,8 @@ export default function ArtworkDetailPage({
                             key={lightboxIndex}
                             src={allImages[lightboxIndex]}
                             alt={`${artwork.title} - fullsize ${lightboxIndex + 1}`}
-                            className="max-w-full max-h-[85vh] object-contain"
-                            containerClassName="w-full h-full"
+                            className="max-w-full max-h-[80vh] object-contain"
+                            containerClassName="w-full h-full flex items-center justify-center"
                         />
                     </div>
 
