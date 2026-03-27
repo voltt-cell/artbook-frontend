@@ -3,7 +3,7 @@
 import useSWR from "swr";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/auth-context";
-import { Loader2, ShoppingBag, Gavel, Trophy, CreditCard, LayoutDashboard, User, Clock, ChevronRight } from "lucide-react";
+import { Loader2, ShoppingBag, Gavel, Trophy, CreditCard, LayoutDashboard, User, Clock, ChevronRight, Truck, ExternalLink } from "lucide-react";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import { Button } from "@/components/ui/button";
 import { fetcher } from "@/lib/swr";
@@ -23,6 +23,8 @@ type OrderRow = {
     type: "fixed" | "auction";
     stripeSessionId: string | null;
     createdAt: string;
+    trackingNumber?: string | null;
+    shippingCarrier?: string | null;
 };
 
 type BidRow = {
@@ -61,6 +63,16 @@ const tabs = [
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
+
+const getTrackingLink = (carrier: string, number: string) => {
+    const c = carrier.toLowerCase();
+    if (c.includes("fedex")) return `https://www.fedex.com/fedextrack/?trknbr=${number}`;
+    if (c.includes("ups")) return `https://www.ups.com/track?tracknum=${number}`;
+    if (c.includes("usps")) return `https://tools.usps.com/go/TrackConfirmAction?tLabels=${number}`;
+    if (c.includes("dhl")) return `https://www.dhl.com/en/express/tracking.html?AWB=${number}`;
+    if (c.includes("bluedart")) return `https://www.bluedart.com/tracking?trackid=${number}`;
+    return "#";
+};
 
 export default function BuyerDashboard() {
     const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -313,7 +325,7 @@ export default function BuyerDashboard() {
                                                 <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Order Ref</th>
                                                 <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Amount</th>
                                                 <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Origin</th>
-                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Status</th>
+                                                <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal">Status / Tracking</th>
                                                 <th className="py-5 px-6 font-bold text-[10px] uppercase tracking-widest text-gallery-charcoal text-right">Date</th>
                                             </tr>
                                         </thead>
@@ -323,7 +335,7 @@ export default function BuyerDashboard() {
                                                     key={order.id}
                                                     className="hover:bg-gallery-cream/30 transition-colors"
                                                 >
-                                                    <td className="py-5 px-6">
+                                                    <td className="py-5 px-6 font-sans text-xs">
                                                         <span className="font-mono text-xs font-bold text-gallery-charcoal uppercase tracking-wider">
                                                             {order.id.slice(0, 8)}
                                                         </span>
@@ -331,18 +343,36 @@ export default function BuyerDashboard() {
                                                     <td className="py-5 px-6 font-serif font-bold text-lg text-gallery-black">
                                                         ${parseFloat(order.amount).toLocaleString()}
                                                     </td>
-                                                    <td className="py-5 px-6">
+                                                    <td className="py-5 px-6 font-sans text-xs">
                                                         <span className="text-[10px] font-bold px-2 py-0.5 border border-gallery-charcoal/20 text-gallery-charcoal capitalize">
                                                             {order.type}
                                                         </span>
                                                     </td>
-                                                    <td className="py-5 px-6">
-                                                        <span
-                                                            className={`text-[10px] font-bold px-2 py-0.5 border uppercase tracking-widest ${order.status === 'completed' || order.status === 'paid' ? 'border-gallery-black bg-gallery-black text-white' : 'border-gallery-charcoal/20 text-gallery-charcoal bg-white'
-                                                                }`}
-                                                        >
-                                                            {order.status}
-                                                        </span>
+                                                    <td className="py-5 px-6 font-sans">
+                                                        <div className="flex flex-col gap-2">
+                                                            <span
+                                                                className={`text-[10px] font-bold px-2 py-0.5 border uppercase tracking-widest w-fit ${order.status === 'completed' || order.status === 'paid' ? 'border-gallery-black bg-gallery-black text-white' : order.status === 'shipped' ? 'border-gallery-red bg-gallery-red text-white' : 'border-gallery-charcoal/20 text-gallery-charcoal bg-white'
+                                                                    }`}
+                                                            >
+                                                                {order.status}
+                                                            </span>
+                                                            {order.trackingNumber && (
+                                                                <div className="flex flex-col gap-1">
+                                                                    <p className="text-[10px] font-serif italic text-gallery-charcoal/60 uppercase tracking-widest leading-none">
+                                                                        {order.shippingCarrier}
+                                                                    </p>
+                                                                    <a
+                                                                        href={getTrackingLink(order.shippingCarrier!, order.trackingNumber)}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="text-[10px] font-bold text-gallery-red hover:underline flex items-center gap-1 uppercase tracking-widest"
+                                                                    >
+                                                                        {order.trackingNumber}
+                                                                        <ExternalLink className="w-2.5 h-2.5" />
+                                                                    </a>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </td>
                                                     <td className="py-5 px-6 text-xs text-gallery-charcoal/60 uppercase tracking-widest text-right">
                                                         {new Date(order.createdAt).toLocaleDateString()}

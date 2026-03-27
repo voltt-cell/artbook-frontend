@@ -10,6 +10,17 @@ import { ArtisticLoader } from "@/components/ui/artistic-loader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
+import { toast } from "sonner";
 
 type ShopOrderRow = {
     order: {
@@ -21,6 +32,8 @@ type ShopOrderRow = {
         status: "pending" | "paid" | "shipped" | "completed";
         type: "fixed" | "auction";
         createdAt: string;
+        trackingNumber?: string | null;
+        shippingCarrier?: string | null;
     };
     artwork: {
         id: string;
@@ -45,10 +58,37 @@ export default function ShopOrdersPage() {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
 
-    const { data: ordersData, isLoading: ordersLoading } = useSWR<ShopOrderRow[]>(
+    const { data: ordersData, isLoading: ordersLoading, mutate } = useSWR<ShopOrderRow[]>(
         user && hasShop ? "/payments/orders/shop" : null,
         fetcher
     );
+
+    const [trackingModalOpen, setTrackingModalOpen] = useState(false);
+    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+    const [trackingNumber, setTrackingNumber] = useState("");
+    const [shippingCarrier, setShippingCarrier] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleUpdateTracking = async () => {
+        if (!selectedOrderId || !trackingNumber || !shippingCarrier) return;
+
+        setIsSubmitting(true);
+        try {
+            await api.patch(`/payments/orders/${selectedOrderId}/tracking`, {
+                trackingNumber,
+                shippingCarrier,
+            });
+            toast.success("Tracking information updated successfully");
+            setTrackingModalOpen(false);
+            setTrackingNumber("");
+            setShippingCarrier("");
+            mutate();
+        } catch (error) {
+            toast.error("Failed to update tracking information");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     const orders = ordersData || [];
 
@@ -204,14 +244,30 @@ export default function ShopOrdersPage() {
                                                     ${parseFloat(order.amount).toLocaleString()}
                                                 </p>
                                             </td>
-                                            <td className="py-4 px-6 text-center align-middle">
-                                                <div className="flex items-center justify-center">
+                                             <td className="py-4 px-6 text-center align-middle">
+                                                <div className="flex flex-col items-center justify-center gap-2">
                                                     <span
                                                         className={`text-[10px] uppercase font-bold tracking-widest px-3 py-1 border ${orderStatusColors[order.status] || "bg-gallery-cream border-gallery-charcoal/20 text-gallery-charcoal/50"
                                                             }`}
                                                     >
                                                         {order.status}
                                                     </span>
+                                                    {order.status === "paid" && (
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedOrderId(order.id);
+                                                                setTrackingModalOpen(true);
+                                                            }}
+                                                            className="text-[10px] font-bold uppercase tracking-widest text-gallery-red hover:underline"
+                                                        >
+                                                            Add Tracking
+                                                        </button>
+                                                    )}
+                                                    {order.trackingNumber && (
+                                                        <div className="text-[10px] font-serif italic text-gallery-charcoal/50">
+                                                            {order.shippingCarrier}: {order.trackingNumber.slice(0, 10)}...
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>
@@ -222,6 +278,52 @@ export default function ShopOrdersPage() {
                     )}
                 </motion.div>
             </div>
+
+            <Dialog open={trackingModalOpen} onOpenChange={setTrackingModalOpen}>
+                <DialogContent className="sm:max-w-md bg-white border border-gallery-charcoal/20 rounded-none p-8">
+                    <DialogHeader>
+                        <DialogTitle className="font-serif text-2xl font-black uppercase tracking-widest text-gallery-black border-b border-gallery-charcoal/10 pb-4">
+                            Add Tracking Information
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-6 py-4">
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50">Shipping Carrier</label>
+                            <Input
+                                placeholder="e.g. FedEx, BlueDart, UPS"
+                                value={shippingCarrier}
+                                onChange={(e) => setShippingCarrier(e.target.value)}
+                                className="rounded-none border-gallery-charcoal/20 focus-visible:ring-gallery-red"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase font-bold tracking-widest text-gallery-charcoal/50">Tracking Number</label>
+                            <Input
+                                placeholder="Enter tracking number"
+                                value={trackingNumber}
+                                onChange={(e) => setTrackingNumber(e.target.value)}
+                                className="rounded-none border-gallery-charcoal/20 focus-visible:ring-gallery-red"
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setTrackingModalOpen(false)}
+                            className="rounded-none uppercase text-[10px] font-bold tracking-widest"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleUpdateTracking}
+                            disabled={isSubmitting || !trackingNumber || !shippingCarrier}
+                            className="rounded-none bg-gallery-black hover:bg-gallery-red text-white uppercase text-[10px] font-bold tracking-widest"
+                        >
+                            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Confirm Shipping"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
