@@ -43,6 +43,15 @@ import { useAuctionSocket } from "@/hooks/useAuctionSocket";
 import { StripeProvider } from "@/components/providers/stripe-provider";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Shield } from "lucide-react";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel";
+import ArtworkCard from "@/features/home/artwork-card";
+import { staggerContainer } from "@/lib/animations";
 
 type ArtworkResponse = {
     id: string;
@@ -92,6 +101,11 @@ const formatPrice = (price: number) =>
         style: "currency",
         currency: "USD",
     }).format(price);
+
+type RelatedArtworkResponse = {
+    artwork: ArtworkResponse;
+    artist: ArtistResponse;
+};
 
 function ArtworkDetailSkeleton() {
     return (
@@ -147,6 +161,11 @@ export default function ArtworkDetailPage({
 
     const { data: artwork, isLoading } = useSWR<ArtworkResponse>(
         `/artworks/${id}`,
+        fetcher
+    );
+
+    const { data: relatedArtworks, isLoading: relatedLoading } = useSWR<RelatedArtworkResponse[]>(
+        artwork ? `/artworks/${id}/related?limit=10` : null,
         fetcher
     );
 
@@ -758,6 +777,66 @@ export default function ArtworkDetailPage({
                     </motion.div>
                 </div>
             </div>
+
+            {/* Related Artworks Section */}
+            {relatedArtworks && relatedArtworks.length > 0 && (
+                <section className="py-16 sm:py-24 bg-white border-y border-gallery-charcoal/10 mt-16">
+                    <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            variants={fadeInUp}
+                            className="flex justify-between items-center mb-12 border-b border-gallery-charcoal/20 pb-4"
+                        >
+                            <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-black text-gallery-black uppercase tracking-tight">
+                                More Like This
+                            </h2>
+                        </motion.div>
+
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "0px" }}
+                            variants={staggerContainer}
+                        >
+                            <Carousel
+                                opts={{ align: "start", dragFree: true }}
+                                className="w-full"
+                            >
+                                <CarouselContent className="-ml-3 sm:-ml-4">
+                                    {relatedArtworks.map((item) => (
+                                        <CarouselItem
+                                            key={item.artwork.id}
+                                            className="pl-3 sm:pl-4 basis-full sm:basis-[48%] md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+                                        >
+                                            <ArtworkCard
+                                                artwork={{
+                                                    id: item.artwork.id,
+                                                    title: item.artwork.title,
+                                                    artist: item.artist.name,
+                                                    artistId: item.artwork.artistId,
+                                                    price: parseFloat(item.artwork.price),
+                                                    image: item.artwork.images?.[0] || item.artwork.imageUrl,
+                                                    medium: item.artwork.medium,
+                                                    isAuction: item.artwork.listingType === "auction",
+                                                }}
+                                                artist={{
+                                                    ...item.artist,
+                                                    profileImage: item.artist.profileImage || undefined
+                                                }}
+                                            />
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+
+                                <CarouselPrevious className="-left-3 md:-left-5 bg-white border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                                <CarouselNext className="-right-3 md:-right-5 bg-white border border-gallery-charcoal w-8 h-8 md:w-10 md:h-10 hover:bg-gallery-charcoal hover:text-white text-gallery-charcoal rounded-none transition-colors" />
+                            </Carousel>
+                        </motion.div>
+                    </div>
+                </section>
+            )}
 
             {/* Lightbox Dialog */}
             <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
